@@ -11,7 +11,7 @@ function PrincipalPage() {
       <div>
         <Navegacion />
       </div>
-      <div>
+      <div className="p-1">
         <AbmAlumno />
       </div>
     </div>
