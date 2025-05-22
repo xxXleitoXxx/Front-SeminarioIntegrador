@@ -1,5 +1,5 @@
 import { Button, Row, Col } from "react-bootstrap";
-import AFiltro from "./AFiltro";
+import AFiltro from "../components/AbmAlumno/AFiltro";
 
 export default function AbmAlumno() {
   // Crear un array con 20 elementos
@@ -12,7 +12,7 @@ export default function AbmAlumno() {
       </div>
 
       <div className="p-3">
-        <Row xs={1} md={1} lg={1} className="g-4">
+        <Row xs={1} md={2} lg={3} className="g-4">
           {items.map((item, index) => (
             <Col key={index}>
               <div className="p-2 d-flex justify-content-between align-items-center border">

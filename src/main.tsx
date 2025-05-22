@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
+import App from "./App";
 //import "./index.css";
-import PrincipalPage from "./principalPage/PrincipalPage";
+
 //import App from './App.tsx'
 
-createRoot(document.getElementById("root")!).render(<PrincipalPage />);
+createRoot(document.getElementById("root")!).render(<App />);

@@ -2,8 +2,9 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 //import NavDropdown from "react-bootstrap/NavDropdown";
-
+import { useNavigate } from "react-router-dom";
 function Navegacion() {
+  const navigate = useNavigate();
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary justify-content-between">
@@ -14,9 +15,13 @@ function Navegacion() {
               <Nav.Link href="#controlAsistencia">
                 Controlar Asistencia
               </Nav.Link>
-              <Nav.Link href="#ConfFechas">Conf Fechas</Nav.Link>
-              <Nav.Link href="#Inscrip">Inscribir Alumnos</Nav.Link>
-              <Nav.Link href="#AbmAlumno">AbmAlumno</Nav.Link>
+              <Nav.Link onClick={() => navigate("/")}>Conf Fechas</Nav.Link>
+              <Nav.Link onClick={() => navigate("/altaalumno")}>
+                Inscribir Alumnos
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/abmalumno")}>
+                AbmAlumno
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

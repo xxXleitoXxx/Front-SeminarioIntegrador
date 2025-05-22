@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import AltaAlumno from "../assets/AbmAlumno/AltaAlumno";
+import AltaAlumno from "./AltaAlumno";
 
 export default function AFiltro() {
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  //const handleClose = () => setShow(false);
+  //const handleShow = () => setShow(true);
 
   return (
     <div className="d-flex align-items-end">

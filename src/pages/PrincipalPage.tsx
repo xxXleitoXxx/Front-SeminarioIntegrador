@@ -1,8 +1,6 @@
-//import AltaAlumno from "../assets/AbmAlumno/AltaAlumno";
-//import Formulario from "../assets/AbmAlumno/FormularioAbmAlumno";
-import AtlantisHeader from "../AtlantisHeader";
+import AtlantisHeader from "../Header";
 import AbmAlumno from "./AbmAlumno";
-import Navegacion from "./Navegacion";
+import Navegacion from "../principalPage/Navegacion";
 
 function PrincipalPage() {
   return (
@@ -17,4 +15,5 @@ function PrincipalPage() {
     </div>
   );
 }
+
 export default PrincipalPage;
