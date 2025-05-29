@@ -63,9 +63,24 @@ const ProveedorModal = ({
     }
   };
   //Delete
+  //Metodo Delete Fisico Deprecado
+  /*
   const handleDelete = async () => {
     try {
       await ProveedorService.deleteProveedor(prov.id);
+      toast.success("Proveedor eliminado con éxito", {
+        position: "top-center",
+      });
+      onHide();
+      refreshData((prevState) => !prevState);
+    } catch (error) {
+      console.error(error);
+      toast.error("Ha ocurrido un error");
+    }
+  };*/
+  const handleDelete = async () => {
+    try {
+      await ProveedorService.bajaLogicaProveedor(prov.id, prov);
       toast.success("Proveedor eliminado con éxito", {
         position: "top-center",
       });

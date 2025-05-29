@@ -67,6 +67,18 @@ const data = await response.json();
     }
     
     
-}
+},bajaLogicaProveedor:async (id:number,proveedor:Proveedor): Promise<void> =>{
+     proveedor.fechaHoraBajaProv=new Date();
+ const response = await fetch(`${BASE_URL}/Proveedor/${id}`
+        ,{
+        method: "PUT",
+        headers:{
+            'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify(proveedor)
+    });
+    const data = await response.json();
+    return data;
+  }
 
     }
