@@ -22,6 +22,12 @@ function Navegacion() {
               <Nav.Link onClick={() => navigate("/abmalumno")}>
                 AbmAlumno
               </Nav.Link>
+              <Nav.Link onClick={() => navigate("/paginaProps")}>
+                PaginaProps
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/abmprueba")}>
+                ABM Prueba
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

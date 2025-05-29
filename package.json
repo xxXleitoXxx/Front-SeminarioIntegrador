@@ -11,10 +11,14 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.6",
+    "formik": "^2.4.6",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
+    "react-bootstrap-icons": "^1.11.6",
     "react-dom": "^19.1.0",
-    "react-router-dom":"7.6.0"
+    "react-router-dom": "7.6.0",
+    "react-toastify": "^11.0.5",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

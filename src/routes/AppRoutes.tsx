@@ -3,6 +3,8 @@ import AltaAlumno from "../components/AbmAlumno/AltaAlumno";
 
 import AbmAlumno from "../pages/AbmAlumno";
 import PaginaPrincipal from "../pages/Main";
+import PaginaProps from "../pages/PaginaProps";
+import ProveedorTable from "../components/ProveedorTable/ProveedorTable";
 
 function Aplicacion() {
   return (
@@ -12,6 +14,8 @@ function Aplicacion() {
           <Route path="/" element={<PaginaPrincipal />} />
           <Route path="abmalumno" element={<AbmAlumno />} />
           <Route path="altaalumno" element={<AltaAlumno />} />
+          <Route path="paginaProps" element={<PaginaProps />} />
+          <Route path="abmprueba" element={<ProveedorTable />} />
         </Routes>
       </div>
     </div>
