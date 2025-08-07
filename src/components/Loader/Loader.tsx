@@ -1,9 +1,31 @@
 import { Spinner } from "react-bootstrap";
+import "./Loader.css";
 
-export default function Loader() {
-  return (
-    <div className="loader">
-      <Spinner animation="border" variant="info" className="loader-spinner"/>
-    </div>
-  );
+interface LoaderProps {
+  text?: string;
+  size?: 'small' | 'medium' | 'large';
+  variant?: 'fullscreen' | 'container';
 }
+
+const Loader = ({ 
+  text = "Cargando...", 
+  size = 'medium', 
+  variant = 'fullscreen' 
+}: LoaderProps) => {
+  const sizeClass = size === 'small' ? 'loader-small' : 
+                   size === 'large' ? 'loader-spinner-large' : 'loader-spinner';
+  
+  const containerClass = variant === 'container' ? 'loader-container' : 'loader';
+
+  return (
+    <>
+      {variant === 'fullscreen' && <div className="loader-backdrop" />}
+      <div className={containerClass}>
+        <div className={sizeClass}></div>
+        {text && <div className="loader-text">{text}</div>}
+      </div>
+    </>
+  );
+};
+
+export default Loader;

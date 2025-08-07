@@ -1,6 +1,5 @@
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import "./abmAlumno.css";
 export default function Formulario() {
   return (
     <div className="p-4 formulario">
