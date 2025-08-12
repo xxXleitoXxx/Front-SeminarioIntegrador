@@ -9,6 +9,7 @@ import type { ProfesorDTO } from "../../types";
 import { ProfesorService } from "../../services/ProfesorService";
 import { ButtonAlta } from "../ButtonAlta/ButtonAlta";
 import EmptyState from "../EmptyState/EmptyState";
+import "./ProfesorTable.css";
 
 const ProfesorTable = () => {
   const initializableNewProfesor = (): ProfesorDTO => ({
@@ -83,11 +84,12 @@ const ProfesorTable = () => {
           <Table className="table-modern" striped bordered hover>
             <thead>
               <tr>
-                <th>Código</th>
+                <th>ProfesorNro</th>
                 <th>DNI</th>
                 <th>Nombre</th>
                 <th>Teléfono</th>
                 <th>Estado</th>
+                <th>Fecha y Hora de Baja</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -100,6 +102,22 @@ const ProfesorTable = () => {
                   <td className="text-center">{prof.telefonoProfesor}</td>
                   <td className="text-center">
                     <span className={`status-badge ${prof.fechaBajaProfesor ? 'inactive' : 'active'}`}>{prof.fechaBajaProfesor ? 'Inactivo' : 'Activo'}</span>
+                  </td>
+                  <td className="text-center">
+                    {prof.fechaBajaProfesor ? (
+                      <span className="fecha-baja">
+                        {new Date(prof.fechaBajaProfesor).toLocaleString('es-ES', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit'
+                        })}
+                      </span>
+                    ) : (
+                      <span className="no-fecha">-</span>
+                    )}
                   </td>
                   <td className="text-center">
                     <div className="action-buttons">

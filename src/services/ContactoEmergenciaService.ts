@@ -1,5 +1,6 @@
 import type { ContactoEmergenciaDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/contactos-emergencia';
+
+const BASE_URL = 'http://localhost:8080/api/v1/contactosEmergencia';
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -90,16 +91,16 @@ export const ContactoEmergenciaService = {
         }
         throw new Error(errorMessage);
       }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      throw error;
+    }
+  },
 
-      if (response.status === 204) {
-        return;
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        return data;
-      }
+  contactosPorAlumno: async (nroAlumno: number): Promise<ContactoEmergenciaDTO[]> => {
+    try {
+      const response = await fetch(`${BASE_URL}/alumno/${nroAlumno}`);
+      return await handleResponse(response);
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

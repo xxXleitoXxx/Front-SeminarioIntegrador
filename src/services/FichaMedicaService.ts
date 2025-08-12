@@ -1,5 +1,6 @@
 import type { FichaMedicaDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/fichas-medicas';
+
+const BASE_URL = 'http://localhost:8080/api/v1/fichaMedica';
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -22,7 +23,7 @@ const handleResponse = async (response: Response) => {
 };
 
 export const FichaMedicaService = {
-  getFichas: async (): Promise<FichaMedicaDTO[]> => {
+  getFichasMedicas: async (): Promise<FichaMedicaDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}`);
       return await handleResponse(response);
@@ -32,7 +33,7 @@ export const FichaMedicaService = {
     }
   },
 
-  getFicha: async (id: number): Promise<FichaMedicaDTO> => {
+  getFichaMedica: async (id: number): Promise<FichaMedicaDTO> => {
     try {
       const response = await fetch(`${BASE_URL}/${id}`);
       return await handleResponse(response);
@@ -42,14 +43,14 @@ export const FichaMedicaService = {
     }
   },
 
-  createFicha: async (ficha: FichaMedicaDTO): Promise<FichaMedicaDTO> => {
+  createFichaMedica: async (fichaMedica: FichaMedicaDTO): Promise<FichaMedicaDTO> => {
     try {
       const response = await fetch(`${BASE_URL}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(ficha)
+        body: JSON.stringify(fichaMedica)
       });
       return await handleResponse(response);
     } catch (error) {
@@ -58,14 +59,14 @@ export const FichaMedicaService = {
     }
   },
 
-  updateFicha: async (ficha: FichaMedicaDTO): Promise<FichaMedicaDTO> => {
+  updateFichaMedica: async (fichaMedica: FichaMedicaDTO): Promise<FichaMedicaDTO> => {
     try {
-      const response = await fetch(`${BASE_URL}/${ficha.id}`, {
+      const response = await fetch(`${BASE_URL}/${fichaMedica.id}`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(ficha)
+        body: JSON.stringify(fichaMedica)
       });
       return await handleResponse(response);
     } catch (error) {
@@ -74,7 +75,7 @@ export const FichaMedicaService = {
     }
   },
 
-  deleteFicha: async (id: number): Promise<void> => {
+  deleteFichaMedica: async (id: number): Promise<void> => {
     try {
       const response = await fetch(`${BASE_URL}/${id}`, {
         method: "DELETE",
@@ -90,16 +91,16 @@ export const FichaMedicaService = {
         }
         throw new Error(errorMessage);
       }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      throw error;
+    }
+  },
 
-      if (response.status === 204) {
-        return;
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        return data;
-      }
+  fichaMedicaPorAlumno: async (alumnoId: number): Promise<FichaMedicaDTO[]> => {
+    try {
+      const response = await fetch(`${BASE_URL}/${alumnoId}`);
+      return await handleResponse(response);
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

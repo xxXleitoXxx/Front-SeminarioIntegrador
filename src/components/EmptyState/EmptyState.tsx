@@ -7,7 +7,7 @@ interface EmptyStateProps {
   message: string;
   icon?: string;
 }
-
+    
 const EmptyState: React.FC<EmptyStateProps> = ({ title, message, icon = "📭" }) => {
   return (
     <div className="empty-state-container">

@@ -1,0 +1,60 @@
+/* Modal de Contactos de Emergencia */
+.modal-header-info {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: white;
+  border-bottom: none;
+}
+
+.modal-body-info {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.modal-footer-info {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.contactos-table {
+  margin-bottom: 0;
+}
+
+.contactos-table th {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+  font-weight: 600;
+  color: #495057;
+}
+
+.contactos-table td {
+  vertical-align: middle;
+  border-color: #dee2e6;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.empty-icon {
+  font-size: 3em;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.empty-message {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.btn-close {
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.btn-close:hover {
+  background-color: #6c757d;
+  color: white;
+} 

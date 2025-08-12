@@ -28,7 +28,7 @@ const ProfesorModal = ({
   const handleSaveUpdate = async (prof: ProfesorDTO) => {
     try {
       const isNew = prof.nroProfesor === 0;
-      console.log("el codigo del profesor es: ");
+      console.log("el nro del profesor es: ");
       console.log(prof.nroProfesor);
       if (isNew) {
         await ProfesorService.createProfesor(prof);
@@ -90,7 +90,9 @@ const ProfesorModal = ({
 
   // Validación
   const validationSchema = Yup.object().shape({
-    nroProfesor: Yup.number().integer().min(0).required("El código es requerido"),
+    nroProfesor: modalType === ModalType.CREATE 
+      ? Yup.number().integer().min(0).optional()
+      : Yup.number().integer().min(0).required("El ProfesorNro es requerido"),
     dniProfesor: Yup.number().integer().min(0).required("El DNI es requerido"),
     nombreProfesor: Yup.string().required("El nombre es requerido"),
     telefonoProfesor: Yup.number().integer().min(0).required("El teléfono es requerido"),
@@ -153,26 +155,28 @@ const ProfesorModal = ({
           <Modal.Body className="modal-body-form">
             <Form onSubmit={formik.handleSubmit} className="form-modern">
               <div className="form-grid">
-                <Form.Group controlId="formNroProfesor" className="form-group-modern">
+                {modalType !== ModalType.CREATE && (
+                  <Form.Group controlId="formNroProfesor" className="form-group-modern">
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">#</span>
-                    Código
+                      ProfesorNro
                   </Form.Label>
                   <Form.Control
-                    name="nroProfesor"
+                      name="nroProfesor"
                     type="number"
-                    value={formik.values.nroProfesor || ""}
+                      value={formik.values.nroProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.nroProfesor && formik.touched.nroProfesor)}
-                    disabled={modalType !== ModalType.CREATE}
+                      isInvalid={!!(formik.errors.nroProfesor && formik.touched.nroProfesor)}
+                      disabled={true}
                     className="form-control-modern"
-                    placeholder="Ingrese el código"
+                      placeholder="Ingrese el ProfesorNro"
                   />
                   <Form.Control.Feedback type="invalid" className="feedback-modern">
-                    {formik.errors.nroProfesor}
+                      {formik.errors.nroProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
+                )}
                 <Form.Group controlId="formDniProfesor" className="form-group-modern">
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">🆔</span>
