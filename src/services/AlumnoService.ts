@@ -47,10 +47,13 @@ export const AlumnoService = {
   createAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO> => {
     try {
       // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
-      const localidad = (alumno as any).localidadAlumno ?? (alumno as any).localidad ?? null;
+    
+     const localidad = alumno.localidadAlumno
 
-      // Preparar los datos para el envío, manejando las fechas correctamente
-      const alumnoData: any = {
+     // Preparar los datos para el envío, manejando las fechas correctamente
+  
+     
+     const alumnoData: any = {
         dniAlumno: alumno.dniAlumno,
         domicilioAlumno: alumno.domicilioAlumno,
         fechaNacAlumno: alumno.fechaNacAlumno instanceof Date 
@@ -85,11 +88,12 @@ export const AlumnoService = {
       };
 
       // Solo incluir nroAlumno si no es 0 (para nuevos registros)
-      if (alumno.nroAlumno !== 0) {
-        alumnoData.nroAlumno = alumno.nroAlumno;
-      }
+      
+      // if (alumno.nroAlumno !== 0) {
+      //   alumnoData.nroAlumno = alumno.nroAlumno;
+      // }
 
-      console.log('[AlumnoService.createAlumno] Payload a enviar:', alumnoData);
+    //  console.log('[AlumnoService.createAlumno] Payload a enviar:', alumnoData);
 
       const response = await fetch(`${BASE_URL}`, {
         method: "POST",

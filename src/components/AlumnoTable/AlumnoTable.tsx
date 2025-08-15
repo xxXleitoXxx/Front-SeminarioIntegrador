@@ -7,7 +7,11 @@ import ContactosModal from "../ContactosModal/ContactosModal";
 import FichasMedicasModal from "../FichasMedicasModal/FichasMedicasModal";
 import { EditButton } from "../EditButton/EditButton";
 import { DeleteButton } from "../DeleteButton/DeleteButton";
-import type { AlumnoDTO } from "../../types";
+import type {
+  AlumnoDTO,
+  ContactoEmergenciaDTO,
+  FichaMedicaDTO,
+} from "../../types";
 import { AlumnoService } from "../../services/AlumnoService";
 import EmptyState from "../EmptyState/EmptyState";
 import "./AlumnoTable.css";
@@ -23,17 +27,19 @@ const AlumnoTable = () => {
     telefonoAlumno: 0,
     mailAlumno: "",
     localidadAlumno: null,
-    contactosEmergencia: [{
-      id: 0,
-      direccionContacto: "",
-      nombreContacto: "",
-      telefonoContacto: 0
-    }],
+    contactosEmergencia: [
+      {
+        id: 0,
+        direccionContacto: "",
+        nombreContacto: "",
+        telefonoContacto: 0,
+      },
+    ],
     fichaMedicaDTO: {
       id: 0,
       fechaBajaFichaMedica: null,
-      archivo: new Uint8Array()
-    }
+      archivo: new Uint8Array(),
+    },
   });
 
   const [alumno, setAlumno] = useState<AlumnoDTO>(initializableNewAlumno());
@@ -43,11 +49,12 @@ const AlumnoTable = () => {
   const [alumnos, setAlumnos] = useState<AlumnoDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshData, setRefreshData] = useState(false);
-  
+
   // Estados para modales de contactos y fichas médicas
   const [showContactosModal, setShowContactosModal] = useState(false);
   const [showFichasModal, setShowFichasModal] = useState(false);
-  const [selectedAlumnoForModals, setSelectedAlumnoForModals] = useState<AlumnoDTO | null>(null);
+  const [selectedAlumnoForModals, setSelectedAlumnoForModals] =
+    useState<AlumnoDTO | null>(null);
 
   const handleClick = (
     newTitle: string,
@@ -75,18 +82,18 @@ const AlumnoTable = () => {
   }, [refreshData]);
 
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
+    return new Date(date).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     });
   };
 
-  const getContactosCount = (contactos: any[]) => {
+  const getContactosCount = (contactos: ContactoEmergenciaDTO[]) => {
     return contactos ? contactos.length : 0;
   };
 
-  const hasFichaMedica = (fichaMedica: any) => {
+  const hasFichaMedica = (fichaMedica: FichaMedicaDTO) => {
     return fichaMedica && fichaMedica.archivo && fichaMedica.archivo.length > 0;
   };
 
@@ -155,7 +162,9 @@ const AlumnoTable = () => {
                   <td className="text-center">{alumno.nroAlumno}</td>
                   <td className="text-center">{alumno.dniAlumno}</td>
                   <td>
-                    <strong>{alumno.nombreAlumno} {alumno.apellidoAlumno}</strong>
+                    <strong>
+                      {alumno.nombreAlumno} {alumno.apellidoAlumno}
+                    </strong>
                   </td>
                   <td className="text-center">
                     {formatDate(alumno.fechaNacAlumno)}
@@ -165,21 +174,40 @@ const AlumnoTable = () => {
                     <span className="email-cell">{alumno.mailAlumno}</span>
                   </td>
                   <td>
-                    <span className="domicilio-cell">{alumno.domicilioAlumno}</span>
+                    <span className="domicilio-cell">
+                      {alumno.domicilioAlumno}
+                    </span>
                   </td>
                   <td className="text-center">
                     <span className="localidad-badge">
-                      {alumno.localidadAlumno?.nombreLocalidad || 'N/A'}
+                      {alumno.localidadAlumno?.nombreLocalidad || "N/A"}
                     </span>
                   </td>
                   <td className="text-center">
-                    <span className={`contactos-badge ${getContactosCount(alumno.contactosEmergencia) > 0 ? 'has-contacts' : 'no-contacts'}`}>
-                      {getContactosCount(alumno.contactosEmergencia)} contacto{getContactosCount(alumno.contactosEmergencia) !== 1 ? 's' : ''}
+                    <span
+                      className={`contactos-badge ${
+                        getContactosCount(alumno.contactosEmergencia) > 0
+                          ? "has-contacts"
+                          : "no-contacts"
+                      }`}
+                    >
+                      {getContactosCount(alumno.contactosEmergencia)} contacto
+                      {getContactosCount(alumno.contactosEmergencia) !== 1
+                        ? "s"
+                        : ""}
                     </span>
                   </td>
                   <td className="text-center">
-                    <span className={`ficha-badge ${hasFichaMedica(alumno.fichaMedicaDTO) ? 'has-ficha' : 'no-ficha'}`}>
-                      {hasFichaMedica(alumno.fichaMedicaDTO) ? '📄 Presente' : '❌ Sin ficha'}
+                    <span
+                      className={`ficha-badge ${
+                        hasFichaMedica(alumno.fichaMedicaDTO)
+                          ? "has-ficha"
+                          : "no-ficha"
+                      }`}
+                    >
+                      {hasFichaMedica(alumno.fichaMedicaDTO)
+                        ? "📄 Presente"
+                        : "❌ Sin ficha"}
                     </span>
                   </td>
                   <td className="text-center">
@@ -254,4 +282,4 @@ const AlumnoTable = () => {
   );
 };
 
-export default AlumnoTable; 
+export default AlumnoTable;

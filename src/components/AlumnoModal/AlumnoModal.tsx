@@ -32,7 +32,9 @@ const AlumnoModal = ({
 }: AlumnoModalProps) => {
   const [localidades, setLocalidades] = useState<LocalidadDTO[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [contactosEmergencia, setContactosEmergencia] = useState<ContactoEmergenciaDTO[]>([]);
+  const [contactosEmergencia, setContactosEmergencia] = useState<
+    ContactoEmergenciaDTO[]
+  >([]);
 
   // Cargar localidades al abrir el modal
   useEffect(() => {
@@ -59,7 +61,7 @@ const AlumnoModal = ({
         id: 0,
         direccionContacto: "",
         nombreContacto: "",
-        telefonoContacto: 0
+        telefonoContacto: 0,
       };
       setContactosEmergencia([defaultContacto]);
     }
@@ -72,21 +74,21 @@ const AlumnoModal = ({
       console.log("el nro del alumno es: ", alumnoData.nroAlumno);
 
       // Normalizar propiedad de localidad a 'localidadAlumno'
-      const anyAlumno: any = alumnoData as any;
-      anyAlumno.localidadAlumno = anyAlumno.localidadAlumno ?? anyAlumno.localidad ?? null;
-      if (Object.prototype.hasOwnProperty.call(anyAlumno, 'localidad')) {
-        delete anyAlumno.localidad;
-      }
+      // const anyAlumno: any = alumnoData as any;
+      // anyAlumno.localidadAlumno = anyAlumno.localidadAlumno ?? anyAlumno.localidad ?? null;
+      // if (Object.prototype.hasOwnProperty.call(anyAlumno, 'localidad')) {
+      //   delete anyAlumno.localidad;
+      // }
 
       // Procesar archivo PDF si se seleccionó uno
       if (selectedFile) {
         const arrayBuffer = await selectedFile.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
-        
+
         const fichaMedica: FichaMedicaDTO = {
           id: alumnoData.fichaMedicaDTO?.id || 0,
           fechaBajaFichaMedica: null,
-          archivo: uint8Array
+          archivo: uint8Array,
         };
         
         alumnoData.fichaMedicaDTO = fichaMedica;
@@ -95,9 +97,9 @@ const AlumnoModal = ({
         const fichaMedica: FichaMedicaDTO = {
           id: alumnoData.fichaMedicaDTO?.id || 0,
           fechaBajaFichaMedica: null,
-          archivo: new Uint8Array([1, 2, 3, 4, 5]) // Archivo por defecto
+          archivo: new Uint8Array([1, 2, 3, 4, 5]), // Archivo por defecto
         };
-        
+
         alumnoData.fichaMedicaDTO = fichaMedica;
       }
 
@@ -109,7 +111,7 @@ const AlumnoModal = ({
       } else {
         await AlumnoService.updateAlumno(alumnoData);
       }
-      
+
       toast.success(
         isNew ? "Alumno creado con éxito" : "Alumno actualizado con éxito",
         { position: "top-center" }
@@ -149,7 +151,9 @@ const AlumnoModal = ({
   const handleAltaLogica = async () => {
     try {
       await AlumnoService.altaLogicaAlumno(alumno);
-      toast.success("Alumno dado de alta con éxito", { position: "top-center" });
+      toast.success("Alumno dado de alta con éxito", {
+        position: "top-center",
+      });
       onHide();
       refreshData((prevState) => !prevState);
     } catch (error) {
@@ -168,9 +172,13 @@ const AlumnoModal = ({
     const file = event.target.files?.[0];
     if (file && file.type === "application/pdf") {
       setSelectedFile(file);
-      toast.success("Archivo PDF seleccionado correctamente", { position: "top-center" });
+      toast.success("Archivo PDF seleccionado correctamente", {
+        position: "top-center",
+      });
     } else {
-      toast.error("Por favor seleccione un archivo PDF válido", { position: "top-center" });
+      toast.error("Por favor seleccione un archivo PDF válido", {
+        position: "top-center",
+      });
       event.target.value = "";
     }
   };
@@ -181,7 +189,7 @@ const AlumnoModal = ({
       id: 0,
       direccionContacto: "",
       nombreContacto: "",
-      telefonoContacto: 0
+      telefonoContacto: 0,
     };
     setContactosEmergencia([...contactosEmergencia, nuevoContacto]);
   };
@@ -192,7 +200,11 @@ const AlumnoModal = ({
   };
 
   // Actualizar contacto de emergencia
-  const updateContactoEmergencia = (index: number, field: keyof ContactoEmergenciaDTO, value: any) => {
+  const updateContactoEmergencia = (
+    index: number,
+    field: keyof ContactoEmergenciaDTO,
+    value: any
+  ) => {
     const updatedContactos = [...contactosEmergencia];
     updatedContactos[index] = { ...updatedContactos[index], [field]: value };
     setContactosEmergencia(updatedContactos);
@@ -200,16 +212,34 @@ const AlumnoModal = ({
 
   // Validación
   const validationSchema = Yup.object().shape({
-    nroAlumno: modalType === ModalType.CREATE 
-      ? Yup.number().integer().min(0).optional()
-      : Yup.number().integer().min(0).required("El AlumnoNro es requerido"),
-    dniAlumno: Yup.number().integer().min(1, "El DNI debe ser mayor a 0").required("El DNI es requerido"),
-    nombreAlumno: Yup.string().trim().min(1, "El nombre es requerido").required("El nombre es requerido"),
-    apellidoAlumno: Yup.string().trim().min(1, "El apellido es requerido").required("El apellido es requerido"),
-    domicilioAlumno: Yup.string().trim().min(1, "El domicilio es requerido").required("El domicilio es requerido"),
+    nroAlumno:
+      modalType === ModalType.CREATE
+        ? Yup.number().integer().min(0).optional()
+        : Yup.number().integer().min(0).required("El AlumnoNro es requerido"),
+    dniAlumno: Yup.number()
+      .integer()
+      .min(1, "El DNI debe ser un número mayor a 0")
+      .required("El DNI es requerido"),
+    nombreAlumno: Yup.string()
+      .trim()
+      .min(1, "El nombre es requerido")
+      .required("El nombre es requerido"),
+    apellidoAlumno: Yup.string()
+      .trim()
+      .min(1, "El apellido es requerido")
+      .required("El apellido es requerido"),
+    domicilioAlumno: Yup.string()
+      .trim()
+      .min(1, "El domicilio es requerido")
+      .required("El domicilio es requerido"),
     fechaNacAlumno: Yup.date().required("La fecha de nacimiento es requerida"),
-    telefonoAlumno: Yup.number().integer().min(1, "El teléfono debe ser mayor a 0").required("El teléfono es requerido"),
-    mailAlumno: Yup.string().email("Email inválido").required("El email es requerido"),
+    telefonoAlumno: Yup.number()
+      .integer()
+      .min(1, "El teléfono debe ser mayor a 0")
+      .required("El teléfono es requerido"),
+    mailAlumno: Yup.string()
+      .email("Email inválido")
+      .required("El email es requerido"),
   });
 
   const formik = useFormik({
@@ -219,22 +249,29 @@ const AlumnoModal = ({
     validateOnBlur: true,
     onSubmit: (values) => {
       // Validación adicional para la localidad
-      if (!values.localidadAlumno || values.localidadAlumno.codLocalidad === 0) {
-        toast.error("Debe seleccionar una localidad", { position: "top-center" });
+      if (
+        !values.localidadAlumno ||
+        values.localidadAlumno.codLocalidad === 0
+      ) {
+        toast.error("Debe seleccionar una localidad", {
+          position: "top-center",
+        });
         return;
       }
-      
+
       // Validación para contactos de emergencia
-      const contactosValidos = contactosEmergencia.filter(contacto => 
-        contacto.nombreContacto.trim() !== "" && 
-        contacto.telefonoContacto > 0
+      const contactosValidos = contactosEmergencia.filter(
+        (contacto) =>
+          contacto.nombreContacto.trim() !== "" && contacto.telefonoContacto > 0
       );
-      
+
       if (contactosValidos.length === 0) {
-        toast.error("Debe agregar al menos un contacto de emergencia válido", { position: "top-center" });
+        toast.error("Debe agregar al menos un contacto de emergencia válido", {
+          position: "top-center",
+        });
         return;
       }
-      
+
       handleSaveUpdate(values);
     },
   });
@@ -242,7 +279,13 @@ const AlumnoModal = ({
   return (
     <>
       {modalType === ModalType.DELETE ? (
-        <Modal show={show} onHide={onHide} centered backdrop="static" className="modal-modern">
+        <Modal
+          show={show}
+          onHide={onHide}
+          centered
+          backdrop="static"
+          className="modal-modern"
+        >
           <Modal.Header closeButton className="modal-header-danger">
             <Modal.Title>
               <span className="modal-icon">🗑️</span>
@@ -256,15 +299,25 @@ const AlumnoModal = ({
                 ¿Está seguro que desea eliminar el alumno?
               </p>
               <div className="delete-item">
-                <strong>{alumno.nombreAlumno} {alumno.apellidoAlumno}</strong>
+                <strong>
+                  {alumno.nombreAlumno} {alumno.apellidoAlumno}
+                </strong>
               </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="modal-footer-danger">
-            <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+            <Button
+              variant="outline-secondary"
+              onClick={onHide}
+              className="btn-cancel"
+            >
               Cancelar
             </Button>
-            <Button variant="danger" onClick={handleDelete} className="btn-delete">
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              className="btn-delete"
+            >
               Eliminar
             </Button>
           </Modal.Footer>
@@ -290,7 +343,10 @@ const AlumnoModal = ({
             <Form onSubmit={formik.handleSubmit} className="form-modern">
               <div className="form-grid">
                 {modalType !== ModalType.CREATE && (
-                  <Form.Group controlId="formNroAlumno" className="form-group-modern">
+                  <Form.Group
+                    controlId="formNroAlumno"
+                    className="form-group-modern"
+                  >
                     <Form.Label className="form-label-modern">
                       <span className="label-icon">#</span>
                       AlumnoNro
@@ -301,12 +357,17 @@ const AlumnoModal = ({
                       value={formik.values.nroAlumno || ""}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      isInvalid={!!(formik.errors.nroAlumno && formik.touched.nroAlumno)}
+                      isInvalid={
+                        !!(formik.errors.nroAlumno && formik.touched.nroAlumno)
+                      }
                       disabled={true}
                       className="form-control-modern"
                       placeholder="Ingrese el AlumnoNro"
                     />
-                    <Form.Control.Feedback type="invalid" className="feedback-modern">
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="feedback-modern"
+                    >
                       {formik.errors.nroAlumno}
                     </Form.Control.Feedback>
                   </Form.Group>
@@ -314,7 +375,10 @@ const AlumnoModal = ({
 
                 <Row>
                   <Col md={6}>
-                    <Form.Group controlId="formDniAlumno" className="form-group-modern">
+                    <Form.Group
+                      controlId="formDniAlumno"
+                      className="form-group-modern"
+                    >
                       <Form.Label className="form-label-modern">
                         <span className="label-icon">🆔</span>
                         DNI
@@ -325,17 +389,27 @@ const AlumnoModal = ({
                         value={formik.values.dniAlumno || ""}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        isInvalid={!!(formik.errors.dniAlumno && formik.touched.dniAlumno)}
+                        isInvalid={
+                          !!(
+                            formik.errors.dniAlumno && formik.touched.dniAlumno
+                          )
+                        }
                         className="form-control-modern"
                         placeholder="Ingrese el DNI"
                       />
-                      <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="feedback-modern"
+                      >
                         {formik.errors.dniAlumno}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group controlId="formFechaNacAlumno" className="form-group-modern">
+                    <Form.Group
+                      controlId="formFechaNacAlumno"
+                      className="form-group-modern"
+                    >
                       <Form.Label className="form-label-modern">
                         <span className="label-icon">📅</span>
                         Fecha de Nacimiento
@@ -343,13 +417,27 @@ const AlumnoModal = ({
                       <Form.Control
                         name="fechaNacAlumno"
                         type="date"
-                        value={formik.values.fechaNacAlumno ? new Date(formik.values.fechaNacAlumno).toISOString().split('T')[0] : ""}
+                        value={
+                          formik.values.fechaNacAlumno
+                            ? new Date(formik.values.fechaNacAlumno)
+                                .toISOString()
+                                .split("T")[0]
+                            : ""
+                        }
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        isInvalid={!!(formik.errors.fechaNacAlumno && formik.touched.fechaNacAlumno)}
+                        isInvalid={
+                          !!(
+                            formik.errors.fechaNacAlumno &&
+                            formik.touched.fechaNacAlumno
+                          )
+                        }
                         className="form-control-modern"
                       />
-                      <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="feedback-modern"
+                      >
                         {formik.errors.fechaNacAlumno as string}
                       </Form.Control.Feedback>
                     </Form.Group>
@@ -358,7 +446,10 @@ const AlumnoModal = ({
 
                 <Row>
                   <Col md={6}>
-                    <Form.Group controlId="formNombreAlumno" className="form-group-modern">
+                    <Form.Group
+                      controlId="formNombreAlumno"
+                      className="form-group-modern"
+                    >
                       <Form.Label className="form-label-modern">
                         <span className="label-icon">👤</span>
                         Nombre
@@ -369,17 +460,28 @@ const AlumnoModal = ({
                         value={formik.values.nombreAlumno || ""}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        isInvalid={!!(formik.errors.nombreAlumno && formik.touched.nombreAlumno)}
+                        isInvalid={
+                          !!(
+                            formik.errors.nombreAlumno &&
+                            formik.touched.nombreAlumno
+                          )
+                        }
                         className="form-control-modern"
                         placeholder="Ingrese el nombre"
                       />
-                      <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="feedback-modern"
+                      >
                         {formik.errors.nombreAlumno}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group controlId="formApellidoAlumno" className="form-group-modern">
+                    <Form.Group
+                      controlId="formApellidoAlumno"
+                      className="form-group-modern"
+                    >
                       <Form.Label className="form-label-modern">
                         <span className="label-icon">👤</span>
                         Apellido
@@ -390,11 +492,19 @@ const AlumnoModal = ({
                         value={formik.values.apellidoAlumno || ""}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        isInvalid={!!(formik.errors.apellidoAlumno && formik.touched.apellidoAlumno)}
+                        isInvalid={
+                          !!(
+                            formik.errors.apellidoAlumno &&
+                            formik.touched.apellidoAlumno
+                          )
+                        }
                         className="form-control-modern"
                         placeholder="Ingrese el apellido"
                       />
-                      <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="feedback-modern"
+                      >
                         {formik.errors.apellidoAlumno}
                       </Form.Control.Feedback>
                     </Form.Group>
@@ -403,7 +513,10 @@ const AlumnoModal = ({
 
                 <Row>
                   <Col md={6}>
-                    <Form.Group controlId="formTelefonoAlumno" className="form-group-modern">
+                    <Form.Group
+                      controlId="formTelefonoAlumno"
+                      className="form-group-modern"
+                    >
                       <Form.Label className="form-label-modern">
                         <span className="label-icon">📞</span>
                         Teléfono
@@ -414,17 +527,28 @@ const AlumnoModal = ({
                         value={formik.values.telefonoAlumno || ""}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        isInvalid={!!(formik.errors.telefonoAlumno && formik.touched.telefonoAlumno)}
+                        isInvalid={
+                          !!(
+                            formik.errors.telefonoAlumno &&
+                            formik.touched.telefonoAlumno
+                          )
+                        }
                         className="form-control-modern"
                         placeholder="Ingrese el teléfono"
                       />
-                      <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="feedback-modern"
+                      >
                         {formik.errors.telefonoAlumno}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col md={6}>
-                    <Form.Group controlId="formMailAlumno" className="form-group-modern">
+                    <Form.Group
+                      controlId="formMailAlumno"
+                      className="form-group-modern"
+                    >
                       <Form.Label className="form-label-modern">
                         <span className="label-icon">📧</span>
                         Email
@@ -435,18 +559,29 @@ const AlumnoModal = ({
                         value={formik.values.mailAlumno || ""}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        isInvalid={!!(formik.errors.mailAlumno && formik.touched.mailAlumno)}
+                        isInvalid={
+                          !!(
+                            formik.errors.mailAlumno &&
+                            formik.touched.mailAlumno
+                          )
+                        }
                         className="form-control-modern"
                         placeholder="Ingrese el email"
                       />
-                      <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="feedback-modern"
+                      >
                         {formik.errors.mailAlumno}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
 
-                <Form.Group controlId="formDomicilioAlumno" className="form-group-modern">
+                <Form.Group
+                  controlId="formDomicilioAlumno"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">🏠</span>
                     Domicilio
@@ -457,16 +592,27 @@ const AlumnoModal = ({
                     value={formik.values.domicilioAlumno || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.domicilioAlumno && formik.touched.domicilioAlumno)}
+                    isInvalid={
+                      !!(
+                        formik.errors.domicilioAlumno &&
+                        formik.touched.domicilioAlumno
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el domicilio"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.domicilioAlumno}
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId="formLocalidadAlumno" className="form-group-modern">
+                <Form.Group
+                  controlId="formLocalidadAlumno"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">🏘️</span>
                     Localidad
@@ -475,8 +621,13 @@ const AlumnoModal = ({
                     name="localidadAlumno"
                     value={formik.values.localidadAlumno?.codLocalidad || ""}
                     onChange={(e) => {
-                      const selectedLocalidad = localidades.find(l => l.codLocalidad === parseInt(e.target.value));
-                      formik.setFieldValue('localidadAlumno', selectedLocalidad);
+                      const selectedLocalidad = localidades.find(
+                        (l) => l.codLocalidad === parseInt(e.target.value)
+                      );
+                      formik.setFieldValue(
+                        "localidadAlumno",
+                        selectedLocalidad
+                      );
                     }}
                     onBlur={formik.handleBlur}
                     isInvalid={!formik.values.localidadAlumno}
@@ -484,12 +635,18 @@ const AlumnoModal = ({
                   >
                     <option value="">Seleccione una localidad</option>
                     {localidades.map((localidad) => (
-                      <option key={localidad.codLocalidad} value={localidad.codLocalidad}>
+                      <option
+                        key={localidad.codLocalidad}
+                        value={localidad.codLocalidad}
+                      >
                         {localidad.nombreLocalidad}
                       </option>
                     ))}
                   </Form.Select>
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     La localidad es requerida
                   </Form.Control.Feedback>
                 </Form.Group>
@@ -505,11 +662,19 @@ const AlumnoModal = ({
                       <Row>
                         <Col md={4}>
                           <Form.Group className="form-group-modern">
-                            <Form.Label className="form-label-modern">Nombre</Form.Label>
+                            <Form.Label className="form-label-modern">
+                              Nombre
+                            </Form.Label>
                             <Form.Control
                               type="text"
                               value={contacto.nombreContacto}
-                              onChange={(e) => updateContactoEmergencia(index, 'nombreContacto', e.target.value)}
+                              onChange={(e) =>
+                                updateContactoEmergencia(
+                                  index,
+                                  "nombreContacto",
+                                  e.target.value
+                                )
+                              }
                               className="form-control-modern"
                               placeholder="Nombre del contacto"
                             />
@@ -517,11 +682,19 @@ const AlumnoModal = ({
                         </Col>
                         <Col md={4}>
                           <Form.Group className="form-group-modern">
-                            <Form.Label className="form-label-modern">Teléfono</Form.Label>
+                            <Form.Label className="form-label-modern">
+                              Teléfono
+                            </Form.Label>
                             <Form.Control
                               type="number"
                               value={contacto.telefonoContacto || ""}
-                              onChange={(e) => updateContactoEmergencia(index, 'telefonoContacto', parseInt(e.target.value) || 0)}
+                              onChange={(e) =>
+                                updateContactoEmergencia(
+                                  index,
+                                  "telefonoContacto",
+                                  parseInt(e.target.value) || 0
+                                )
+                              }
                               className="form-control-modern"
                               placeholder="Teléfono del contacto"
                             />
@@ -529,11 +702,19 @@ const AlumnoModal = ({
                         </Col>
                         <Col md={3}>
                           <Form.Group className="form-group-modern">
-                            <Form.Label className="form-label-modern">Dirección</Form.Label>
+                            <Form.Label className="form-label-modern">
+                              Dirección
+                            </Form.Label>
                             <Form.Control
                               type="text"
                               value={contacto.direccionContacto}
-                              onChange={(e) => updateContactoEmergencia(index, 'direccionContacto', e.target.value)}
+                              onChange={(e) =>
+                                updateContactoEmergencia(
+                                  index,
+                                  "direccionContacto",
+                                  e.target.value
+                                )
+                              }
                               className="form-control-modern"
                               placeholder="Dirección del contacto"
                             />
@@ -568,34 +749,43 @@ const AlumnoModal = ({
                     <span className="section-icon">🏥</span>
                     Ficha Médica
                   </h5>
-                                      <Form.Group controlId="formFichaMedica" className="form-group-modern">
-                      <Form.Label className="form-label-modern">
-                        <span className="label-icon">📄</span>
-                        Archivo PDF
-                      </Form.Label>
-                      <Form.Control
-                        type="file"
-                        accept=".pdf"
-                        onChange={handleFileChange}
-                        className="form-control-modern"
-                      />
-                      <Form.Text className="text-muted">
-                        Seleccione un archivo PDF con la ficha médica del alumno
-                      </Form.Text>
-                      {selectedFile && (
-                        <div className="selected-file">
-                          <span className="file-name">📎 {selectedFile.name}</span>
-                          <span className="file-size">({(selectedFile.size / 1024).toFixed(2)} KB)</span>
-                        </div>
-                      )}
-                    </Form.Group>
-
-
+                  <Form.Group
+                    controlId="formFichaMedica"
+                    className="form-group-modern"
+                  >
+                    <Form.Label className="form-label-modern">
+                      <span className="label-icon">📄</span>
+                      Archivo PDF
+                    </Form.Label>
+                    <Form.Control
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileChange}
+                      className="form-control-modern"
+                    />
+                    <Form.Text className="text-muted">
+                      Seleccione un archivo PDF con la ficha médica del alumno
+                    </Form.Text>
+                    {selectedFile && (
+                      <div className="selected-file">
+                        <span className="file-name">
+                          📎 {selectedFile.name}
+                        </span>
+                        <span className="file-size">
+                          ({(selectedFile.size / 1024).toFixed(2)} KB)
+                        </span>
+                      </div>
+                    )}
+                  </Form.Group>
                 </div>
               </div>
 
               <Modal.Footer className="modal-footer-form">
-                <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+                <Button
+                  variant="outline-secondary"
+                  onClick={onHide}
+                  className="btn-cancel"
+                >
                   Cancelar
                 </Button>
                 <Button
@@ -616,4 +806,4 @@ const AlumnoModal = ({
   );
 };
 
-export default AlumnoModal; 
+export default AlumnoModal;
