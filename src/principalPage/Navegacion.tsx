@@ -19,18 +19,14 @@ function Navegacion() {
                 Abm Profesor
               </Nav.Link>
               <Nav.Link onClick={() => navigate("/")}>Conf Fechas</Nav.Link>
-              <Nav.Link onClick={() => navigate("/altaalumno")}>
-                Inscribir Alumnos
-              </Nav.Link>
-              
               <Nav.Link onClick={() => navigate("/abmalumno")}>
                 AbmAlumno
               </Nav.Link>
-              <Nav.Link onClick={() => navigate("/paginaProps")}>
-                PaginaProps
+              <Nav.Link onClick={() => navigate("/inscripcion-clase")}>
+                Inscripción a Clase
               </Nav.Link>
-              <Nav.Link onClick={() => navigate("/abmprueba")}>
-                ABM Prueba
+              <Nav.Link onClick={() => navigate("/configurar-cronograma")}>
+                Configurar Cronograma
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

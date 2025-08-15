@@ -5,4 +5,6 @@ export type { FichaMedicaDTO } from './FichaMedicaDTO';
 export type { ProfesorDTO } from './ProfesorDTO';
 export type { RangoEtarioDTO } from './RangoEtarioDTO';
 export type { ArticuloDTO } from './ArticuloDTO';
+export type { TipoClaseDTO } from './TipoClaseDTO';
+export type { InscripcionDTO } from './InscripcionDTO';
 export { ModalType } from './ModalType'; 

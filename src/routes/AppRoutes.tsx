@@ -3,8 +3,9 @@ import AltaAlumno from "../components/AbmAlumno/AltaAlumno";
 
 import AbmAlumno from "../pages/AbmAlumno";
 import PaginaPrincipal from "../pages/Main";
-import PaginaProps from "../pages/PaginaProps";
 import AbmProfesor from "../pages/AbmProfesor";
+import InscripcionClase from "../pages/InscripcionClase";
+import ConfigurarCronograma from "../pages/ConfigurarCronograma";
 
 function Aplicacion() {
   return (
@@ -14,8 +15,9 @@ function Aplicacion() {
           <Route path="/" element={<PaginaPrincipal />} />
           <Route path="abmalumno" element={<AbmAlumno />} />
           <Route path="altaalumno" element={<AltaAlumno />} />
-          <Route path="paginaProps" element={<PaginaProps />} />
           <Route path="abmprofesor" element={<AbmProfesor />} />
+          <Route path="inscripcion-clase" element={<InscripcionClase />} />
+          <Route path="configurar-cronograma" element={<ConfigurarCronograma />} />
         </Routes>
       </div>
     </div>
