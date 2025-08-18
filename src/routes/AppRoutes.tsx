@@ -13,11 +13,14 @@ function Aplicacion() {
       <div className="Aplicacion">
         <Routes>
           <Route path="/" element={<PaginaPrincipal />} />
-          <Route path="abmalumno" element={<AbmAlumno />} />
+          <Route path="gestionalumno" element={<AbmAlumno />} />
           <Route path="altaalumno" element={<AltaAlumno />} />
-          <Route path="abmprofesor" element={<AbmProfesor />} />
+          <Route path="gestionprofesor" element={<AbmProfesor />} />
           <Route path="inscripcion-clase" element={<InscripcionClase />} />
-          <Route path="configurar-cronograma" element={<ConfigurarCronograma />} />
+          <Route
+            path="configurar-cronograma"
+            element={<ConfigurarCronograma />}
+          />
         </Routes>
       </div>
     </div>

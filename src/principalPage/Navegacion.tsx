@@ -15,12 +15,12 @@ function Navegacion() {
               <Nav.Link href="#controlAsistencia">
                 Controlar Asistencia
               </Nav.Link>
-              <Nav.Link onClick={() => navigate("/abmprofesor")}>
-                Abm Profesor
+              <Nav.Link onClick={() => navigate("/gestionprofesor")}>
+                Gestion Profesor
               </Nav.Link>
               <Nav.Link onClick={() => navigate("/")}>Conf Fechas</Nav.Link>
-              <Nav.Link onClick={() => navigate("/abmalumno")}>
-                AbmAlumno
+              <Nav.Link onClick={() => navigate("/gestionalumno")}>
+                Gestion Alumno
               </Nav.Link>
               <Nav.Link onClick={() => navigate("/inscripcion-clase")}>
                 Inscripción a Clase

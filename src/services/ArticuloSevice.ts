@@ -40,6 +40,7 @@ export const ArticuloService = {
 
   createArticulo: async (articulo: ArticuloDTO): Promise<ArticuloDTO> => {
     try {
+      console.log("Datos enviados al crear artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/altaArticulo`, {
         method: "POST",
         headers: {
@@ -56,6 +57,7 @@ export const ArticuloService = {
 
   updateArticulo: async (articulo: ArticuloDTO): Promise<ArticuloDTO> => {
     try {
+      console.log("Datos enviados al actualizar artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/modificarArticulo`, {
         method: "PUT",
         headers: {
@@ -104,7 +106,7 @@ export const ArticuloService = {
 
   bajaLogicaArticulo: async (articulo: ArticuloDTO): Promise<void> => {
      try {
-      console.log(articulo);
+      console.log("Datos enviados al dar de baja lógica artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/bajaArticulo`, {
         method: "PUT",
         headers: {
@@ -120,7 +122,7 @@ export const ArticuloService = {
   },
   altaLogicaArticulo: async (articulo: ArticuloDTO): Promise<void> => {
      try {
-      console.log(articulo);
+      console.log("Datos enviados al dar de alta lógica artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/bajaArticulo`, {
         method: "PUT",
         headers: {
@@ -156,6 +158,7 @@ export const ArticuloService = {
 
   listarProveedoresPorArticulo: async (articulo: ArticuloDTO): Promise<ArticuloProvDTO[]> => {
     try {
+      console.log("Datos enviados al listar proveedores por artículo:", articulo);
       console.log("[DEBUG] ArticuloService - Enviando POST a /Articulo/proveedoresPorArticulo");
       console.log("[DEBUG] ArticuloService - Datos enviados:", JSON.stringify(articulo, null, 2));
       

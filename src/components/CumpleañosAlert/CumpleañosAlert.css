@@ -1,0 +1,143 @@
+.alert {
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alert h4 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.alert p {
+  margin-bottom: 10px;
+  color: #6c757d;
+  text-align: center;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px 15px;
+  text-align: center;
+}
+
+.card-header h5 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-body p {
+  margin: 0 0 10px;
+  color: #212529;
+}
+
+.table-modern {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-modern th, .table-modern td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table-modern th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+}
+
+.table-modern td {
+  color: #212529;
+  font-size: 0.875rem;
+}
+
+.table-modern tr:hover {
+  background-color: #f8f9fa;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.btn-action {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.btn-action:active {
+  transform: translateY(0);
+}
