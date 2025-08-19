@@ -20,14 +20,22 @@ const handleResponse = async (response: Response) => {
     }
     throw new Error(errorMessage);
   }
-  return response.json();
+  
+  // Manejar tanto JSON como string
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    return response.text();
+  }
 };
 
 export const AlumnoService = {
   getAlumnos: async (): Promise<AlumnoDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -37,22 +45,23 @@ export const AlumnoService = {
   getAlumno: async (id: number): Promise<AlumnoDTO> => {
     try {
       const response = await fetch(`${BASE_URL}/${id}`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return typeof result === 'object' ? result : {} as AlumnoDTO;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  createAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO> => {
+  createAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO | string> => {
     try {
       // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
-    
+     
      const localidad = alumno.localidadAlumno
 
      // Preparar los datos para el envío, manejando las fechas correctamente
   
-     
+      
      const alumnoData: any = {
         dniAlumno: alumno.dniAlumno,
         domicilioAlumno: alumno.domicilioAlumno,
@@ -103,14 +112,39 @@ export const AlumnoService = {
         },
         body: JSON.stringify(alumnoData)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al crear alumno: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'object' ? data : data;
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  updateAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO> => {
+  updateAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO | string> => {
     try {
       // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
       const localidad = (alumno as any).localidadAlumno ?? (alumno as any).localidad ?? null;
@@ -161,14 +195,39 @@ export const AlumnoService = {
         },
         body: JSON.stringify(alumnoData)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al actualizar alumno: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'object' ? data : data;
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  deleteAlumno: async (id: number): Promise<void> => {
+  deleteAlumno: async (id: number): Promise<string> => {
     try {
       const response = await fetch(`${BASE_URL}/${id}`, {
         method: "DELETE",
@@ -186,13 +245,15 @@ export const AlumnoService = {
       }
 
       if (response.status === 204) {
-        return;
+        return "Alumno eliminado exitosamente";
       }
 
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
-        return data;
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -200,7 +261,7 @@ export const AlumnoService = {
     }
   },
 
-  bajaLogicaAlumno: async (alumno: AlumnoDTO): Promise<void> => {
+  bajaLogicaAlumno: async (alumno: AlumnoDTO): Promise<string> => {
     try {
       console.log(alumno);
       // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
@@ -239,13 +300,38 @@ export const AlumnoService = {
         },
         body: JSON.stringify(alumnoData)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al dar de baja alumno: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
-  altaLogicaAlumno: async (alumno: AlumnoDTO): Promise<void> => {
+  altaLogicaAlumno: async (alumno: AlumnoDTO): Promise<string> => {
     try {
       console.log(alumno);
       // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
@@ -284,7 +370,32 @@ export const AlumnoService = {
         },
         body: JSON.stringify(alumnoData)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al dar de alta alumno: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

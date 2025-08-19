@@ -93,7 +93,7 @@ const InscripcionClaseModal = ({
     } catch (error) {
       console.error(error);
       toast.error(
-        `Ha ocurrido un error: $
+        `Ha ocurrido un error: ${
           error instanceof Error ? error.message : String(error)
         }`,
         { position: "top-center" }
@@ -117,7 +117,7 @@ const InscripcionClaseModal = ({
     } catch (error) {
       console.error(error);
       toast.error(
-        `Ha ocurrido un error: $
+        `Ha ocurrido un error: ${
           error instanceof Error ? error.message : String(error)
         }`,
         { position: "top-center" }

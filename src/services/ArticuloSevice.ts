@@ -6,22 +6,36 @@ const handleResponse = async (response: Response) => {
   if (!response.ok) {
     let errorMessage = `Error: ${response.statusText}`;
     try {
-      const errorData = await response.json();
-      // Asumiendo que el error tiene un formato como { error: "Mensaje de error" }
-      errorMessage = errorData.error || JSON.stringify(errorData);
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await response.json();
+        // Asumiendo que el error tiene un formato como { error: "Mensaje de error" }
+        errorMessage = errorData.error || JSON.stringify(errorData);
+      } else {
+        const text = await response.text();
+        errorMessage = text || errorMessage;
+      }
     } catch (error) {
       console.error("Error parsing error response:", error);
     }
     throw new Error(errorMessage);
   }
-  return response.json();
+  
+  // Manejar tanto JSON como string
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    return response.text();
+  }
 };
 
 export const ArticuloService = {
   getArticulos: async (): Promise<ArticuloDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}/Articulo`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -31,14 +45,15 @@ export const ArticuloService = {
   getArticulo: async (id: number): Promise<ArticuloDTO> => {
     try {
       const response = await fetch(`${BASE_URL}/Articulo/altaArticulo/${id}`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return typeof result === 'object' ? result : {} as ArticuloDTO;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  createArticulo: async (articulo: ArticuloDTO): Promise<ArticuloDTO> => {
+  createArticulo: async (articulo: ArticuloDTO): Promise<ArticuloDTO | string> => {
     try {
       console.log("Datos enviados al crear artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/altaArticulo`, {
@@ -48,14 +63,39 @@ export const ArticuloService = {
         },
         body: JSON.stringify(articulo)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al crear artículo: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'object' ? data : data;
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  updateArticulo: async (articulo: ArticuloDTO): Promise<ArticuloDTO> => {
+  updateArticulo: async (articulo: ArticuloDTO): Promise<ArticuloDTO | string> => {
     try {
       console.log("Datos enviados al actualizar artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/modificarArticulo`, {
@@ -65,14 +105,39 @@ export const ArticuloService = {
         },
         body: JSON.stringify(articulo)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al actualizar artículo: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'object' ? data : data;
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  deleteArticulo: async (id: number): Promise<void> => {
+  deleteArticulo: async (id: number): Promise<string> => {
     try {
       const response = await fetch(`${BASE_URL}/Articulo/altaArticulo/${id}`, {
         method: "DELETE",
@@ -90,13 +155,15 @@ export const ArticuloService = {
       }
 
       if (response.status === 204) {
-        return;
+        return "Artículo eliminado exitosamente";
       }
 
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
-        return data;
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -104,7 +171,7 @@ export const ArticuloService = {
     }
   },
 
-  bajaLogicaArticulo: async (articulo: ArticuloDTO): Promise<void> => {
+  bajaLogicaArticulo: async (articulo: ArticuloDTO): Promise<string> => {
      try {
       console.log("Datos enviados al dar de baja lógica artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/bajaArticulo`, {
@@ -114,13 +181,38 @@ export const ArticuloService = {
         },
         body: JSON.stringify(articulo)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al dar de baja artículo: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
-  altaLogicaArticulo: async (articulo: ArticuloDTO): Promise<void> => {
+  altaLogicaArticulo: async (articulo: ArticuloDTO): Promise<string> => {
      try {
       console.log("Datos enviados al dar de alta lógica artículo:", articulo);
       const response = await fetch(`${BASE_URL}/Articulo/bajaArticulo`, {
@@ -130,7 +222,32 @@ export const ArticuloService = {
         },
         body: JSON.stringify(articulo)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al dar de alta artículo: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -139,7 +256,8 @@ export const ArticuloService = {
   getProductosFaltantes: async (): Promise<ArticuloDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}/Articulo/articulosFaltantes`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud de productos faltantes:", error);
       throw error;
@@ -149,14 +267,15 @@ export const ArticuloService = {
   getProductosAReponer: async (): Promise<ArticuloDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}/Articulo/productosAReponer`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud de productos a reponer:", error);
       throw error;
     }
   },
 
-  listarProveedoresPorArticulo: async (articulo: ArticuloDTO): Promise<ArticuloProvDTO[]> => {
+  listarProveedoresPorArticulo: async (articulo: ArticuloDTO): Promise<any[]> => {
     try {
       console.log("Datos enviados al listar proveedores por artículo:", articulo);
       console.log("[DEBUG] ArticuloService - Enviando POST a /Articulo/proveedoresPorArticulo");
@@ -176,7 +295,7 @@ export const ArticuloService = {
       const result = await handleResponse(response);
       console.log("[DEBUG] ArticuloService - Resultado procesado:", result);
       
-      return result;
+      return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

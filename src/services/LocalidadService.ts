@@ -18,14 +18,22 @@ const handleResponse = async (response: Response) => {
     }
     throw new Error(errorMessage);
   }
-  return response.json();
+  
+  // Manejar tanto JSON como string
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    return response.text();
+  }
 };
 
 export const LocalidadService = {
   getLocalidades: async (): Promise<LocalidadDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -35,14 +43,15 @@ export const LocalidadService = {
   getLocalidad: async (id: number): Promise<LocalidadDTO> => {
     try {
       const response = await fetch(`${BASE_URL}/${id}`);
-      return await handleResponse(response);
+      const result = await handleResponse(response);
+      return typeof result === 'object' ? result : {} as LocalidadDTO;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  createLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO> => {
+  createLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
     try {
       const response = await fetch(`${BASE_URL}`, {
         method: "POST",
@@ -51,14 +60,39 @@ export const LocalidadService = {
         },
         body: JSON.stringify(localidad)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al crear localidad: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'object' ? data : data;
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  updateLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO> => {
+  updateLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
     try {
       const response = await fetch(`${BASE_URL}/${localidad.codLocalidad}`, {
         method: "PUT",
@@ -67,14 +101,39 @@ export const LocalidadService = {
         },
         body: JSON.stringify(localidad)
       });
-      return await handleResponse(response);
+
+      if (!response.ok) {
+        let errorMessage = `Error al actualizar localidad: ${response.statusText}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (error) {
+          console.error("Error parsing error response:", error);
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Manejar la respuesta exitosa
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return typeof data === 'object' ? data : data;
+      } else {
+        return await response.text();
+      }
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
     }
   },
 
-  deleteLocalidad: async (id: number): Promise<void> => {
+  deleteLocalidad: async (id: number): Promise<string> => {
     try {
       const response = await fetch(`${BASE_URL}/${id}`, {
         method: "DELETE",
@@ -92,13 +151,15 @@ export const LocalidadService = {
       }
 
       if (response.status === 204) {
-        return;
+        return "Localidad eliminada exitosamente";
       }
 
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
-        return data;
+        return typeof data === 'string' ? data : JSON.stringify(data);
+      } else {
+        return await response.text();
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
