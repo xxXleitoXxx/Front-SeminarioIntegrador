@@ -30,6 +30,29 @@ const VerHorariosModal = ({
     return timeString.substring(0, 5);
   };
 
+  const getHorarioEstado = (horario: HorarioiDiaxTipoClaseDTO) => {
+    console.log("Analizando horario:", horario);
+    console.log("fechaBajaHFxTC:", horario.fechaBajaHFxTC);
+    console.log("Tipo de fechaBajaHFxTC:", typeof horario.fechaBajaHFxTC);
+    console.log("Configuración fechaFinVigenciaConf:", selectedConfig?.fechaFinVigenciaConf);
+    
+    // Si la configuración ya no está vigente, todos los horarios están inactivos
+    if (selectedConfig?.fechaFinVigenciaConf) {
+      console.log("Configuración no vigente - Horario INACTIVO");
+      return { estado: "Inactivo", color: "danger" };
+    }
+    
+    // Si la propiedad fechaBajaHFxTC existe y tiene valor, está inactivo
+    if (horario.fechaBajaHFxTC && horario.fechaBajaHFxTC !== null) {
+      console.log("Horario con fecha de baja - INACTIVO");
+      return { estado: "Inactivo", color: "danger" };
+    }
+    
+    // Si no tiene fechaBajaHFxTC o es null, está activo
+    console.log("Horario ACTIVO");
+    return { estado: "Activo", color: "success" };
+  };
+
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
@@ -91,11 +114,10 @@ const VerHorariosModal = ({
                           </Badge>
                         </td>
                         <td className="text-center">
-                          {horario.fechaBajaHFxTC ? (
-                            <Badge bg="danger">Inactivo</Badge>
-                          ) : (
-                            <Badge bg="success">Activo</Badge>
-                          )}
+                          {(() => {
+                            const estado = getHorarioEstado(horario);
+                            return <Badge bg={estado.color}>{estado.estado}</Badge>;
+                          })()}
                         </td>
                       </tr>
                     ))}

@@ -33,15 +33,15 @@ const NuevaConfiguracionModal = ({
   const [nuevoHorario, setNuevoHorario] = useState<HorarioiDiaxTipoClaseDTO>({
     nroHFxTC: 0,
     fechaBajaHFxTC: null,
-    horaDesde: "08:00:00",
-    horaHasta: "09:00:00",
+    horaDesde: "08:00",
+    horaHasta: "09:00",
     diaDTO: {
       codDia: 1,
       fechaBajaDia: null,
       nombreDia: "Lunes",
     },
     tipoClase: {
-      codTipoClase: 1,
+      codTipoClase: 0,
       fechaBajaTipoClase: null,
       nombreTipoClase: "",
       descripcionTipoClase: "",
@@ -49,6 +49,9 @@ const NuevaConfiguracionModal = ({
   });
 
   const handleAddHorario = () => {
+    console.log("Agregando horario:", nuevoHorario);
+    console.log("Tipo de clase seleccionado:", nuevoHorario.tipoClase);
+    
     setNuevaConfiguracion((prev) => ({
       ...prev,
       horarioiDiaxTipoClaseList: [
@@ -59,15 +62,15 @@ const NuevaConfiguracionModal = ({
     setNuevoHorario({
       nroHFxTC: 0,
       fechaBajaHFxTC: null,
-      horaDesde: "08:00:00",
-      horaHasta: "09:00:00",
+      horaDesde: "08:00",
+      horaHasta: "09:00",
       diaDTO: {
         codDia: 1,
         fechaBajaDia: null,
         nombreDia: "Lunes",
       },
       tipoClase: {
-        codTipoClase: 1,
+        codTipoClase: 0,
         fechaBajaTipoClase: null,
         nombreTipoClase: "",
         descripcionTipoClase: "",
@@ -91,8 +94,18 @@ const NuevaConfiguracionModal = ({
         return;
       }
 
+      // Formatear las horas para el backend (HH:MM:SS)
+      const configuracionFormateada = {
+        ...nuevaConfiguracion,
+        horarioiDiaxTipoClaseList: nuevaConfiguracion.horarioiDiaxTipoClaseList.map(horario => ({
+          ...horario,
+          horaDesde: horario.horaDesde + ":00",
+          horaHasta: horario.horaHasta + ":00"
+        }))
+      };
+
       const result = await ConfHorarioTipoClaseService.crearConfiguracion(
-        nuevaConfiguracion
+        configuracionFormateada
       );
 
       if (typeof result === "string") {
@@ -230,14 +243,20 @@ const NuevaConfiguracionModal = ({
               <Form.Group className="mb-3">
                 <Form.Label>Tipo de Clase</Form.Label>
                 <Form.Select
-                  value={nuevoHorario.tipoClase.codTipoClase}
+                  value={nuevoHorario.tipoClase.codTipoClase || ""}
                   onChange={(e) => {
+                    const codTipoClase = parseInt(e.target.value);
                     const tipoClase = tiposClase.find(
-                      (t) => t.codTipoClase === parseInt(e.target.value)
+                      (t) => t.codTipoClase === codTipoClase
                     );
                     setNuevoHorario((prev) => ({
                       ...prev,
-                      tipoClase: tipoClase || prev.tipoClase,
+                      tipoClase: tipoClase || {
+                        codTipoClase: 0,
+                        fechaBajaTipoClase: null,
+                        nombreTipoClase: "",
+                        descripcionTipoClase: "",
+                      },
                     }));
                   }}
                 >
@@ -258,7 +277,8 @@ const NuevaConfiguracionModal = ({
                 disabled={
                   !nuevoHorario.horaDesde ||
                   !nuevoHorario.horaHasta ||
-                  !nuevoHorario.tipoClase.codTipoClase
+                  !nuevoHorario.tipoClase.codTipoClase ||
+                  nuevoHorario.tipoClase.codTipoClase === 0
                 }
               >
                 Agregar

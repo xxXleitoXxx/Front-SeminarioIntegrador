@@ -8,7 +8,6 @@ import type {
   TipoClaseDTO,
 } from "../../types";
 import { ConfHorarioTipoClaseService } from "../../services/ConfHorarioTipoClaseService";
-import { HorarioiDiaxTipoClaseService } from "../../services/HorarioiDiaxTipoClaseService";
 import { TipoClaseService } from "../../services/TipoClaseService";
 import "./ConfigurarCronograma.css";
 import NuevaConfiguracionModal from "./NuevaConfiguracionModal";
@@ -18,9 +17,6 @@ const ConfigurarCronograma: React.FC = () => {
   const [configuraciones, setConfiguraciones] = useState<
     ConfHorarioTipoClaseDTO[]
   >([]);
-  const [horarios, setHorarios] = useState<{
-    [confId: number]: HorarioiDiaxTipoClaseDTO[];
-  }>({});
   const [tiposClase, setTiposClase] = useState<TipoClaseDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -46,24 +42,6 @@ const ConfigurarCronograma: React.FC = () => {
 
       setConfiguraciones(configsData);
       setTiposClase(tiposClaseData);
-
-      const horariosData: { [confId: number]: HorarioiDiaxTipoClaseDTO[] } = {};
-      for (const config of configsData) {
-        try {
-          const horariosConfig =
-            await HorarioiDiaxTipoClaseService.getHorariosPorConf(
-              config.nroConfTC
-            );
-          horariosData[config.nroConfTC] = horariosConfig;
-        } catch (error) {
-          console.error(
-            `Error cargando horarios para configuración ${config.nroConfTC}:`,
-            error
-          );
-          horariosData[config.nroConfTC] = [];
-        }
-      }
-      setHorarios(horariosData);
     } catch (error) {
       console.error("Error cargando datos:", error);
       toast.error("Error al cargar las configuraciones");
@@ -84,8 +62,19 @@ const ConfigurarCronograma: React.FC = () => {
   const handleVerHorarios = (config: ConfHorarioTipoClaseDTO) => {
     try {
       setSelectedConfig(config);
-      const horariosConfig = horarios[config.nroConfTC] || [];
-      setSelectedHorarios(horariosConfig);
+      const horariosConfig = config.horarioiDiaxTipoClaseList || [];
+      console.log("Horarios de la configuración:", horariosConfig);
+      console.log("Primer horario:", horariosConfig[0]);
+      console.log("Propiedades del primer horario:", Object.keys(horariosConfig[0] || {}));
+      console.log("fechaBajaHFxTC del primer horario:", horariosConfig[0]?.fechaBajaHFxTC);
+      
+      // Mapear los horarios para asegurar que tengan la propiedad fechaBajaHFxTC
+      const horariosMapeados = horariosConfig.map(horario => ({
+        ...horario,
+        fechaBajaHFxTC: horario.fechaBajaHFxTC || null
+      }));
+      
+      setSelectedHorarios(horariosMapeados);
       setShowHorariosModal(true);
     } catch (error) {
       console.error("Error al mostrar horarios:", error);
@@ -201,7 +190,7 @@ const ConfigurarCronograma: React.FC = () => {
                   </td>
                   <td className="text-center">
                     <Badge bg="info" className="horarios-badge">
-                      {horarios[config.nroConfTC]?.length || 0} horarios
+                      {config.horarioiDiaxTipoClaseList?.length || 0} horarios
                     </Badge>
                   </td>
                   <td className="text-center">
