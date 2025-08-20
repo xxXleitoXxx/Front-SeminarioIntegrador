@@ -1,0 +1,307 @@
+import { useState } from "react";
+import { Button, Form, Modal, Badge } from "react-bootstrap";
+import { toast } from "react-toastify";
+import type {
+  ConfHorarioTipoClaseDTO,
+  HorarioiDiaxTipoClaseDTO,
+  TipoClaseDTO,
+} from "../../types";
+import { ConfHorarioTipoClaseService } from "../../services/ConfHorarioTipoClaseService";
+
+const NuevaConfiguracionModal = ({
+  show,
+  onHide,
+  tiposClase,
+  diasSemana,
+  fetchData,
+}: {
+  show: boolean;
+  onHide: () => void;
+  tiposClase: TipoClaseDTO[];
+  diasSemana: { codDia: number; nombreDia: string }[];
+  fetchData: () => void;
+}) => {
+  const [nuevaConfiguracion, setNuevaConfiguracion] =
+    useState<ConfHorarioTipoClaseDTO>({
+      nroConfTC: 0,
+      fechaVigenciaConf: new Date(),
+      fechaFinVigenciaConf: null,
+      horarioiDiaxTipoClaseList: [],
+      fechaHoraBaja: null, // Added missing property
+    });
+
+  const [nuevoHorario, setNuevoHorario] = useState<HorarioiDiaxTipoClaseDTO>({
+    nroHFxTC: 0,
+    fechaBajaHFxTC: null,
+    horaDesde: "08:00:00",
+    horaHasta: "09:00:00",
+    diaDTO: {
+      codDia: 1,
+      fechaBajaDia: null,
+      nombreDia: "Lunes",
+    },
+    tipoClase: {
+      codTipoClase: 1,
+      fechaBajaTipoClase: null,
+      nombreTipoClase: "",
+      descripcionTipoClase: "",
+    },
+  });
+
+  const handleAddHorario = () => {
+    setNuevaConfiguracion((prev) => ({
+      ...prev,
+      horarioiDiaxTipoClaseList: [
+        ...prev.horarioiDiaxTipoClaseList,
+        { ...nuevoHorario },
+      ],
+    }));
+    setNuevoHorario({
+      nroHFxTC: 0,
+      fechaBajaHFxTC: null,
+      horaDesde: "08:00:00",
+      horaHasta: "09:00:00",
+      diaDTO: {
+        codDia: 1,
+        fechaBajaDia: null,
+        nombreDia: "Lunes",
+      },
+      tipoClase: {
+        codTipoClase: 1,
+        fechaBajaTipoClase: null,
+        nombreTipoClase: "",
+        descripcionTipoClase: "",
+      },
+    });
+  };
+
+  const handleRemoveHorario = (index: number) => {
+    setNuevaConfiguracion((prev) => ({
+      ...prev,
+      horarioiDiaxTipoClaseList: prev.horarioiDiaxTipoClaseList.filter(
+        (_, i) => i !== index
+      ),
+    }));
+  };
+
+  const handleSubmitConfiguracion = async () => {
+    try {
+      if (nuevaConfiguracion.horarioiDiaxTipoClaseList.length === 0) {
+        toast.error("Debe agregar al menos un horario");
+        return;
+      }
+
+      const result = await ConfHorarioTipoClaseService.crearConfiguracion(
+        nuevaConfiguracion
+      );
+
+      if (typeof result === "string") {
+        toast.success(result);
+      } else {
+        toast.success("Configuración creada exitosamente");
+      }
+
+      onHide();
+      fetchData();
+    } catch (error) {
+      console.error("Error creando configuración:", error);
+      toast.error("Error al crear la configuración");
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={onHide} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>Nueva Configuración de Cronograma</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Fecha de Vigencia</Form.Label>
+            <Form.Control
+              type="date"
+              value={
+                nuevaConfiguracion.fechaVigenciaConf
+                  ? new Date(nuevaConfiguracion.fechaVigenciaConf)
+                      .toISOString()
+                      .split("T")[0]
+                  : ""
+              }
+              onChange={(e) =>
+                setNuevaConfiguracion((prev) => ({
+                  ...prev,
+                  fechaVigenciaConf: e.target.value
+                    ? new Date(e.target.value)
+                    : null,
+                }))
+              }
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Fecha de Fin de Vigencia (Opcional)</Form.Label>
+            <Form.Control
+              type="date"
+              value={
+                nuevaConfiguracion.fechaFinVigenciaConf
+                  ? new Date(nuevaConfiguracion.fechaFinVigenciaConf)
+                      .toISOString()
+                      .split("T")[0]
+                  : ""
+              }
+              onChange={(e) =>
+                setNuevaConfiguracion((prev) => ({
+                  ...prev,
+                  fechaFinVigenciaConf: e.target.value
+                    ? new Date(e.target.value)
+                    : null,
+                }))
+              }
+            />
+          </Form.Group>
+
+          <hr />
+          <h5>Agregar Horarios</h5>
+
+          <div className="row">
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label>Día</Form.Label>
+                <Form.Select
+                  value={nuevoHorario.diaDTO.codDia}
+                  onChange={(e) => {
+                    const dia = diasSemana.find(
+                      (d) => d.codDia === parseInt(e.target.value)
+                    );
+                    setNuevoHorario((prev) => ({
+                      ...prev,
+                      diaDTO: {
+                        ...prev.diaDTO,
+                        codDia: parseInt(e.target.value),
+                        nombreDia: dia?.nombreDia || "Lunes",
+                      },
+                    }));
+                  }}
+                >
+                  {diasSemana.map((dia) => (
+                    <option key={dia.codDia} value={dia.codDia}>
+                      {dia.nombreDia}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+
+            <div className="col-md-2">
+              <Form.Group className="mb-3">
+                <Form.Label>Hora Desde</Form.Label>
+                <Form.Control
+                  type="time"
+                  value={nuevoHorario.horaDesde}
+                  onChange={(e) =>
+                    setNuevoHorario((prev) => ({
+                      ...prev,
+                      horaDesde: e.target.value,
+                    }))
+                  }
+                />
+              </Form.Group>
+            </div>
+
+            <div className="col-md-2">
+              <Form.Group className="mb-3">
+                <Form.Label>Hora Hasta</Form.Label>
+                <Form.Control
+                  type="time"
+                  value={nuevoHorario.horaHasta}
+                  onChange={(e) =>
+                    setNuevoHorario((prev) => ({
+                      ...prev,
+                      horaHasta: e.target.value,
+                    }))
+                  }
+                />
+              </Form.Group>
+            </div>
+
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label>Tipo de Clase</Form.Label>
+                <Form.Select
+                  value={nuevoHorario.tipoClase.codTipoClase}
+                  onChange={(e) => {
+                    const tipoClase = tiposClase.find(
+                      (t) => t.codTipoClase === parseInt(e.target.value)
+                    );
+                    setNuevoHorario((prev) => ({
+                      ...prev,
+                      tipoClase: tipoClase || prev.tipoClase,
+                    }));
+                  }}
+                >
+                  <option value="">Seleccionar tipo de clase</option>
+                  {tiposClase.map((tipo) => (
+                    <option key={tipo.codTipoClase} value={tipo.codTipoClase}>
+                      {tipo.nombreTipoClase}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+
+            <div className="col-md-2 d-flex align-items-end">
+              <Button
+                variant="outline-primary"
+                onClick={handleAddHorario}
+                disabled={
+                  !nuevoHorario.horaDesde ||
+                  !nuevoHorario.horaHasta ||
+                  !nuevoHorario.tipoClase.codTipoClase
+                }
+              >
+                Agregar
+              </Button>
+            </div>
+          </div>
+
+          {nuevaConfiguracion.horarioiDiaxTipoClaseList.length > 0 && (
+            <div className="mt-3">
+              <h6>Horarios Agregados:</h6>
+              <div className="horarios-list">
+                {nuevaConfiguracion.horarioiDiaxTipoClaseList.map(
+                  (horario, index) => (
+                    <Badge
+                      key={index}
+                      bg="primary"
+                      className="me-2 mb-2 p-2"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleRemoveHorario(index)}
+                    >
+                      {horario.diaDTO.nombreDia} {horario.horaDesde}-
+                      {horario.horaHasta}({horario.tipoClase.nombreTipoClase})
+                      <span className="ms-2">×</span>
+                    </Badge>
+                  )
+                )}
+              </div>
+            </div>
+          )}
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onHide}>
+          Cancelar
+        </Button>
+        <Button
+          variant="primary"
+          onClick={handleSubmitConfiguracion}
+          disabled={nuevaConfiguracion.horarioiDiaxTipoClaseList.length === 0}
+        >
+          Crear Configuración
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default NuevaConfiguracionModal;

@@ -60,20 +60,21 @@ const InscripcionClaseModal = ({
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value.toLowerCase();
-    
-    const filtered = alumnos.filter((alumno) =>
-      alumno.dniAlumno.toString().includes(searchValue) ||
-      alumno.nombreAlumno.toLowerCase().includes(searchValue) ||
-      alumno.apellidoAlumno.toLowerCase().includes(searchValue)
+
+    const filtered = alumnos.filter(
+      (alumno) =>
+        alumno.dniAlumno.toString().includes(searchValue) ||
+        alumno.nombreAlumno.toLowerCase().includes(searchValue) ||
+        alumno.apellidoAlumno.toLowerCase().includes(searchValue)
     );
-    
+
     setFilteredAlumnos(filtered);
   };
 
-  const handleAlumnoSelect = (alumno: AlumnoDTO) => {
-    formik.setFieldValue("dniAlumno", alumno.dniAlumno);
-    setFilteredAlumnos(alumnos); // Reset filtered list
-  };
+  // const handleAlumnoSelect = (alumno: AlumnoDTO) => {
+  //   formik.setFieldValue("dniAlumno", alumno.dniAlumno);
+  //   setFilteredAlumnos(alumnos); // Reset filtered list
+  // };
 
   // Crear nueva inscripción
   const handleCreate = async (values: {

@@ -5,4 +5,5 @@ export interface ConfHorarioTipoClaseDTO {
   fechaVigenciaConf: Date | null;
   fechaFinVigenciaConf: Date | null;
   horarioiDiaxTipoClaseList: HorarioiDiaxTipoClaseDTO[];
+  fechaHoraBaja: Date | null; // Added to track inactive status
 }
