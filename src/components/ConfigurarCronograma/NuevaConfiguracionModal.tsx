@@ -105,7 +105,9 @@ const NuevaConfiguracionModal = ({
       fetchData();
     } catch (error) {
       console.error("Error creando configuración:", error);
-      toast.error("Error al crear la configuración");
+      const errorMessage =
+        error instanceof Error ? error.message : "Error desconocido";
+      toast.error(`Error al crear la configuración: ${errorMessage}`);
     }
   };
 

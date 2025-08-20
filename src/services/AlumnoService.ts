@@ -1,34 +1,7 @@
 import type { AlumnoDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/alumnos';
+import { handleResponse } from './common/handleResponse';
 
-const handleResponse = async (response: Response) => {
-  if (!response.ok) {
-    let errorMessage = `Error: ${response.statusText}`;
-    try {
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const errorData = await response.json();
-        console.error("Error response from backend:", errorData);
-        errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
-      } else {
-        const text = await response.text();
-        console.error("Error response text from backend:", text);
-        errorMessage = text || errorMessage;
-      }
-    } catch (error) {
-      console.error("Error parsing error response:", error);
-    }
-    throw new Error(errorMessage);
-  }
-  
-  // Manejar tanto JSON como string
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return response.json();
-  } else {
-    return response.text();
-  }
-};
+const BASE_URL = 'http://localhost:8080/api/v1/alumnos';
 
 export const AlumnoService = {
   getAlumnos: async (): Promise<AlumnoDTO[]> => {
@@ -401,4 +374,4 @@ export const AlumnoService = {
       throw error;
     }
   },
-}; 
+};
