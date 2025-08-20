@@ -170,12 +170,8 @@ export const ProfesorService = {
   bajaLogicaProfesor: async (profesor: ProfesorDTO): Promise<string> => {
     try {
       console.log(profesor);
-      const response = await fetch(`${BASE_URL}/bajaProfesor`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(profesor)
+      const response = await fetch(`${BASE_URL}/${profesor.dniProfesor}/baja`, {
+        method: "PUT"
       });
 
       if (!response.ok) {
