@@ -58,15 +58,17 @@ export const AlumnoService = {
               contacto.telefonoContacto && contacto.telefonoContacto > 0
             )
           : [],
-        fichaMedicaDTO: {
-          id: alumno.fichaMedicaDTO?.id || 0,
-          fechaBajaFichaMedica: alumno.fichaMedicaDTO?.fechaBajaFichaMedica instanceof Date 
-            ? alumno.fichaMedicaDTO.fechaBajaFichaMedica.toISOString().split('T')[0] 
-            : alumno.fichaMedicaDTO?.fechaBajaFichaMedica || null,
-          archivo: alumno.fichaMedicaDTO?.archivo && alumno.fichaMedicaDTO.archivo.length > 0
-            ? Array.from(alumno.fichaMedicaDTO.archivo) // Convertir Uint8Array a array normal
-            : [1,2,3,4,5] // Archivo por defecto si no se selecciona uno
-        }
+        fichaMedicaDTO: alumno.fichaMedicaDTO && alumno.fichaMedicaDTO.length > 0
+          ? alumno.fichaMedicaDTO.map(ficha => ({
+              id: ficha.id || 0,
+              fechaBajaFichaMedica: ficha.fechaBajaFichaMedica instanceof Date
+                ? ficha.fechaBajaFichaMedica.toISOString().split('T')[0]
+                : ficha.fechaBajaFichaMedica || null,
+              archivo: ficha.archivo && ficha.archivo.length > 0
+                ? Array.from(ficha.archivo)
+                : []
+            }))
+          : [],
       };
 
       // Solo incluir nroAlumno si no es 0 (para nuevos registros)
@@ -147,15 +149,17 @@ export const AlumnoService = {
               contacto.telefonoContacto && contacto.telefonoContacto > 0
             )
           : [],
-        fichaMedicaDTO: {
-          id: alumno.fichaMedicaDTO?.id || 0,
-          fechaBajaFichaMedica: alumno.fichaMedicaDTO?.fechaBajaFichaMedica instanceof Date 
-            ? alumno.fichaMedicaDTO.fechaBajaFichaMedica.toISOString().split('T')[0] 
-            : alumno.fichaMedicaDTO?.fechaBajaFichaMedica || null,
-          archivo: alumno.fichaMedicaDTO?.archivo && alumno.fichaMedicaDTO.archivo.length > 0
-            ? Array.from(alumno.fichaMedicaDTO.archivo)
-            : [1,2,3,4,5]
-        }
+        fichaMedicaDTO: alumno.fichaMedicaDTO && alumno.fichaMedicaDTO.length > 0
+          ? alumno.fichaMedicaDTO.map(ficha => ({
+              id: ficha.id || 0,
+              fechaBajaFichaMedica: ficha.fechaBajaFichaMedica instanceof Date
+                ? ficha.fechaBajaFichaMedica.toISOString().split('T')[0]
+                : ficha.fechaBajaFichaMedica || null,
+              archivo: ficha.archivo && ficha.archivo.length > 0
+                ? Array.from(ficha.archivo)
+                : []
+            }))
+          : [],
       };
 
       console.log('[AlumnoService.updateAlumno] Payload a enviar:', alumnoData);
@@ -236,42 +240,8 @@ export const AlumnoService = {
 
   bajaLogicaAlumno: async (alumno: AlumnoDTO): Promise<string> => {
     try {
-      console.log(alumno);
-      // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
-      const localidad = (alumno as any).localidadAlumno ?? (alumno as any).localidad ?? null;
-
-      // Preparar los datos para el envío
-      const alumnoData: any = {
-        nroAlumno: alumno.nroAlumno,
-        dniAlumno: alumno.dniAlumno,
-        domicilioAlumno: alumno.domicilioAlumno,
-        fechaNacAlumno: alumno.fechaNacAlumno instanceof Date 
-          ? alumno.fechaNacAlumno.toISOString().split('T')[0] 
-          : alumno.fechaNacAlumno,
-        nombreAlumno: alumno.nombreAlumno,
-        apellidoAlumno: alumno.apellidoAlumno,
-        telefonoAlumno: alumno.telefonoAlumno,
-        mailAlumno: alumno.mailAlumno,
-        localidadAlumno: localidad && localidad.codLocalidad > 0 ? {
-          codLocalidad: localidad.codLocalidad,
-          nombreLocalidad: localidad.nombreLocalidad,
-          fechaBajaLocalidad: localidad.fechaBajaLocalidad instanceof Date 
-            ? localidad.fechaBajaLocalidad.toISOString().split('T')[0] 
-            : localidad.fechaBajaLocalidad
-        } : null,
-        contactosEmergencia: alumno.contactosEmergencia || [],
-        fichaMedicaDTO: alumno.fichaMedicaDTO
-      };
-
-      console.log('[AlumnoService.bajaLogicaAlumno] Payload a enviar:', alumnoData);
-
-      const response = await fetch(`${BASE_URL}/bajaAlumno`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(alumnoData)
+      const response = await fetch(`${BASE_URL}/${alumno.dniAlumno}/baja`, {
+        method: "PUT"
       });
 
       if (!response.ok) {
