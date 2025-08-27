@@ -86,21 +86,21 @@ const AlumnoModal = ({
         const uint8Array = new Uint8Array(arrayBuffer);
 
         const fichaMedica: FichaMedicaDTO = {
-          id: alumnoData.fichaMedicaDTO?.id || 0,
+          id: alumnoData.fichaMedicaDTO && alumnoData.fichaMedicaDTO.length > 0 ? alumnoData.fichaMedicaDTO[0].id : 0,
           fechaBajaFichaMedica: null,
           archivo: uint8Array,
         };
         
-        alumnoData.fichaMedicaDTO = fichaMedica;
+        alumnoData.fichaMedicaDTO = [fichaMedica]; // Asegurarse de que sea un arreglo
       } else {
         // Si no se seleccionó archivo, crear una ficha médica por defecto
         const fichaMedica: FichaMedicaDTO = {
-          id: alumnoData.fichaMedicaDTO?.id || 0,
+          id: alumnoData.fichaMedicaDTO && alumnoData.fichaMedicaDTO.length > 0 ? alumnoData.fichaMedicaDTO[0].id : 0,
           fechaBajaFichaMedica: null,
           archivo: new Uint8Array([1, 2, 3, 4, 5]), // Archivo por defecto
         };
 
-        alumnoData.fichaMedicaDTO = fichaMedica;
+        alumnoData.fichaMedicaDTO = [fichaMedica]; // Asegurarse de que sea un arreglo
       }
 
       // Agregar contactos de emergencia

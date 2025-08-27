@@ -26,181 +26,75 @@ export const AlumnoService = {
     }
   },
 
-  createAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO | string> => {
-    try {
-      // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
-     
-     const localidad = alumno.localidadAlumno
-
-     // Preparar los datos para el envío, manejando las fechas correctamente
-  
-      
-     const alumnoData: any = {
-        dniAlumno: alumno.dniAlumno,
-        domicilioAlumno: alumno.domicilioAlumno,
-        fechaNacAlumno: alumno.fechaNacAlumno instanceof Date 
-          ? alumno.fechaNacAlumno.toISOString().split('T')[0] 
-          : alumno.fechaNacAlumno,
-        nombreAlumno: alumno.nombreAlumno,
-        apellidoAlumno: alumno.apellidoAlumno,
-        telefonoAlumno: alumno.telefonoAlumno,
-        mailAlumno: alumno.mailAlumno,
-        localidadAlumno: localidad && localidad.codLocalidad > 0 ? {
-          codLocalidad: localidad.codLocalidad,
-          nombreLocalidad: localidad.nombreLocalidad,
-          fechaBajaLocalidad: localidad.fechaBajaLocalidad instanceof Date 
-            ? localidad.fechaBajaLocalidad.toISOString().split('T')[0] 
-            : localidad.fechaBajaLocalidad
-        } : null,
-        contactosEmergencia: alumno.contactosEmergencia && alumno.contactosEmergencia.length > 0 
-          ? alumno.contactosEmergencia.filter(contacto => 
-              contacto.nombreContacto && contacto.nombreContacto.trim() !== "" && 
-              contacto.telefonoContacto && contacto.telefonoContacto > 0
-            )
-          : [],
-        fichaMedicaDTO: alumno.fichaMedicaDTO && alumno.fichaMedicaDTO.length > 0
-          ? alumno.fichaMedicaDTO.map(ficha => ({
-              id: ficha.id || 0,
-              fechaBajaFichaMedica: ficha.fechaBajaFichaMedica instanceof Date
-                ? ficha.fechaBajaFichaMedica.toISOString().split('T')[0]
-                : ficha.fechaBajaFichaMedica || null,
-              archivo: ficha.archivo && ficha.archivo.length > 0
-                ? Array.from(ficha.archivo)
-                : []
-            }))
-          : [],
-      };
-
-      // Solo incluir nroAlumno si no es 0 (para nuevos registros)
-      
-      // if (alumno.nroAlumno !== 0) {
-      //   alumnoData.nroAlumno = alumno.nroAlumno;
-      // }
-
-    //  console.log('[AlumnoService.createAlumno] Payload a enviar:', alumnoData);
-
-      const response = await fetch(`${BASE_URL}`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(alumnoData)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al crear alumno: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
+  createAlumno: async (alumno: AlumnoDTO): Promise<void> => {
+    const alumnoData = {
+      ...alumno,
+      fechaNacAlumno: alumno.fechaNacAlumno instanceof Date
+        ? alumno.fechaNacAlumno.toISOString().split("T")[0]
+        : alumno.fechaNacAlumno,
+      localidadAlumno: alumno.localidadAlumno
+        ? {
+            ...alumno.localidadAlumno,
+            fechaBajaLocalidad: alumno.localidadAlumno.fechaBajaLocalidad instanceof Date
+              ? alumno.localidadAlumno.fechaBajaLocalidad.toISOString().split("T")[0]
+              : alumno.localidadAlumno.fechaBajaLocalidad,
           }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
+        : null,
+      fichaMedicaDTO: Array.isArray(alumno.fichaMedicaDTO)
+        ? alumno.fichaMedicaDTO.map(ficha => ({
+            ...ficha,
+            archivo: Array.isArray(ficha.archivo)
+              ? ficha.archivo
+              : Object.values(ficha.archivo),
+          }))
+        : [],
+    };
 
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-      throw error;
+    console.log("Contenido de fichaMedicaDTO antes de enviar:", alumnoData.fichaMedicaDTO);
+
+    const response = await fetch(`${BASE_URL}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(alumnoData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al crear el alumno");
     }
   },
 
-  updateAlumno: async (alumno: AlumnoDTO): Promise<AlumnoDTO | string> => {
-    try {
-      // Normalizar propiedad de localidad (aceptar 'localidad' o 'localidadAlumno')
-      const localidad = (alumno as any).localidadAlumno ?? (alumno as any).localidad ?? null;
-
-      // Preparar los datos para el envío, manejando las fechas correctamente
-      const alumnoData: any = {
-        nroAlumno: alumno.nroAlumno,
-        dniAlumno: alumno.dniAlumno,
-        domicilioAlumno: alumno.domicilioAlumno,
-        fechaNacAlumno: alumno.fechaNacAlumno instanceof Date 
-          ? alumno.fechaNacAlumno.toISOString().split('T')[0] 
-          : alumno.fechaNacAlumno,
-        nombreAlumno: alumno.nombreAlumno,
-        apellidoAlumno: alumno.apellidoAlumno,
-        telefonoAlumno: alumno.telefonoAlumno,
-        mailAlumno: alumno.mailAlumno,
-        localidadAlumno: localidad && localidad.codLocalidad > 0 ? {
-          codLocalidad: localidad.codLocalidad,
-          nombreLocalidad: localidad.nombreLocalidad,
-          fechaBajaLocalidad: localidad.fechaBajaLocalidad instanceof Date 
-            ? localidad.fechaBajaLocalidad.toISOString().split('T')[0] 
-            : localidad.fechaBajaLocalidad
-        } : null,
-        contactosEmergencia: alumno.contactosEmergencia && alumno.contactosEmergencia.length > 0 
-          ? alumno.contactosEmergencia.filter(contacto => 
-              contacto.nombreContacto && contacto.nombreContacto.trim() !== "" && 
-              contacto.telefonoContacto && contacto.telefonoContacto > 0
-            )
-          : [],
-        fichaMedicaDTO: alumno.fichaMedicaDTO && alumno.fichaMedicaDTO.length > 0
-          ? alumno.fichaMedicaDTO.map(ficha => ({
-              id: ficha.id || 0,
-              fechaBajaFichaMedica: ficha.fechaBajaFichaMedica instanceof Date
-                ? ficha.fechaBajaFichaMedica.toISOString().split('T')[0]
-                : ficha.fechaBajaFichaMedica || null,
-              archivo: ficha.archivo && ficha.archivo.length > 0
-                ? Array.from(ficha.archivo)
-                : []
-            }))
-          : [],
-      };
-
-      console.log('[AlumnoService.updateAlumno] Payload a enviar:', alumnoData);
-
-      const response = await fetch(`${BASE_URL}/${alumno.dniAlumno}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(alumnoData)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al actualizar alumno: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
+  updateAlumno: async (alumno: AlumnoDTO): Promise<void> => {
+    const alumnoData = {
+      ...alumno,
+      fechaNacAlumno: alumno.fechaNacAlumno instanceof Date
+        ? alumno.fechaNacAlumno.toISOString().split("T")[0]
+        : alumno.fechaNacAlumno,
+      localidadAlumno: alumno.localidadAlumno
+        ? {
+            ...alumno.localidadAlumno,
+            fechaBajaLocalidad: alumno.localidadAlumno.fechaBajaLocalidad instanceof Date
+              ? alumno.localidadAlumno.fechaBajaLocalidad.toISOString().split("T")[0]
+              : alumno.localidadAlumno.fechaBajaLocalidad,
           }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
+        : null,
+      fichaMedicaDTO: Array.isArray(alumno.fichaMedicaDTO)
+        ? alumno.fichaMedicaDTO.map(ficha => ({
+            ...ficha,
+            archivo: Array.isArray(ficha.archivo)
+              ? ficha.archivo
+              : Object.values(ficha.archivo),
+          }))
+        : [],
+    };
 
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-      throw error;
+    const response = await fetch(`${BASE_URL}/${alumno.nroAlumno}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(alumnoData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al actualizar el alumno");
     }
   },
 
