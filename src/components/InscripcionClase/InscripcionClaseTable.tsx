@@ -112,13 +112,25 @@ const InscripcionClaseTable = () => {
               {inscripciones.map((insc) => {
                 const alumno = alumnos.find(a => a.dniAlumno === insc.dniAlumno);
                 const tipoClase = tipoClases.find(tc => tc.codTipoClase === insc.codTipoClase);
+                const calcularEdad = (fechaNac?: Date | string): number | null => {
+                  if (!fechaNac) return null;
+                  const nacimiento = new Date(fechaNac);
+                  if (isNaN(nacimiento.getTime())) return null;
+                  const hoy = new Date();
+                  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+                  const m = hoy.getMonth() - nacimiento.getMonth();
+                  if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+                    edad--;
+                  }
+                  return edad;
+                };
                 
                 return (
                   <tr key={insc.nroInscripcion} className="table-row-modern">
                     <td className="text-center">{insc.nroInscripcion}</td>
                     <td className="text-center">{insc.dniAlumno}</td>
-                    <td className="text-center">{alumno ? alumno.nombreAlumno : 'N/A'}</td>
-                    <td className="text-center">{tipoClase ? tipoClase.nombreTipoClase : 'N/A'}</td>
+                    <td className="text-center">{alumno ? `${alumno.nombreAlumno} (${calcularEdad(alumno?.fechaNacAlumno) ?? '-' } años)` : 'N/A'}</td>
+                    <td className="text-center">{tipoClase ? `${tipoClase.nombreTipoClase} (${tipoClase.rangoEtario?.edadDesde}-${tipoClase.rangoEtario?.edadHasta})` : 'N/A'}</td>
                     <td className="text-center">
                       {new Date(insc.fechaInscripcion).toLocaleDateString('es-ES')}
                     </td>

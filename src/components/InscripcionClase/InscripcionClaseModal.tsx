@@ -29,6 +29,7 @@ const InscripcionClaseModal = ({
   const [tipoClases, setTipoClases] = useState<TipoClaseDTO[]>([]);
   const [alumnos, setAlumnos] = useState<AlumnoDTO[]>([]);
   const [filteredAlumnos, setFilteredAlumnos] = useState<AlumnoDTO[]>([]);
+  const [searchAlumno, setSearchAlumno] = useState("");
 
   useEffect(() => {
     const fetchTipoClases = async () => {
@@ -58,18 +59,36 @@ const InscripcionClaseModal = ({
     }
   }, [show]);
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value.toLowerCase();
+  const normalize = (str: string) =>
+    str
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}+/gu, '');
 
-    const filtered = alumnos.filter(
-      (alumno) =>
-        alumno.dniAlumno.toString().includes(searchValue) ||
-        alumno.nombreAlumno.toLowerCase().includes(searchValue) ||
-        alumno.apellidoAlumno.toLowerCase().includes(searchValue)
-    );
-
-    setFilteredAlumnos(filtered);
-  };
+  // Debounce del filtro de alumnos
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const query = normalize(searchAlumno);
+      if (!query) {
+        setFilteredAlumnos(alumnos);
+        return;
+      }
+      const filtered = alumnos.filter((alumno) => {
+        const dni = alumno.dniAlumno.toString();
+        const nombre = normalize(alumno.nombreAlumno || "");
+        const apellido = normalize(alumno.apellidoAlumno || "");
+        const full = `${nombre} ${apellido}`.trim();
+        return (
+          dni.includes(query) ||
+          nombre.includes(query) ||
+          apellido.includes(query) ||
+          full.includes(query)
+        );
+      });
+      setFilteredAlumnos(filtered);
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [searchAlumno, alumnos]);
 
   // const handleAlumnoSelect = (alumno: AlumnoDTO) => {
   //   formik.setFieldValue("dniAlumno", alumno.dniAlumno);
@@ -149,6 +168,22 @@ const InscripcionClaseModal = ({
     onSubmit: handleCreate,
   });
 
+  const selectedAlumno: AlumnoDTO | undefined = alumnos.find(a => a.dniAlumno === formik.values.dniAlumno);
+  const selectedTipoClase: TipoClaseDTO | undefined = tipoClases.find(tc => tc.codTipoClase === formik.values.codTipoClase);
+
+  const calcularEdad = (fechaNac?: Date | string): number | null => {
+    if (!fechaNac) return null;
+    const nacimiento = new Date(fechaNac);
+    if (isNaN(nacimiento.getTime())) return null;
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  };
+
   return (
     <>
       {modalType === ModalType.DELETE ? (
@@ -218,7 +253,8 @@ const InscripcionClaseModal = ({
                   <Form.Control
                     type="text"
                     placeholder="Buscar por DNI, nombre o apellido"
-                    onChange={handleFilterChange}
+                    value={searchAlumno}
+                    onChange={(e) => setSearchAlumno(e.target.value)}
                     className="form-control-modern mb-2"
                   />
                 </Form.Group>
@@ -244,8 +280,7 @@ const InscripcionClaseModal = ({
                     <option value="">Seleccione un alumno</option>
                     {filteredAlumnos.map((alumno) => (
                       <option key={alumno.dniAlumno} value={alumno.dniAlumno}>
-                        {alumno.nombreAlumno} {alumno.apellidoAlumno} - DNI:{" "}
-                        {alumno.dniAlumno}
+                        {alumno.nombreAlumno} {alumno.apellidoAlumno} ( {calcularEdad(alumno.fechaNacAlumno) ?? '-'} años ) - DNI: {alumno.dniAlumno}
                       </option>
                     ))}
                   </Form.Select>
@@ -255,6 +290,11 @@ const InscripcionClaseModal = ({
                   >
                     {formik.errors.dniAlumno}
                   </Form.Control.Feedback>
+                  {selectedAlumno && (
+                    <div className="mt-2 text-muted">
+                      Edad actual: {calcularEdad(selectedAlumno.fechaNacAlumno) ?? '-'} años
+                    </div>
+                  )}
                 </Form.Group>
 
                 <Form.Group
@@ -284,8 +324,9 @@ const InscripcionClaseModal = ({
                         key={tipoClase.codTipoClase}
                         value={tipoClase.codTipoClase}
                       >
-                        {tipoClase.nombreTipoClase} -{" "}
-                        {tipoClase.descripcionTipoClase}
+                        {tipoClase.nombreTipoClase}
+                        {tipoClase.rangoEtario ? ` (${tipoClase.rangoEtario.edadDesde}-${tipoClase.rangoEtario.edadHasta})` : ""}
+                        {tipoClase.descripcionTipoClase ? ` - ${tipoClase.descripcionTipoClase}` : ""}
                       </option>
                     ))}
                   </Form.Select>
@@ -295,6 +336,11 @@ const InscripcionClaseModal = ({
                   >
                     {formik.errors.codTipoClase}
                   </Form.Control.Feedback>
+                  {selectedTipoClase?.rangoEtario && (
+                    <div className="mt-2 text-muted">
+                      Rango etario: {selectedTipoClase.rangoEtario.edadDesde}-{selectedTipoClase.rangoEtario.edadHasta}
+                    </div>
+                  )}
                 </Form.Group>
               </div>
               <Modal.Footer className="modal-footer-form">

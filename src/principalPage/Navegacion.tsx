@@ -18,6 +18,18 @@ function Navegacion() {
               <Nav.Link onClick={() => navigate("/gestionprofesor")}>
                 Gestion Profesor
               </Nav.Link>
+              <Nav.Link onClick={() => navigate("/gestiondia")}>
+                Gestion Día
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/gestiontipoclase")}>
+                Gestion Tipo Clase
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/gestionlocalidad")}>
+                Gestion Localidad
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/gestionrangoetario")}>
+                Gestion Rango Etario
+              </Nav.Link>
               <Nav.Link onClick={() => navigate("/")}>Conf Fechas</Nav.Link>
               <Nav.Link onClick={() => navigate("/gestionalumno")}>
                 Gestion Alumno

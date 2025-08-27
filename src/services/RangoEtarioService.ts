@@ -1,5 +1,6 @@
-import type { LocalidadDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/localidades';
+import type { RangoEtarioDTO } from "../types/index.ts";
+
+const BASE_URL = 'http://localhost:8080/api/v1/rangosetarios';
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -18,8 +19,6 @@ const handleResponse = async (response: Response) => {
     }
     throw new Error(errorMessage);
   }
-  
-  // Manejar tanto JSON como string
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {
     return response.json();
@@ -28,8 +27,8 @@ const handleResponse = async (response: Response) => {
   }
 };
 
-export const LocalidadService = {
-  getLocalidades: async (): Promise<LocalidadDTO[]> => {
+export const RangoEtarioService = {
+  getRangos: async (): Promise<RangoEtarioDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}`);
       const result = await handleResponse(response);
@@ -40,20 +39,29 @@ export const LocalidadService = {
     }
   },
 
-  // No se utiliza GET por id en los controladores provistos
+  getRango: async (codRangoEtario: number): Promise<RangoEtarioDTO> => {
+    try {
+      const response = await fetch(`${BASE_URL}/${codRangoEtario}`);
+      const result = await handleResponse(response);
+      return typeof result === 'object' ? result : {} as RangoEtarioDTO;
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      throw error;
+    }
+  },
 
-  createLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
+  createRango: async (rango: RangoEtarioDTO): Promise<RangoEtarioDTO | string> => {
     try {
       const response = await fetch(`${BASE_URL}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(localidad)
+        body: JSON.stringify(rango)
       });
 
       if (!response.ok) {
-        let errorMessage = `Error al crear localidad: ${response.statusText}`;
+        let errorMessage = `Error al crear rango etario: ${response.statusText}`;
         try {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -69,7 +77,6 @@ export const LocalidadService = {
         throw new Error(errorMessage);
       }
 
-      // Manejar la respuesta exitosa
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
@@ -83,18 +90,18 @@ export const LocalidadService = {
     }
   },
 
-  updateLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
+  updateRango: async (codRangoEtario: number, rango: RangoEtarioDTO): Promise<RangoEtarioDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${localidad.codLocalidad}`, {
+      const response = await fetch(`${BASE_URL}/${codRangoEtario}`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ codLocalidad: localidad.codLocalidad, nombreLocalidad: localidad.nombreLocalidad })
+        body: JSON.stringify(rango)
       });
 
       if (!response.ok) {
-        let errorMessage = `Error al actualizar localidad: ${response.statusText}`;
+        let errorMessage = `Error al actualizar rango etario: ${response.statusText}`;
         try {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -110,7 +117,6 @@ export const LocalidadService = {
         throw new Error(errorMessage);
       }
 
-      // Manejar la respuesta exitosa
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
@@ -124,31 +130,36 @@ export const LocalidadService = {
     }
   },
 
-  // En backend realizan baja lógica por PUT /{cod}/baja
-  deleteLocalidad: async (id: number): Promise<string> => {
+  bajaRango: async (codRangoEtario: number): Promise<RangoEtarioDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}/baja`, {
+      const response = await fetch(`${BASE_URL}/${codRangoEtario}/baja`, {
         method: "PUT",
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
-        let errorMessage = `Error al eliminar la localidad: ${response.statusText}`;
+        let errorMessage = `Error al dar de baja rango etario: ${response.statusText}`;
         try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || JSON.stringify(errorData);
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
         } catch (error) {
           console.error("Error parsing error response:", error);
         }
         throw new Error(errorMessage);
       }
 
-      // El controller devuelve 200 con entidad, sin 204
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
+        return typeof data === 'object' ? data : data;
       } else {
         return await response.text();
       }
@@ -156,5 +167,7 @@ export const LocalidadService = {
       console.error("Error en la solicitud:", error);
       throw error;
     }
-  },
-}; 
+  }
+};
+
+

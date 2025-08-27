@@ -1,5 +1,6 @@
-import type { LocalidadDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/localidades';
+import type { DiaDTO } from "../types/index.ts";
+
+const BASE_URL = 'http://localhost:8080/api/v1/dias';
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -18,8 +19,6 @@ const handleResponse = async (response: Response) => {
     }
     throw new Error(errorMessage);
   }
-  
-  // Manejar tanto JSON como string
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {
     return response.json();
@@ -28,8 +27,8 @@ const handleResponse = async (response: Response) => {
   }
 };
 
-export const LocalidadService = {
-  getLocalidades: async (): Promise<LocalidadDTO[]> => {
+export const DiaService = {
+  getDias: async (): Promise<DiaDTO[]> => {
     try {
       const response = await fetch(`${BASE_URL}`);
       const result = await handleResponse(response);
@@ -40,20 +39,20 @@ export const LocalidadService = {
     }
   },
 
-  // No se utiliza GET por id en los controladores provistos
+  // No hay endpoint GET /{id} en el controller provisto
 
-  createLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
+  createDia: async (dia: DiaDTO): Promise<DiaDTO | string> => {
     try {
       const response = await fetch(`${BASE_URL}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(localidad)
+        body: JSON.stringify(dia)
       });
 
       if (!response.ok) {
-        let errorMessage = `Error al crear localidad: ${response.statusText}`;
+        let errorMessage = `Error al crear día: ${response.statusText}`;
         try {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -69,7 +68,6 @@ export const LocalidadService = {
         throw new Error(errorMessage);
       }
 
-      // Manejar la respuesta exitosa
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
@@ -83,18 +81,19 @@ export const LocalidadService = {
     }
   },
 
-  updateLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
+  // PUT /{cod} recibe sólo el nombre en el body (String)
+  updateDia: async (codDia: number, dia: DiaDTO): Promise<DiaDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${localidad.codLocalidad}`, {
+      const response = await fetch(`${BASE_URL}/${codDia}`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ codLocalidad: localidad.codLocalidad, nombreLocalidad: localidad.nombreLocalidad })
+        body: JSON.stringify(dia.nombreDia)
       });
 
       if (!response.ok) {
-        let errorMessage = `Error al actualizar localidad: ${response.statusText}`;
+        let errorMessage = `Error al actualizar día: ${response.statusText}`;
         try {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -110,7 +109,6 @@ export const LocalidadService = {
         throw new Error(errorMessage);
       }
 
-      // Manejar la respuesta exitosa
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
@@ -124,31 +122,36 @@ export const LocalidadService = {
     }
   },
 
-  // En backend realizan baja lógica por PUT /{cod}/baja
-  deleteLocalidad: async (id: number): Promise<string> => {
+  bajaDia: async (codDia: number): Promise<DiaDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}/baja`, {
+      const response = await fetch(`${BASE_URL}/${codDia}/baja`, {
         method: "PUT",
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
-        let errorMessage = `Error al eliminar la localidad: ${response.statusText}`;
+        let errorMessage = `Error al dar de baja día: ${response.statusText}`;
         try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || JSON.stringify(errorData);
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
         } catch (error) {
           console.error("Error parsing error response:", error);
         }
         throw new Error(errorMessage);
       }
 
-      // El controller devuelve 200 con entidad, sin 204
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
+        return typeof data === 'object' ? data : data;
       } else {
         return await response.text();
       }
@@ -156,5 +159,7 @@ export const LocalidadService = {
       console.error("Error en la solicitud:", error);
       throw error;
     }
-  },
-}; 
+  }
+};
+
+
