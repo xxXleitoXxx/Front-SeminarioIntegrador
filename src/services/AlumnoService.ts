@@ -27,6 +27,7 @@ export const AlumnoService = {
   },
 
   createAlumno: async (alumno: AlumnoDTO): Promise<void> => {
+    try{
     const alumnoData = {
       ...alumno,
       fechaNacAlumno: alumno.fechaNacAlumno instanceof Date
@@ -57,10 +58,12 @@ export const AlumnoService = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(alumnoData),
     });
-
-    if (!response.ok) {
-      throw new Error("Error al crear el alumno");
-    }
+    
+    const result = await handleResponse(response);
+  }catch(error){
+    console.error("Error en la solicitud:", error);
+    throw error;
+  }
   },
 
   updateAlumno: async (alumno: AlumnoDTO): Promise<void> => {
