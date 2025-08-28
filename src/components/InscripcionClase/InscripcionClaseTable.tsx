@@ -29,6 +29,7 @@ const InscripcionClaseTable = () => {
       localidadAlumno: null,
       contactosEmergencia: [],
       fichaMedicaDTO: [],
+      fechaBajaAlumno: null,
     },
     tipoClaseDTO: {
       codTipoClase: 0,

@@ -46,7 +46,7 @@ export const AlumnoService = {
             ...ficha,
             archivo: Array.isArray(ficha.archivo)
               ? ficha.archivo
-              : Object.values(ficha.archivo),
+              : Object.values(ficha.archivo || {}),
           }))
         : [],
     };
@@ -85,7 +85,7 @@ export const AlumnoService = {
             ...ficha,
             archivo: Array.isArray(ficha.archivo)
               ? ficha.archivo
-              : Object.values(ficha.archivo),
+              : Object.values(ficha.archivo || {}),
           }))
         : [],
     };

@@ -90,7 +90,8 @@ const AlumnoModal = ({
             alumnoData.fichaMedicaDTO && alumnoData.fichaMedicaDTO.length > 0
               ? alumnoData.fichaMedicaDTO[0].id
               : 0,
-          fechaBajaFichaMedica: null,
+          vigenciaDesde: new Date(),
+          vigenciaHasta: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Por defecto 1 año de vigencia
           archivo: uint8Array,
         };
 
@@ -102,7 +103,8 @@ const AlumnoModal = ({
             alumnoData.fichaMedicaDTO && alumnoData.fichaMedicaDTO.length > 0
               ? alumnoData.fichaMedicaDTO[0].id
               : 0,
-          fechaBajaFichaMedica: null,
+          vigenciaDesde: new Date(),
+          vigenciaHasta: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Por defecto 1 año de vigencia
           archivo: new Uint8Array([1, 2, 3, 4, 5]), // Archivo por defecto
         };
 

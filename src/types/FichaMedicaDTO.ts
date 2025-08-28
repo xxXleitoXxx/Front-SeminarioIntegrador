@@ -1,5 +1,6 @@
 export interface FichaMedicaDTO {
     id: number;
-    fechaHoraBaja: Date | null;
-    archivo: Uint8Array; // For PDF or image data
+    vigenciaDesde: Date;
+    vigenciaHasta: Date;
+    archivo: Uint8Array | null; // For PDF or image data
 } 

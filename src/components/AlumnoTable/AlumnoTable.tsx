@@ -39,8 +39,9 @@ const AlumnoTable = () => {
     fichaMedicaDTO: [
       {
         id: 0,
-        fechaHoraBaja: null,
-        archivo: new Uint8Array(),
+        vigenciaDesde: new Date(),
+        vigenciaHasta: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Por defecto 1 año de vigencia
+        archivo: null,
       },
     ],
   });
@@ -97,10 +98,19 @@ const AlumnoTable = () => {
   };
 
   const hasFichaMedica = (fichaMedicas: FichaMedicaDTO[]) => {
-    return (
-      fichaMedicas &&
-      fichaMedicas.length > 0
-    );
+    if (!fichaMedicas || fichaMedicas.length === 0) {
+      return false;
+    }
+    
+    const fechaActual = new Date();
+    
+    // Verificar si hay alguna ficha médica vigente
+    return fichaMedicas.some(ficha => {
+      const vigenciaDesde = new Date(ficha.vigenciaDesde);
+      const vigenciaHasta = new Date(ficha.vigenciaHasta);
+      
+      return fechaActual >= vigenciaDesde && fechaActual <= vigenciaHasta;
+    });
   };
   const isAlumnoActivo = (fechaBajaAlumno: Date | null) => {
     return fechaBajaAlumno === null;
