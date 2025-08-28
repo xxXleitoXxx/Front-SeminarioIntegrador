@@ -1,6 +1,8 @@
+import type { RangoEtarioDTO } from './RangoEtarioDTO';
 export interface TipoClaseDTO {
   codTipoClase: number;
   nombreTipoClase: string;
-  descripcionTipoClase?: string;
-  fechaBajaTipoClase?: Date | null;
+  fechaBajaTipoClase: Date | null;
+  cupoMaxTipoClase: number;
+  rangoEtarioDTO: RangoEtarioDTO;
 }

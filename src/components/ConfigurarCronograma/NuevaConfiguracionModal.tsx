@@ -36,15 +36,14 @@ const NuevaConfiguracionModal = ({
     horaDesde: "08:00",
     horaHasta: "09:00",
     diaDTO: {
-      codDia: 1,
+      codDia: diasSemana?.[0]?.codDia || 0,
       fechaBajaDia: null,
-      nombreDia: "Lunes",
+      nombreDia: diasSemana?.[0]?.nombreDia || "",
     },
     tipoClase: {
       codTipoClase: 0,
       fechaBajaTipoClase: null,
       nombreTipoClase: "",
-      descripcionTipoClase: "",
     },
   });
 
@@ -65,15 +64,14 @@ const NuevaConfiguracionModal = ({
       horaDesde: "08:00",
       horaHasta: "09:00",
       diaDTO: {
-        codDia: 1,
+        codDia: diasSemana?.[0]?.codDia || 0,
         fechaBajaDia: null,
-        nombreDia: "Lunes",
+        nombreDia: diasSemana?.[0]?.nombreDia || "",
       },
       tipoClase: {
         codTipoClase: 0,
         fechaBajaTipoClase: null,
         nombreTipoClase: "",
-        descripcionTipoClase: "",
       },
     });
   };

@@ -1,7 +1,10 @@
+import type { AlumnoDTO } from './AlumnoDTO';
+import type { TipoClaseDTO } from './TipoClaseDTO';
+
 export interface InscripcionDTO {
   nroInscripcion: number;
-  dniAlumno: number;
-  codTipoClase: number;
+  fechaBajaInscripcion: Date | null;
   fechaInscripcion: Date;
-  fechaBajaInscripcion?: Date | null;
+  alumnoDto: AlumnoDTO;
+  tipoClaseDTO: TipoClaseDTO;
 }

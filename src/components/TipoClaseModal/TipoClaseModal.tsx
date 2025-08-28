@@ -43,10 +43,18 @@ const TipoClaseModal = ({
   const handleSaveUpdate = async (entity: TipoClaseDTO) => {
     try {
       const isNew = entity.codTipoClase === 0;
+      const payload: TipoClaseDTO = {
+        ...entity,
+        rangoEtarioDTO: {
+          // Enviar solo el identificador para evitar validaciones por campos nulos en backend
+          codRangoEtario: (entity as any).rangoEtarioDTO?.codRangoEtario || 0,
+          // Los demás campos no se envían; TypeScript requiere propiedades, pero fetch serializa solo las presentes
+        } as any,
+      } as any;
       if (isNew) {
-        await TipoClaseService.createTipoClase(entity);
+        await TipoClaseService.createTipoClase(payload);
       } else {
-        await TipoClaseService.updateTipoClase(entity.codTipoClase, entity);
+        await TipoClaseService.updateTipoClase(entity.codTipoClase, payload);
       }
       toast.success(
         isNew ? "Tipo de clase creado con éxito" : "Tipo de clase actualizado con éxito",
@@ -87,15 +95,12 @@ const TipoClaseModal = ({
       ? Yup.number().integer().min(0).optional()
       : Yup.number().integer().min(0).required("El código es requerido"),
     nombreTipoClase: Yup.string().required("El nombre es requerido"),
-    descripcionTipoClase: Yup.string().optional(),
     cupoMaxTipoClase: Yup.number().integer().min(0).required("El cupo es requerido"),
-    rangoEtario: Yup.object({
-      codRangoEtario: Yup.number().integer().min(0).required("El rango etario es requerido"),
-      edadDesde: Yup.number().integer().min(0).optional(),
-      edadHasta: Yup.number().integer().min(0).optional(),
-      fechaBajaRangoEtario: Yup.mixed().optional(),
-      fechaAltaRangoEtario: Yup.mixed().optional(),
-      nombreRangoEtario: Yup.string().optional(),
+    rangoEtarioDTO: Yup.object({
+      codRangoEtario: Yup.number()
+        .integer()
+        .moreThan(0, "El rango etario es requerido")
+        .required("El rango etario es requerido"),
     })
   });
 
@@ -198,21 +203,7 @@ const TipoClaseModal = ({
                     {formik.errors.nombreTipoClase as string}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formDescripcionTipoClase" className="form-group-modern">
-                  <Form.Label className="form-label-modern">
-                    <span className="label-icon">📝</span>
-                    Descripción
-                  </Form.Label>
-                  <Form.Control
-                    name="descripcionTipoClase"
-                    as="textarea"
-                    value={formik.values.descripcionTipoClase || ""}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    className="form-control-modern"
-                    placeholder="Ingrese una descripción"
-                  />
-                </Form.Group>
+                {/* campo de descripción removido en DTO backend */}
                 <Form.Group controlId="formCupoMaxTipoClase" className="form-group-modern">
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">👥</span>
@@ -238,15 +229,14 @@ const TipoClaseModal = ({
                     Rango Etario
                   </Form.Label>
                   <Form.Select
-                    name="rangoEtario.codRangoEtario"
-                    value={formik.values.rangoEtario?.codRangoEtario || 0}
+                    name="rangoEtarioDTO.codRangoEtario"
+                    value={(formik.values as any).rangoEtarioDTO?.codRangoEtario || 0}
                     onChange={(e) => {
                       const cod = Number(e.target.value);
-                      const selected = rangos.find(r => r.codRangoEtario === cod);
-                      formik.setFieldValue('rangoEtario', selected || { codRangoEtario: 0, edadDesde: 0, edadHasta: 0, fechaBajaRangoEtario: null });
+                      formik.setFieldValue('rangoEtarioDTO', { codRangoEtario: cod });
                     }}
                     className="form-control-modern"
-                    isInvalid={!!(formik.errors.rangoEtario && formik.touched.rangoEtario)}
+                    isInvalid={!!((formik.errors as any)?.rangoEtarioDTO?.codRangoEtario && (formik.touched as any)?.rangoEtarioDTO?.codRangoEtario)}
                   >
                     <option value={0}>Seleccione un rango</option>
                     {rangos.map(r => (
@@ -256,7 +246,7 @@ const TipoClaseModal = ({
                     ))}
                   </Form.Select>
                   <Form.Control.Feedback type="invalid" className="feedback-modern">
-                    {typeof formik.errors.rangoEtario === 'string' ? formik.errors.rangoEtario : ''}
+                    {((formik.errors as any)?.rangoEtarioDTO?.codRangoEtario as string) || ''}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>

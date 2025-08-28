@@ -13,10 +13,9 @@ const TipoClaseTable = () => {
   const initializableNew = (): TipoClaseDTO => ({
     codTipoClase: 0,
     nombreTipoClase: "",
-    descripcionTipoClase: "",
     fechaBajaTipoClase: null,
     cupoMaxTipoClase: 0,
-    rangoEtario: { codRangoEtario: 0, edadDesde: 0, edadHasta: 0, fechaBajaRangoEtario: null, fechaAltaRangoEtario: new Date(), nombreRangoEtario: "" }
+    rangoEtarioDTO: { codRangoEtario: 0, edadDesde: 0, edadHasta: 0, fechaBajaRangoEtario: null, nombreRangoEtario: "" }
   });
 
   const [tipoClase, setTipoClase] = useState<TipoClaseDTO>(initializableNew());
@@ -85,7 +84,6 @@ const TipoClaseTable = () => {
               <tr>
                 <th>Código</th>
                 <th>Nombre</th>
-                <th>Descripción</th>
                 <th>Cupo Máximo</th>
                 <th>Rango Etario</th>
                 <th>Estado</th>
@@ -98,9 +96,12 @@ const TipoClaseTable = () => {
                 <tr key={r.codTipoClase} className="table-row-modern">
                   <td className="text-center">{r.codTipoClase}</td>
                   <td>{r.nombreTipoClase}</td>
-                  <td>{r.descripcionTipoClase || '-'}</td>
                   <td className="text-center">{r.cupoMaxTipoClase}</td>
-                  <td className="text-center">{r.rangoEtario?.nombreRangoEtario || `${r.rangoEtario?.edadDesde}-${r.rangoEtario?.edadHasta}`}</td>
+                  <td className="text-center">{
+                    (r as any).rangoEtario?.nombreRangoEtario
+                      || r.rangoEtarioDTO?.nombreRangoEtario
+                      || `${(r as any).rangoEtario?.edadDesde ?? r.rangoEtarioDTO?.edadDesde}-${(r as any).rangoEtario?.edadHasta ?? r.rangoEtarioDTO?.edadHasta}`
+                  }</td>
                   <td className="text-center">
                     <span className={`status-badge ${r.fechaBajaTipoClase ? 'inactive' : 'active'}`}>{r.fechaBajaTipoClase ? 'Inactivo' : 'Activo'}</span>
                   </td>

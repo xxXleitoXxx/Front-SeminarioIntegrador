@@ -15,10 +15,34 @@ import "./InscripcionClase.css";
 const InscripcionClaseTable = () => {
   const initializableNewInscripcion = (): InscripcionDTO => ({
     nroInscripcion: 0,
-    dniAlumno: 0,
-    codTipoClase: 0,
     fechaInscripcion: new Date(),
     fechaBajaInscripcion: null,
+    alumnoDto: {
+      nroAlumno: 0,
+      dniAlumno: 0,
+      domicilioAlumno: "",
+      fechaNacAlumno: new Date(),
+      nombreAlumno: "",
+      apellidoAlumno: "",
+      telefonoAlumno: 0,
+      mailAlumno: "",
+      localidadAlumno: null,
+      contactosEmergencia: [],
+      fichaMedicaDTO: [],
+    },
+    tipoClaseDTO: {
+      codTipoClase: 0,
+      nombreTipoClase: "",
+      fechaBajaTipoClase: null,
+      cupoMaxTipoClase: 0,
+      rangoEtarioDTO: {
+        codRangoEtario: 0,
+        edadDesde: 0,
+        edadHasta: 0,
+        fechaBajaRangoEtario: null,
+        nombreRangoEtario: "",
+      },
+    },
   });
 
   const [inscripcion, setInscripcion] = useState<InscripcionDTO>(initializableNewInscripcion());
@@ -110,8 +134,8 @@ const InscripcionClaseTable = () => {
             </thead>
             <tbody>
               {inscripciones.map((insc) => {
-                const alumno = alumnos.find(a => a.dniAlumno === insc.dniAlumno);
-                const tipoClase = tipoClases.find(tc => tc.codTipoClase === insc.codTipoClase);
+                const alumno = insc.alumnoDto ?? alumnos.find(a => a.dniAlumno === insc?.alumnoDto?.dniAlumno);
+                const tipoClase = insc.tipoClaseDTO ?? tipoClases.find(tc => tc.codTipoClase === insc?.tipoClaseDTO?.codTipoClase);
                 const calcularEdad = (fechaNac?: Date | string): number | null => {
                   if (!fechaNac) return null;
                   const nacimiento = new Date(fechaNac);
@@ -128,9 +152,9 @@ const InscripcionClaseTable = () => {
                 return (
                   <tr key={insc.nroInscripcion} className="table-row-modern">
                     <td className="text-center">{insc.nroInscripcion}</td>
-                    <td className="text-center">{insc.dniAlumno}</td>
+                    <td className="text-center">{insc.alumnoDto?.dniAlumno ?? '-'}</td>
                     <td className="text-center">{alumno ? `${alumno.nombreAlumno} (${calcularEdad(alumno?.fechaNacAlumno) ?? '-' } años)` : 'N/A'}</td>
-                    <td className="text-center">{tipoClase ? `${tipoClase.nombreTipoClase} (${tipoClase.rangoEtario?.edadDesde}-${tipoClase.rangoEtario?.edadHasta})` : 'N/A'}</td>
+                    <td className="text-center">{tipoClase ? `${tipoClase.nombreTipoClase} (${tipoClase.rangoEtarioDTO?.edadDesde}-${tipoClase.rangoEtarioDTO?.edadHasta})` : 'N/A'}</td>
                     <td className="text-center">
                       {new Date(insc.fechaInscripcion).toLocaleDateString('es-ES')}
                     </td>

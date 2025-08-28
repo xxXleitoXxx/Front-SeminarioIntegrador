@@ -9,6 +9,7 @@ import type {
 } from "../../types";
 import { ConfHorarioTipoClaseService } from "../../services/ConfHorarioTipoClaseService";
 import { TipoClaseService } from "../../services/TipoClaseService";
+import { DiaService } from "../../services/DiaService";
 import "./ConfigurarCronograma.css";
 import NuevaConfiguracionModal from "./NuevaConfiguracionModal";
 import VerHorariosModal from "./VerHorariosModal";
@@ -18,6 +19,7 @@ const ConfigurarCronograma: React.FC = () => {
     ConfHorarioTipoClaseDTO[]
   >([]);
   const [tiposClase, setTiposClase] = useState<TipoClaseDTO[]>([]);
+  const [diasSemana, setDiasSemana] = useState<{ codDia: number; nombreDia: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showHorariosModal, setShowHorariosModal] = useState(false);
@@ -35,13 +37,16 @@ const ConfigurarCronograma: React.FC = () => {
     try {
       setIsLoading(true);
 
-      const [configsData, tiposClaseData] = await Promise.all([
+      const [configsData, tiposClaseData, diasData] = await Promise.all([
         ConfHorarioTipoClaseService.getConfiguraciones(),
         TipoClaseService.getTipoClases(),
+        DiaService.getDias(),
       ]);
 
       setConfiguraciones(configsData);
       setTiposClase(tiposClaseData);
+      const activos = (diasData || []).filter(d => !d.fechaBajaDia).map(d => ({ codDia: d.codDia, nombreDia: d.nombreDia }));
+      setDiasSemana(activos);
     } catch (error) {
       console.error("Error cargando datos:", error);
       toast.error("Error al cargar las configuraciones");
@@ -122,15 +127,7 @@ const ConfigurarCronograma: React.FC = () => {
     }, 1000);
   };
 
-  const diasSemana = [
-    { codDia: 1, nombreDia: "Lunes" },
-    { codDia: 2, nombreDia: "Martes" },
-    { codDia: 3, nombreDia: "Miércoles" },
-    { codDia: 4, nombreDia: "Jueves" },
-    { codDia: 5, nombreDia: "Viernes" },
-    { codDia: 6, nombreDia: "Sábado" },
-    { codDia: 7, nombreDia: "Domingo" },
-  ];
+  // Los días ahora se cargan dinámicamente desde el backend
 
   if (isLoading) {
     return (

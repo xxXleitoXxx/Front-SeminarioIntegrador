@@ -15,7 +15,6 @@ const RangoEtarioTable = () => {
     edadDesde: 0,
     edadHasta: 0,
     fechaBajaRangoEtario: null,
-    fechaAltaRangoEtario: new Date(),
     nombreRangoEtario: "",
   });
 

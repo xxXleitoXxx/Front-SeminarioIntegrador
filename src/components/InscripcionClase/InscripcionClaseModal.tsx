@@ -159,8 +159,8 @@ const InscripcionClaseModal = ({
 
   const formik = useFormik({
     initialValues: {
-      dniAlumno: inscripcion.dniAlumno || 0,
-      codTipoClase: inscripcion.codTipoClase || 0,
+      dniAlumno: inscripcion?.alumnoDto?.dniAlumno || 0,
+      codTipoClase: inscripcion?.tipoClaseDTO?.codTipoClase || 0,
     },
     validationSchema: validationSchema,
     validateOnChange: true,
@@ -325,8 +325,7 @@ const InscripcionClaseModal = ({
                         value={tipoClase.codTipoClase}
                       >
                         {tipoClase.nombreTipoClase}
-                        {tipoClase.rangoEtario ? ` (${tipoClase.rangoEtario.edadDesde}-${tipoClase.rangoEtario.edadHasta})` : ""}
-                        {tipoClase.descripcionTipoClase ? ` - ${tipoClase.descripcionTipoClase}` : ""}
+                        {tipoClase.rangoEtarioDTO ? ` (${tipoClase.rangoEtarioDTO.edadDesde}-${tipoClase.rangoEtarioDTO.edadHasta})` : ""}
                       </option>
                     ))}
                   </Form.Select>
@@ -336,9 +335,9 @@ const InscripcionClaseModal = ({
                   >
                     {formik.errors.codTipoClase}
                   </Form.Control.Feedback>
-                  {selectedTipoClase?.rangoEtario && (
+                  {selectedTipoClase?.rangoEtarioDTO && (
                     <div className="mt-2 text-muted">
-                      Rango etario: {selectedTipoClase.rangoEtario.edadDesde}-{selectedTipoClase.rangoEtario.edadHasta}
+                      Rango etario: {selectedTipoClase.rangoEtarioDTO.edadDesde}-{selectedTipoClase.rangoEtarioDTO.edadHasta}
                     </div>
                   )}
                 </Form.Group>

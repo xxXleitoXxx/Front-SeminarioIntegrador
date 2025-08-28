@@ -3,4 +3,5 @@ export interface RangoEtarioDTO {
     edadDesde: number;
     edadHasta: number;
     fechaBajaRangoEtario: Date | null;
+    nombreRangoEtario: string;
 } 
