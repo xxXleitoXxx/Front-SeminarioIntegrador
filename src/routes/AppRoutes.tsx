@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import AltaAlumno from "../components/AbmAlumno/AltaAlumno";
 
 import AbmAlumno from "../pages/AbmAlumno";
 import PaginaPrincipal from "../pages/Main";
@@ -19,7 +18,6 @@ function Aplicacion() {
         <Routes>
           <Route path="/" element={<PaginaPrincipal />} />
           <Route path="gestionalumno" element={<AbmAlumno />} />
-          <Route path="altaalumno" element={<AltaAlumno />} />
           <Route path="gestionprofesor" element={<AbmProfesor />} />
           <Route path="gestiondia" element={<AbmDia />} />
           <Route path="gestiontipoclase" element={<AbmTipoClase />} />

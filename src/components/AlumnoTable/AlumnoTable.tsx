@@ -39,7 +39,7 @@ const AlumnoTable = () => {
     fichaMedicaDTO: [
       {
         id: 0,
-        fechaBajaFichaMedica: null,
+        fechaHoraBaja: null,
         archivo: new Uint8Array(),
       },
     ],
