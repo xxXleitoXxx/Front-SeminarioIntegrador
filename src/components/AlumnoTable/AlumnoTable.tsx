@@ -18,6 +18,7 @@ import "./AlumnoTable.css";
 
 const AlumnoTable = () => {
   const initializableNewAlumno = (): AlumnoDTO => ({
+    fechaBajaAlumno: null,
     nroAlumno: 0,
     dniAlumno: 0,
     domicilioAlumno: "",
@@ -98,9 +99,11 @@ const AlumnoTable = () => {
   const hasFichaMedica = (fichaMedicas: FichaMedicaDTO[]) => {
     return (
       fichaMedicas &&
-      fichaMedicas.length > 0 &&
-      fichaMedicas.some((ficha) => ficha.archivo && ficha.archivo.length > 0)
+      fichaMedicas.length > 0
     );
+  };
+  const isAlumnoActivo = (fechaBajaAlumno: Date | null) => {
+    return fechaBajaAlumno === null;
   };
 
   const handleContactosClick = (alumno: AlumnoDTO) => {
@@ -158,6 +161,7 @@ const AlumnoTable = () => {
                 <th>Domicilio</th>
                 <th>Localidad</th>
                 <th>Contactos Emergencia</th>
+                <th>Estado</th>
                 <th>Ficha Médica</th>
                 <th>Acciones</th>
               </tr>
@@ -201,6 +205,19 @@ const AlumnoTable = () => {
                       {getContactosCount(alumno.contactosEmergencia) !== 1
                         ? "s"
                         : ""}
+                    </span>
+                  </td>
+                  <td className="text-center">
+                    <span
+                      className={`ficha-badge ${
+                        isAlumnoActivo(alumno.fechaBajaAlumno)
+                          ? "has-ficha"
+                          : "no-ficha"
+                      }`}
+                    >
+                      {isAlumnoActivo(alumno.fechaBajaAlumno)
+                        ? "Activo"
+                        : "Inactivo"}
                     </span>
                   </td>
                   <td className="text-center">
