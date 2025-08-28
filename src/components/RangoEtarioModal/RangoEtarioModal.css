@@ -1,0 +1,216 @@
+/* Modal de Rango Etario - Estilos Modernos */
+.modal-header-purple {
+  background: linear-gradient(135deg, #6f42c1, #5a32a3);
+  color: white;
+  border-bottom: none;
+}
+
+.modal-header-purple .btn-close {
+  color: white;
+  filter: invert(1);
+}
+
+.modal-header-purple .modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-icon {
+  font-size: 1.5rem;
+}
+
+/* Formulario */
+.form-group-modern {
+  margin-bottom: 1.5rem;
+}
+
+.form-label-modern {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label-icon {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.form-control-modern {
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  padding: 12px 16px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+}
+
+.form-control-modern:focus {
+  border-color: #6f42c1;
+  box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+  background-color: white;
+  transform: translateY(-1px);
+}
+
+.form-control-modern:disabled {
+  background-color: #e9ecef;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-control-modern.is-invalid {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+.form-control-modern.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.feedback-modern {
+  display: block;
+  font-size: 0.875rem;
+  color: #dc3545;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* Botones */
+.btn {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-cancel {
+  color: #6c757d;
+  border-color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-cancel:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+
+.btn-save {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #5a32a3;
+  border-color: #4c2b8a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(111, 66, 193, 0.3);
+}
+
+.btn-save:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-icon {
+  margin-right: 8px;
+}
+
+/* Modal Footer */
+.modal-footer-form {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+/* Confirmación de eliminación */
+.delete-confirmation {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff5f5;
+  border-radius: 8px;
+  border: 1px solid #fed7d7;
+}
+
+.delete-confirmation p {
+  margin-bottom: 10px;
+  color: #2d3748;
+  font-size: 1rem;
+}
+
+.delete-confirmation p:last-child {
+  margin-bottom: 0;
+}
+
+.delete-confirmation strong {
+  color: #e53e3e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 10px;
+  }
+  
+  .form-control-modern {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animaciones */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+}
+
+/* Placeholder styling */
+.form-control-modern::placeholder {
+  color: #adb5bd;
+  opacity: 0.7;
+}
+
+/* Focus states */
+.form-control-modern:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* Hover effects */
+.form-control-modern:hover:not(:focus):not(:disabled) {
+  border-color: #ced4da;
+  background-color: #e9ecef;
+}

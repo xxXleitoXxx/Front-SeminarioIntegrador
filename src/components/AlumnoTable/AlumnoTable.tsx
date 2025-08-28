@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import Loader from "../Loader/Loader";
-import { ModalType } from "../../types";
-import AlumnoModal from "../AlumnoModal/AlumnoModal";
+import NuevoAlumnoModal from "../NuevoAlumnoModal/NuevoAlumnoModal";
+import EditarAlumnoModal from "../EditarAlumnoModal/EditarAlumnoModal";
 import ContactosModal from "../ContactosModal/ContactosModal";
 import FichasMedicasModal from "../FichasMedicasModal/FichasMedicasModal";
 import { EditButton } from "../EditButton/EditButton";
@@ -47,9 +47,8 @@ const AlumnoTable = () => {
   });
 
   const [alumno, setAlumno] = useState<AlumnoDTO>(initializableNewAlumno());
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
-  const [title, setTitle] = useState("");
+  const [showNuevoModal, setShowNuevoModal] = useState(false);
+  const [showEditarModal, setShowEditarModal] = useState(false);
   const [alumnos, setAlumnos] = useState<AlumnoDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshData, setRefreshData] = useState(false);
@@ -60,15 +59,13 @@ const AlumnoTable = () => {
   const [selectedAlumnoForModals, setSelectedAlumnoForModals] =
     useState<AlumnoDTO | null>(null);
 
-  const handleClick = (
-    newTitle: string,
-    alumnoData: AlumnoDTO,
-    modal: ModalType
-  ) => {
-    setTitle(newTitle);
-    setModalType(modal);
+  const handleNuevoAlumno = () => {
+    setShowNuevoModal(true);
+  };
+
+  const handleEditarAlumno = (alumnoData: AlumnoDTO) => {
     setAlumno(alumnoData);
-    setShowModal(true);
+    setShowEditarModal(true);
   };
 
   useEffect(() => {
@@ -135,13 +132,7 @@ const AlumnoTable = () => {
         </div>
         <Button
           className="btn btn-primary btn-add"
-          onClick={() =>
-            handleClick(
-              "Añadir Alumno",
-              initializableNewAlumno(),
-              ModalType.CREATE
-            )
-          }
+          onClick={handleNuevoAlumno}
         >
           <span className="btn-icon">+</span>
           Nuevo Alumno
@@ -264,14 +255,13 @@ const AlumnoTable = () => {
                         🏥
                       </Button>
                       <EditButton
-                        onClick={() =>
-                          handleClick("Editar alumno", alumno, ModalType.UPDATE)
-                        }
+                        onClick={() => handleEditarAlumno(alumno)}
                       />
                       <DeleteButton
-                        onClick={() =>
-                          handleClick("Borrar Alumno", alumno, ModalType.DELETE)
-                        }
+                        onClick={() => {
+                          // Aquí puedes implementar la lógica de eliminación
+                          console.log("Eliminar alumno:", alumno.nroAlumno);
+                        }}
                       />
                     </div>
                   </td>
@@ -281,16 +271,21 @@ const AlumnoTable = () => {
           </Table>
         </div>
       )}
-      {showModal && (
-        <AlumnoModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          modalType={modalType}
-          alumno={alumno}
-          title={title}
-          refreshData={setRefreshData}
-        />
-      )}
+
+      {/* Modal de Nuevo Alumno */}
+      <NuevoAlumnoModal
+        show={showNuevoModal}
+        onHide={() => setShowNuevoModal(false)}
+        refreshData={setRefreshData}
+      />
+
+      {/* Modal de Editar Alumno */}
+      <EditarAlumnoModal
+        show={showEditarModal}
+        onHide={() => setShowEditarModal(false)}
+        alumno={alumno}
+        refreshData={setRefreshData}
+      />
 
       {/* Modal de Contactos de Emergencia */}
       {showContactosModal && selectedAlumnoForModals && (

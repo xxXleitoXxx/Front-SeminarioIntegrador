@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import type { ProfesorDTO } from "../../types/ProfesorDTO";
 import { ProfesorService } from "../../services/ProfesorService";
+import "./ProfesorModal.css";
 
 type ProfesorModalProps = {
   show: boolean;
@@ -108,75 +109,17 @@ const ProfesorModal = ({
 
   return (
     <>
-      {modalType === ModalType.DELETE ? (
-        <Modal show={show} onHide={onHide} centered backdrop="static" className="modal-modern">
-          <Modal.Header closeButton className="modal-header-danger">
+      {modalType === ModalType.CREATE && (
+        <Modal show={show} onHide={onHide} centered backdrop="static">
+          <Modal.Header closeButton className="modal-header-success">
             <Modal.Title>
-              <span className="modal-icon">🗑️</span>
+              <span className="modal-icon">👨‍🏫</span>
               {title}
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="modal-body-danger">
-            <div className="delete-confirmation">
-              <div className="delete-icon">⚠️</div>
-              <p className="delete-message">
-                ¿Está seguro que desea eliminar el profesor?
-              </p>
-              <div className="delete-item">
-                <strong>{profesor.nombreProfesor}</strong>
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer className="modal-footer-danger">
-            <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
-              Cancelar
-            </Button>
-            <Button variant="danger" onClick={handleDelete} className="btn-delete">
-              Eliminar
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      ) : (
-        <Modal
-          show={show}
-          onHide={onHide}
-          centered
-          backdrop="static"
-          className="modal-modern modal-xl"
-        >
-          <Modal.Header closeButton className="modal-header-form">
-            <Modal.Title>
-              <span className="modal-icon">
-                {modalType === ModalType.CREATE ? "➕" : "✏️"}
-              </span>
-              {title}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="modal-body-form">
-            <Form onSubmit={formik.handleSubmit} className="form-modern">
-              <div className="form-grid">
-                {modalType !== ModalType.CREATE && (
-                  <Form.Group controlId="formNroProfesor" className="form-group-modern">
-                  <Form.Label className="form-label-modern">
-                    <span className="label-icon">#</span>
-                      ProfesorNro
-                  </Form.Label>
-                  <Form.Control
-                      name="nroProfesor"
-                    type="number"
-                      value={formik.values.nroProfesor || ""}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                      isInvalid={!!(formik.errors.nroProfesor && formik.touched.nroProfesor)}
-                      disabled={true}
-                    className="form-control-modern"
-                      placeholder="Ingrese el ProfesorNro"
-                  />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
-                      {formik.errors.nroProfesor}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                )}
+          <Modal.Body>
+            <Form onSubmit={formik.handleSubmit}>
+              <div className="form-content">
                 <Form.Group controlId="formDniProfesor" className="form-group-modern">
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">🆔</span>
@@ -250,6 +193,145 @@ const ProfesorModal = ({
                 </Button>
               </Modal.Footer>
             </Form>
+          </Modal.Body>
+        </Modal>
+      )}
+
+      {modalType === ModalType.UPDATE && (
+        <Modal show={show} onHide={onHide} centered backdrop="static">
+          <Modal.Header closeButton className="modal-header-success">
+            <Modal.Title>
+              <span className="modal-icon">✏️</span>
+              {title}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={formik.handleSubmit}>
+              <div className="form-content">
+                <Form.Group controlId="formProfesorNro" className="form-group-modern">
+                  <Form.Label className="form-label-modern">
+                    <span className="label-icon">#</span>
+                      ProfesorNro
+                  </Form.Label>
+                  <Form.Control
+                      name="nroProfesor"
+                    type="number"
+                      value={formik.values.nroProfesor || ""}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                      isInvalid={!!(formik.errors.nroProfesor && formik.touched.nroProfesor)}
+                      disabled={true}
+                    className="form-control-modern"
+                      placeholder="Ingrese el ProfesorNro"
+                  />
+                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                      {formik.errors.nroProfesor}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formDniProfesor" className="form-group-modern">
+                  <Form.Label className="form-label-modern">
+                    <span className="label-icon">🆔</span>
+                    DNI
+                  </Form.Label>
+                  <Form.Control
+                    name="dniProfesor"
+                    type="number"
+                    value={formik.values.dniProfesor || ""}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    isInvalid={!!(formik.errors.dniProfesor && formik.touched.dniProfesor)}
+                    className="form-control-modern"
+                    placeholder="Ingrese el DNI"
+                  />
+                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                    {formik.errors.dniProfesor}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formNombreProfesor" className="form-group-modern">
+                  <Form.Label className="form-label-modern">
+                    <span className="label-icon">👤</span>
+                    Nombre
+                  </Form.Label>
+                  <Form.Control
+                    name="nombreProfesor"
+                    type="text"
+                    value={formik.values.nombreProfesor || ""}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    isInvalid={!!(formik.errors.nombreProfesor && formik.touched.nombreProfesor)}
+                    className="form-control-modern"
+                    placeholder="Ingrese el nombre"
+                  />
+                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                    {formik.errors.nombreProfesor}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formTelefonoProfesor" className="form-group-modern">
+                  <Form.Label className="form-label-modern">
+                    <span className="label-icon">📞</span>
+                    Teléfono
+                  </Form.Label>
+                  <Form.Control
+                    name="telefonoProfesor"
+                    type="number"
+                    value={formik.values.telefonoProfesor || ""}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    isInvalid={!!(formik.errors.telefonoProfesor && formik.touched.telefonoProfesor)}
+                    className="form-control-modern"
+                    placeholder="Ingrese el teléfono"
+                  />
+                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                    {formik.errors.telefonoProfesor}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <Modal.Footer className="modal-footer-form">
+                <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+                  Cancelar
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={!formik.isValid}
+                  className="btn-save"
+                >
+                  <span className="btn-icon">💾</span>
+                  Guardar
+                </Button>
+              </Modal.Footer>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      )}
+
+      {modalType === ModalType.DELETE && (
+        <Modal show={show} onHide={onHide} centered backdrop="static">
+          <Modal.Header closeButton className="modal-header-success">
+            <Modal.Title>
+              <span className="modal-icon">🗑️</span>
+              {title}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="delete-confirmation">
+              <p>¿Está seguro que desea eliminar al profesor?</p>
+              <p><strong>Nombre:</strong> {profesor.nombreProfesor}</p>
+              <p><strong>DNI:</strong> {profesor.dniProfesor}</p>
+            </div>
+            <Modal.Footer className="modal-footer-form">
+              <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+                Cancelar
+              </Button>
+              <Button
+                variant="danger"
+                onClick={handleDelete}
+                className="btn-delete"
+              >
+                <span className="btn-icon">🗑️</span>
+                Eliminar
+              </Button>
+            </Modal.Footer>
           </Modal.Body>
         </Modal>
       )}

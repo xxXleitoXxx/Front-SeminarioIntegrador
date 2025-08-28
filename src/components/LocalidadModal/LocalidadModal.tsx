@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import type { LocalidadDTO } from "../../types/LocalidadDTO";
 import { LocalidadService } from "../../services/LocalidadService";
+import "./LocalidadModal.css";
 
 type LocalidadModalProps = {
   show: boolean;
@@ -84,32 +85,29 @@ const LocalidadModal = ({
   return (
     <>
       {modalType === ModalType.DELETE ? (
-        <Modal show={show} onHide={onHide} centered backdrop="static" className="modal-modern">
-          <Modal.Header closeButton className="modal-header-danger">
+        <Modal show={show} onHide={onHide} centered backdrop="static">
+          <Modal.Header closeButton className="modal-header-info">
             <Modal.Title>
               <span className="modal-icon">🗑️</span>
               {title}
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="modal-body-danger">
+          <Modal.Body>
             <div className="delete-confirmation">
-              <div className="delete-icon">⚠️</div>
-              <p className="delete-message">
-                ¿Está seguro que desea eliminar la localidad?
-              </p>
-              <div className="delete-item">
-                <strong>{localidad.nombreLocalidad}</strong>
-              </div>
+              <p>¿Está seguro que desea eliminar la localidad?</p>
+              <p><strong>Nombre:</strong> {localidad.nombreLocalidad}</p>
+              <p><strong>Código:</strong> {localidad.codLocalidad}</p>
             </div>
+            <Modal.Footer className="modal-footer-form">
+              <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+                Cancelar
+              </Button>
+              <Button variant="danger" onClick={handleDelete} className="btn-delete">
+                <span className="btn-icon">🗑️</span>
+                Eliminar
+              </Button>
+            </Modal.Footer>
           </Modal.Body>
-          <Modal.Footer className="modal-footer-danger">
-            <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
-              Cancelar
-            </Button>
-            <Button variant="danger" onClick={handleDelete} className="btn-delete">
-              Eliminar
-            </Button>
-          </Modal.Footer>
         </Modal>
       ) : (
         <Modal
@@ -117,19 +115,18 @@ const LocalidadModal = ({
           onHide={onHide}
           centered
           backdrop="static"
-          className="modal-modern modal-xl"
         >
-          <Modal.Header closeButton className="modal-header-form">
+          <Modal.Header closeButton className="modal-header-info">
             <Modal.Title>
               <span className="modal-icon">
-                {modalType === ModalType.CREATE ? "➕" : "✏️"}
+                {modalType === ModalType.CREATE ? "🏘️" : "✏️"}
               </span>
               {title}
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="modal-body-form">
-            <Form onSubmit={formik.handleSubmit} className="form-modern">
-              <div className="form-grid">
+          <Modal.Body>
+            <Form onSubmit={formik.handleSubmit}>
+              <div className="form-content">
                 {modalType !== ModalType.CREATE && (
                   <Form.Group controlId="formCodLocalidad" className="form-group-modern">
                     <Form.Label className="form-label-modern">
@@ -148,13 +145,13 @@ const LocalidadModal = ({
                       placeholder="Ingrese el código"
                     />
                     <Form.Control.Feedback type="invalid" className="feedback-modern">
-                      {formik.errors.codLocalidad as string}
+                      {formik.errors.codLocalidad}
                     </Form.Control.Feedback>
                   </Form.Group>
                 )}
                 <Form.Group controlId="formNombreLocalidad" className="form-group-modern">
                   <Form.Label className="form-label-modern">
-                    <span className="label-icon">🏙️</span>
+                    <span className="label-icon">🏘️</span>
                     Nombre
                   </Form.Label>
                   <Form.Control
@@ -165,10 +162,10 @@ const LocalidadModal = ({
                     onBlur={formik.handleBlur}
                     isInvalid={!!(formik.errors.nombreLocalidad && formik.touched.nombreLocalidad)}
                     className="form-control-modern"
-                    placeholder="Ingrese el nombre"
+                    placeholder="Ingrese el nombre de la localidad"
                   />
                   <Form.Control.Feedback type="invalid" className="feedback-modern">
-                    {formik.errors.nombreLocalidad as string}
+                    {formik.errors.nombreLocalidad}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
