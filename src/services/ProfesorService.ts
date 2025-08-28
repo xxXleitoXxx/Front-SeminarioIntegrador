@@ -94,7 +94,7 @@ export const ProfesorService = {
 
   updateProfesor: async (profesor: ProfesorDTO): Promise<ProfesorDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${profesor.dniProfesor}`, {
+      const response = await fetch(`${BASE_URL}/${profesor.nroProfesor}`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json'
@@ -170,7 +170,7 @@ export const ProfesorService = {
   bajaLogicaProfesor: async (profesor: ProfesorDTO): Promise<string> => {
     try {
       console.log(profesor);
-      const response = await fetch(`${BASE_URL}/${profesor.dniProfesor}/baja`, {
+      const response = await fetch(`${BASE_URL}/${profesor.nroProfesor}/baja`, {
         method: "PUT"
       });
 

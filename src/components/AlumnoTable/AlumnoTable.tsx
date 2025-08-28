@@ -35,11 +35,13 @@ const AlumnoTable = () => {
         telefonoContacto: 0,
       },
     ],
-    fichaMedicaDTO: {
-      id: 0,
-      fechaBajaFichaMedica: null,
-      archivo: new Uint8Array(),
-    },
+    fichaMedicaDTO: [
+      {
+        id: 0,
+        fechaBajaFichaMedica: null,
+        archivo: new Uint8Array(),
+      },
+    ],
   });
 
   const [alumno, setAlumno] = useState<AlumnoDTO>(initializableNewAlumno());
@@ -93,8 +95,12 @@ const AlumnoTable = () => {
     return contactos ? contactos.length : 0;
   };
 
-  const hasFichaMedica = (fichaMedica: FichaMedicaDTO) => {
-    return fichaMedica && fichaMedica.archivo && fichaMedica.archivo.length > 0;
+  const hasFichaMedica = (fichaMedicas: FichaMedicaDTO[]) => {
+    return (
+      fichaMedicas &&
+      fichaMedicas.length > 0 &&
+      fichaMedicas.some((ficha) => ficha.archivo && ficha.archivo.length > 0)
+    );
   };
 
   const handleContactosClick = (alumno: AlumnoDTO) => {
