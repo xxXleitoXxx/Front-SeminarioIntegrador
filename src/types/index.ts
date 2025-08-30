@@ -7,6 +7,7 @@ export type { RangoEtarioDTO } from './RangoEtarioDTO';
 export type { ArticuloDTO } from './ArticuloDTO';
 export type { TipoClaseDTO } from './TipoClaseDTO';
 export type { InscripcionDTO } from './InscripcionDTO';
+export type { InscripcionProfesorDTO } from './InscripcionProfesorDTO';
 export type { DiaDTO } from './DiaDTO';
 export type { HorarioiDiaxTipoClaseDTO } from './HorarioiDiaxTipoClaseDTO';
 export type { ConfHorarioTipoClaseDTO } from './ConfHorarioTipoClaseDTO';

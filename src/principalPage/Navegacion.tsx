@@ -37,6 +37,9 @@ function Navegacion() {
               <Nav.Link onClick={() => navigate("/inscripcion-clase")}>
                 Inscripción a Clase
               </Nav.Link>
+              <Nav.Link onClick={() => navigate("/inscripcion-profesor")}>
+                Inscripción Profesor
+              </Nav.Link>
               <Nav.Link onClick={() => navigate("/configurar-cronograma")}>
                 Configurar Cronograma
               </Nav.Link>

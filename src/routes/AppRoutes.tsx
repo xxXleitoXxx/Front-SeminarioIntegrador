@@ -9,6 +9,7 @@ import AbmTipoClase from "../pages/AbmTipoClase";
 import AbmLocalidad from "../pages/AbmLocalidad";
 import AbmRangoEtario from "../pages/AbmRangoEtario";
 import InscripcionClase from "../pages/InscripcionClase";
+import InscripcionProfesor from "../pages/InscripcionProfesor";
 import ConfigurarCronograma from "../pages/ConfigurarCronograma";
 
 function Aplicacion() {
@@ -24,6 +25,7 @@ function Aplicacion() {
           <Route path="gestionlocalidad" element={<AbmLocalidad />} />
           <Route path="gestionrangoetario" element={<AbmRangoEtario />} />
           <Route path="inscripcion-clase" element={<InscripcionClase />} />
+          <Route path="inscripcion-profesor" element={<InscripcionProfesor />} />
           <Route
             path="configurar-cronograma"
             element={<ConfigurarCronograma />}
