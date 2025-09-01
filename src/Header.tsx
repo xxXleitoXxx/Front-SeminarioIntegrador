@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AtlantisHeader() {
   return (
-    <div>
+    <div className="atlantis-header">
       <div className="d-flex justify-content-between">
         <div className="p-2" style={{ margin: "20px" }}>
           <h1>Atlantis System</h1>

@@ -1,6 +1,7 @@
-import React from 'react';
-import { Card, Badge, Row, Col } from 'react-bootstrap';
-import './CumpleanosProximos.css';
+import React from "react";
+import { Card, Badge, Row, Col } from "react-bootstrap";
+import "./CumpleanosProximos.css";
+import { toast } from "react-toastify";
 
 interface Cumpleanos {
   id: number;
@@ -20,7 +21,7 @@ const CumpleanosProximos: React.FC = () => {
       apellido: "González",
       fecha: "2024-12-25",
       diasRestantes: 3,
-      edad: 15
+      edad: 15,
     },
     {
       id: 2,
@@ -28,7 +29,7 @@ const CumpleanosProximos: React.FC = () => {
       apellido: "Rodríguez",
       fecha: "2024-12-28",
       diasRestantes: 6,
-      edad: 12
+      edad: 12,
     },
     {
       id: 3,
@@ -36,27 +37,30 @@ const CumpleanosProximos: React.FC = () => {
       apellido: "López",
       fecha: "2024-12-30",
       diasRestantes: 8,
-      edad: 14
+      edad: 14,
     },
     {
       id: 4,
       nombre: "Luis",
       apellido: "Martínez",
       fecha: "2025-01-02",
-      diasRestantes: 11,
-      edad: 13
-    }
+      diasRestantes: -1,
+      edad: 13,
+    },
   ];
 
   const getDiasColor = (dias: number) => {
-    if (dias <= 3) return 'danger';
-    if (dias <= 7) return 'warning';
-    return 'info';
+    if (dias <= 3) return "danger";
+    if (dias <= 7) return "warning";
+    return "info";
   };
 
   const getDiasText = (dias: number) => {
-    if (dias === 0) return '¡Hoy!';
-    if (dias === 1) return 'Mañana';
+    if (dias === 0) return "¡Hoy!";
+    if (dias === 1) return "Mañana";
+    if (dias === -1) return "Ayer";
+    if (dias === -2) return "Anteayer";
+    if (dias < -2) return `${Math.abs(dias)} días atrás`;
     return `${dias} días`;
   };
 
@@ -71,7 +75,7 @@ const CumpleanosProximos: React.FC = () => {
           <p className="section-subtitle">Celebra con nuestros estudiantes</p>
         </div>
       </div>
-      
+
       <Row className="g-3">
         {cumpleanosProximos.map((cumpleanos) => (
           <Col key={cumpleanos.id} xs={12} sm={6} lg={3}>
@@ -81,33 +85,40 @@ const CumpleanosProximos: React.FC = () => {
                   <div className="avatar">
                     <i className="bi bi-person-circle"></i>
                   </div>
-                  <Badge 
-                    bg={getDiasColor(cumpleanos.diasRestantes)} 
+                  <Badge
+                    bg={getDiasColor(cumpleanos.diasRestantes)}
                     className="dias-badge"
                   >
                     {getDiasText(cumpleanos.diasRestantes)}
                   </Badge>
                 </div>
-                
+
                 <Card.Title className="nombre-completo">
                   {cumpleanos.nombre} {cumpleanos.apellido}
                 </Card.Title>
-                
+
                 <div className="fecha-info">
                   <i className="bi bi-calendar-event me-2"></i>
-                  <span>{new Date(cumpleanos.fecha).toLocaleDateString('es-ES', {
-                    day: 'numeric',
-                    month: 'long'
-                  })}</span>
+                  <span>
+                    {new Date(cumpleanos.fecha).toLocaleDateString("es-ES", {
+                      day: "numeric",
+                      month: "long",
+                    })}
+                  </span>
                 </div>
-                
+
                 <div className="edad-info">
                   <i className="bi bi-cake2 me-2"></i>
                   <span>Cumple {cumpleanos.edad} años</span>
                 </div>
-                
+
                 <div className="card-actions">
-                  <button className="btn-felicitacion">
+                  <button
+                    className="btn-felicitacion"
+                    onClick={() => {
+                      toast.info(`Proximamente ....`);
+                    }}
+                  >
                     <i className="bi bi-emoji-smile me-2"></i>
                     Felicitar
                   </button>
@@ -117,7 +128,7 @@ const CumpleanosProximos: React.FC = () => {
           </Col>
         ))}
       </Row>
-      
+
       {cumpleanosProximos.length === 0 && (
         <div className="no-cumpleanos">
           <i className="bi bi-calendar-x"></i>
@@ -129,4 +140,3 @@ const CumpleanosProximos: React.FC = () => {
 };
 
 export default CumpleanosProximos;
-

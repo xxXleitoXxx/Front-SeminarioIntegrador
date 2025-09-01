@@ -1,4 +1,3 @@
-import React from "react";
 import Cronograma from "../components/Cronograma/Cronograma";
 
 const CronogramaPage = () => {
@@ -10,4 +9,3 @@ const CronogramaPage = () => {
 };
 
 export default CronogramaPage;
-

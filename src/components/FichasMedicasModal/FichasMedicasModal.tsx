@@ -1,5 +1,14 @@
-import  { useState, useEffect } from "react";
-import { Button, Modal, Table, Spinner, Form, Row, Col, Badge } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import {
+  Button,
+  Modal,
+  Table,
+  Spinner,
+  Form,
+  Row,
+  Col,
+  Badge,
+} from "react-bootstrap";
 import { toast } from "react-toastify";
 import type { FichaMedicaDTO } from "../../types/FichaMedicaDTO";
 import { FichaMedicaService } from "../../services/FichaMedicaService";
@@ -12,7 +21,7 @@ type FichasMedicasModalProps = {
   alumnoNombre: string;
 };
 
-type FiltroEstado = 'todos' | 'vigente' | 'pendiente' | 'vencida';
+type FiltroEstado = "todos" | "vigente" | "pendiente" | "vencida";
 
 const FichasMedicasModal = ({
   show,
@@ -24,7 +33,7 @@ const FichasMedicasModal = ({
   const [fichasFiltradas, setFichasFiltradas] = useState<FichaMedicaDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('todos');
+  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todos");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAddingFicha, setIsAddingFicha] = useState(false);
 
@@ -54,26 +63,26 @@ const FichasMedicasModal = ({
 
   const aplicarFiltros = () => {
     let filtradas = [...fichasMedicas];
-    
-    if (filtroEstado !== 'todos') {
+
+    if (filtroEstado !== "todos") {
       const fechaActual = new Date();
-      filtradas = filtradas.filter(ficha => {
+      filtradas = filtradas.filter((ficha) => {
         const desde = new Date(ficha.vigenciaDesde);
         const hasta = new Date(ficha.vigenciaHasta);
-        
+
         switch (filtroEstado) {
-          case 'vigente':
+          case "vigente":
             return fechaActual >= desde && fechaActual <= hasta;
-          case 'pendiente':
+          case "pendiente":
             return fechaActual < desde;
-          case 'vencida':
+          case "vencida":
             return fechaActual > hasta;
           default:
             return true;
         }
       });
     }
-    
+
     setFichasFiltradas(filtradas);
   };
 
@@ -110,14 +119,22 @@ const FichasMedicasModal = ({
       const nuevaFicha: FichaMedicaDTO = {
         id: 0, // El backend asignará el ID
         vigenciaDesde: new Date(),
-        vigenciaHasta: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // 1 año de vigencia por defecto
+        vigenciaHasta: new Date(
+          new Date().setFullYear(new Date().getFullYear() + 1)
+        ), // 1 año de vigencia por defecto
         archivo: uint8Array,
       };
 
       // Llamar al servicio para agregar la ficha
-      const resultado = await FichaMedicaService.agregarFichaMedica(alumnoId, nuevaFicha);
-      
-      if (typeof resultado === 'string' && resultado.includes('correctamente')) {
+      const resultado = await FichaMedicaService.agregarFichaMedica(
+        alumnoId,
+        nuevaFicha
+      );
+
+      if (
+        typeof resultado === "string" &&
+        resultado.includes("correctamente")
+      ) {
         toast.success("Ficha médica agregada correctamente", {
           position: "top-center",
         });
@@ -131,9 +148,14 @@ const FichasMedicasModal = ({
       }
     } catch (error) {
       console.error("Error al agregar ficha médica:", error);
-      toast.error(`Error al agregar la ficha médica: ${error instanceof Error ? error.message : String(error)}`, {
-        position: "top-center",
-      });
+      toast.error(
+        `Error al agregar la ficha médica: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        {
+          position: "top-center",
+        }
+      );
     } finally {
       setIsAddingFicha(false);
     }
@@ -143,9 +165,9 @@ const FichasMedicasModal = ({
     if (ficha.archivo) {
       try {
         let archivoBytes: Uint8Array;
-        
+
         // El backend puede devolver el archivo como string base64 o como array de números
-        if (typeof ficha.archivo === 'string') {
+        if (typeof ficha.archivo === "string") {
           // Si es string base64, convertirlo a Uint8Array
           const binaryString = atob(ficha.archivo);
           archivoBytes = new Uint8Array(binaryString.length);
@@ -161,16 +183,16 @@ const FichasMedicasModal = ({
         }
 
         // Crear blob y descargar
-        const blob = new Blob([archivoBytes], { type: 'application/pdf' });
+        const blob = new Blob([archivoBytes], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
         link.download = `ficha_medica_${alumnoNombre}_${ficha.id}.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         toast.success("Archivo descargado correctamente", {
           position: "top-center",
         });
@@ -189,10 +211,10 @@ const FichasMedicasModal = ({
 
   const formatDate = (date: Date | null) => {
     if (!date) return "N/A";
-    return new Date(date).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
+    return new Date(date).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     });
   };
 
@@ -200,11 +222,15 @@ const FichasMedicasModal = ({
     const fechaActual = new Date();
     const desde = new Date(vigenciaDesde);
     const hasta = new Date(vigenciaHasta);
-    
+
     if (fechaActual >= desde && fechaActual <= hasta) {
       return <Badge bg="success">Vigente</Badge>;
     } else if (fechaActual < desde) {
-      return <Badge bg="warning" text="dark">Pendiente</Badge>;
+      return (
+        <Badge bg="warning" text="dark">
+          Pendiente
+        </Badge>
+      );
     } else {
       return <Badge bg="danger">Vencida</Badge>;
     }
@@ -212,29 +238,35 @@ const FichasMedicasModal = ({
 
   const getEstadisticas = () => {
     const fechaActual = new Date();
-    const vigentes = fichasMedicas.filter(ficha => {
+    const vigentes = fichasMedicas.filter((ficha) => {
       const desde = new Date(ficha.vigenciaDesde);
       const hasta = new Date(ficha.vigenciaHasta);
       return fechaActual >= desde && fechaActual <= hasta;
     }).length;
-    
-    const pendientes = fichasMedicas.filter(ficha => {
+
+    const pendientes = fichasMedicas.filter((ficha) => {
       const desde = new Date(ficha.vigenciaDesde);
       return fechaActual < desde;
     }).length;
-    
-    const vencidas = fichasMedicas.filter(ficha => {
+
+    const vencidas = fichasMedicas.filter((ficha) => {
       const hasta = new Date(ficha.vigenciaHasta);
       return fechaActual > hasta;
     }).length;
-    
+
     return { vigentes, pendientes, vencidas };
   };
 
   const estadisticas = getEstadisticas();
 
   return (
-    <Modal show={show} onHide={onHide} centered backdrop="static" className="modal-modern modal-xl">
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      backdrop="static"
+      className="modal-modern modal-xl"
+    >
       <Modal.Header closeButton className="modal-header-medical">
         <Modal.Title>
           <span className="modal-icon">🏥</span>
@@ -244,7 +276,11 @@ const FichasMedicasModal = ({
       <Modal.Body className="modal-body-medical">
         {isLoading ? (
           <div className="loading-container">
-            <Spinner animation="border" role="status" className="loading-spinner">
+            <Spinner
+              animation="border"
+              role="status"
+              className="loading-spinner"
+            >
               <span className="visually-hidden">Cargando...</span>
             </Spinner>
             <p className="loading-text">Cargando fichas médicas...</p>
@@ -253,7 +289,11 @@ const FichasMedicasModal = ({
           <div className="error-container">
             <div className="error-icon">⚠️</div>
             <p className="error-message">{error}</p>
-            <Button variant="outline-primary" onClick={loadFichasMedicas} size="sm">
+            <Button
+              variant="outline-primary"
+              onClick={loadFichasMedicas}
+              size="sm"
+            >
               Reintentar
             </Button>
           </div>
@@ -292,9 +332,11 @@ const FichasMedicasModal = ({
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>Filtrar por Estado:</Form.Label>
-                  <Form.Select 
-                    value={filtroEstado} 
-                    onChange={(e) => setFiltroEstado(e.target.value as FiltroEstado)}
+                  <Form.Select
+                    value={filtroEstado}
+                    onChange={(e) =>
+                      setFiltroEstado(e.target.value as FiltroEstado)
+                    }
                   >
                     <option value="todos">Todos los estados</option>
                     <option value="vigente">Solo Vigentes</option>
@@ -304,11 +346,11 @@ const FichasMedicasModal = ({
                 </Form.Group>
               </Col>
               <Col md={4} className="d-flex align-items-end">
-                <Button 
-                  variant="outline-secondary" 
-                  size="sm" 
-                  onClick={() => setFiltroEstado('todos')}
-                  disabled={filtroEstado === 'todos'}
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={() => setFiltroEstado("todos")}
+                  disabled={filtroEstado === "todos"}
                 >
                   Limpiar Filtros
                 </Button>
@@ -322,15 +364,19 @@ const FichasMedicasModal = ({
                     size="sm"
                     placeholder="Seleccionar PDF"
                   />
-                  <Button 
-                    variant="success" 
-                    size="sm" 
+                  <Button
+                    variant="success"
+                    size="sm"
                     onClick={handleAddFicha}
                     disabled={!selectedFile || isAddingFicha}
                   >
                     {isAddingFicha ? (
                       <>
-                        <Spinner animation="border" size="sm" className="me-1" />
+                        <Spinner
+                          animation="border"
+                          size="sm"
+                          className="me-1"
+                        />
                         Agregando...
                       </>
                     ) : (
@@ -349,10 +395,9 @@ const FichasMedicasModal = ({
               <div className="empty-state">
                 <div className="empty-icon">🔍</div>
                 <p className="empty-message">
-                  {fichasMedicas.length === 0 
+                  {fichasMedicas.length === 0
                     ? "No hay fichas médicas registradas para este alumno."
-                    : "No hay fichas médicas que coincidan con el filtro seleccionado."
-                  }
+                    : "No hay fichas médicas que coincidan con el filtro seleccionado."}
                 </p>
               </div>
             ) : (
@@ -372,38 +417,52 @@ const FichasMedicasModal = ({
                     {fichasFiltradas.map((ficha, index) => (
                       <tr key={index}>
                         <td>{ficha.id}</td>
-                        <td>{getStatusBadge(ficha.vigenciaDesde, ficha.vigenciaHasta)}</td>
+                        <td>
+                          {getStatusBadge(
+                            ficha.vigenciaDesde,
+                            ficha.vigenciaHasta
+                          )}
+                        </td>
                         <td>{formatDate(ficha.vigenciaDesde)}</td>
                         <td>{formatDate(ficha.vigenciaHasta)}</td>
                         <td>
                           {(() => {
-                            if (!ficha.archivo) return <span className="no-file">Sin archivo</span>;
-                            
-                            if (typeof ficha.archivo === 'string') {
+                            if (!ficha.archivo)
+                              return (
+                                <span className="no-file">Sin archivo</span>
+                              );
+
+                            if (typeof ficha.archivo === "string") {
                               const archivoString = ficha.archivo as string;
-                              return archivoString.length > 0 ? 
+                              return archivoString.length > 0 ? (
                                 <span className="file-info">
-                                  📄 Archivo disponible ({(archivoString.length / 1024).toFixed(2)} KB)
-                                </span> : 
-                                <span className="no-file">Sin archivo</span>;
+                                  📄 Archivo disponible (
+                                  {(archivoString.length / 1024).toFixed(2)} KB)
+                                </span>
+                              ) : (
+                                <span className="no-file">Sin archivo</span>
+                              );
                             }
-                            
+
                             if (Array.isArray(ficha.archivo)) {
                               const archivoArray = ficha.archivo as number[];
-                              return archivoArray.length > 0 ? 
+                              return archivoArray.length > 0 ? (
                                 <span className="file-info">
-                                  📄 Archivo disponible ({(archivoArray.length / 1024).toFixed(2)} KB)
-                                </span> : 
-                                <span className="no-file">Sin archivo</span>;
+                                  📄 Archivo disponible (
+                                  {(archivoArray.length / 1024).toFixed(2)} KB)
+                                </span>
+                              ) : (
+                                <span className="no-file">Sin archivo</span>
+                              );
                             }
-                            
+
                             return <span className="no-file">Sin archivo</span>;
                           })()}
                         </td>
                         <td>
-                          <Button 
-                            variant="outline-primary" 
-                            size="sm" 
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
                             onClick={() => handleDownloadFicha(ficha)}
                             disabled={!ficha.archivo}
                             title="Descargar PDF"
@@ -423,9 +482,14 @@ const FichasMedicasModal = ({
       <Modal.Footer className="modal-footer-medical">
         <div className="d-flex justify-content-between w-100">
           <div className="text-muted">
-            Mostrando {fichasFiltradas.length} de {fichasMedicas.length} fichas médicas
+            Mostrando {fichasFiltradas.length} de {fichasMedicas.length} fichas
+            médicas
           </div>
-          <Button variant="outline-secondary" onClick={onHide} className="btn-close">
+          <Button
+            variant="outline-secondary"
+            onClick={onHide}
+            className="btn-close"
+          >
             Cerrar
           </Button>
         </div>
@@ -434,4 +498,4 @@ const FichasMedicasModal = ({
   );
 };
 
-export default FichasMedicasModal; 
+export default FichasMedicasModal;
