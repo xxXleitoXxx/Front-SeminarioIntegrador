@@ -113,9 +113,16 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
               icon={<FaUserPlus />}
               onClick={() => navigate("/inscripcion-clase")}
             >
-              Inscripción a Clase
+              Alumno a clase
+            </MenuItem>
+            <MenuItem
+              icon={<FaUserPlus />}
+              onClick={() => navigate("/inscripcion-profesor")}
+            >
+              Profesor a clase
             </MenuItem>
           </SubMenu>
+
           <SubMenu label="Cronograma" icon={<FaCalendarAlt />}>
             <MenuItem
               icon={<FaCalendarAlt />}
