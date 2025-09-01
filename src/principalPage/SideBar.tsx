@@ -1,6 +1,7 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { useState } from "react";
 import "./SideBar.css";
+import iconAlumno from "../assets/AtlantisMejorado_1.svg";
 import {
   FaUser,
   FaChalkboardTeacher,
@@ -59,8 +60,17 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
             },
           }}
         >
-          <MenuItem icon={<FaHome />} onClick={() => navigate("/")}>
-            Inicio
+          <MenuItem
+            icon={
+              <img
+                src={iconAlumno}
+                alt="Atlantis System"
+                style={{ width: "50px", height: "50px" }}
+              />
+            }
+            onClick={() => navigate("/gestionalumno")}
+          >
+            Atlantis System
           </MenuItem>
           <SubMenu label="Gestión" icon={<FaUser />}>
             <MenuItem
