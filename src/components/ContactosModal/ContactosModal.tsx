@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Button, Modal, Table } from "react-bootstrap";
 import type { ContactoEmergenciaDTO } from "../../types/ContactoEmergenciaDTO";
 import "./ContactosModal.css";
@@ -55,7 +55,7 @@ const ContactosModal = ({
         <Button variant="outline-secondary" onClick={onHide} className="btn-close">
           Cerrar
         </Button>
-      </Modal.Footer>
+      </Modal.Footer> 
     </Modal>
   );
 };

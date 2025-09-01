@@ -1,19 +1,12 @@
 import AtlantisHeader from "../Header";
 import AbmAlumno from "./AbmAlumno";
 import Navegacion from "../principalPage/Navegacion";
+import CumpleanosProximos from "../components/CumpleanosProximos";
+import FichasMedicasProximas from "../components/FichasMedicasProximas";
+import "./PrincipalPage.css";
+import Main from "./Main";
+import { CumpleañosAlert } from "../components/CumpleañosAlert/CumpleañosAlert";
 
-function PrincipalPage() {
-  return (
-    <div>
-      <AtlantisHeader />
-      <div>
-        <Navegacion />
-      </div>
-      <div className="p-1">
-        <AbmAlumno />
-      </div>
-    </div>
-  );
+export default function PrincipalPage() {
+  return <div></div>;
 }
-
-export default PrincipalPage;

@@ -1,12 +1,11 @@
 import "./AtlantisHeader.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navegacion from "./principalPage/Navegacion";
 
 export default function AtlantisHeader() {
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <div className="p-2">
+        <div className="p-2" style={{ margin: "20px" }}>
           <h1>Atlantis System</h1>
         </div>
 
@@ -25,9 +24,7 @@ export default function AtlantisHeader() {
           </div>
         </div>
       </div>
-      <div>
-        <Navegacion />
-      </div>
+      <div>{/*<Navegacion /> */}</div>
     </div>
   );
 }
