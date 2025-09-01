@@ -11,4 +11,5 @@ export type { InscripcionProfesorDTO } from './InscripcionProfesorDTO';
 export type { DiaDTO } from './DiaDTO';
 export type { HorarioiDiaxTipoClaseDTO } from './HorarioiDiaxTipoClaseDTO';
 export type { ConfHorarioTipoClaseDTO } from './ConfHorarioTipoClaseDTO';
+export type { ClaseDTO } from './ClaseDTO';
 export { ModalType } from './ModalType'; 

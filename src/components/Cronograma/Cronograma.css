@@ -1,0 +1,260 @@
+/* Estilos para el Cronograma */
+
+.cronograma-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 1rem;
+}
+
+.cronograma-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: white;
+}
+
+.cronograma-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.cronograma-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cronograma-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 0;
+}
+
+.title-icon {
+  margin-right: 0.5rem;
+  font-size: 2rem;
+}
+
+.cronograma-table-container {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+.cronograma-table {
+  display: table;
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+.cronograma-row {
+  display: table-row;
+}
+
+.cronograma-cell {
+  display: table-cell;
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  vertical-align: top;
+  min-width: 120px;
+  height: 100px;
+}
+
+.header-row {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.header-cell {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.time-cell {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.85rem;
+  color: #495057;
+  min-width: 100px;
+}
+
+.clase-card {
+  height: 100%;
+  margin: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clase-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.clase-card-body {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.clase-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+  color: #333;
+}
+
+.clase-rango {
+  font-size: 0.7rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.clase-profesores {
+  font-size: 0.65rem;
+  color: #888;
+  margin-top: auto;
+}
+
+.clase-horario {
+  font-size: 0.65rem;
+  color: #666;
+  margin-bottom: 0;
+}
+
+.empty-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.empty-text {
+  color: #ccc;
+  font-size: 1.2rem;
+}
+
+.cronograma-leyenda {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.cronograma-leyenda h4 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.leyenda-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.leyenda-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.leyenda-rango {
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cronograma-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .cronograma-title {
+    font-size: 2rem;
+  }
+  
+  .cronograma-table-container {
+    padding: 1rem;
+  }
+  
+  .cronograma-cell {
+    min-width: 80px;
+    height: 80px;
+    padding: 0.25rem;
+  }
+  
+  .clase-card-body {
+    padding: 0.5rem;
+  }
+  
+  .clase-title {
+    font-size: 0.7rem;
+  }
+  
+  .clase-rango {
+    font-size: 0.6rem;
+  }
+  
+  .clase-profesores {
+    font-size: 0.55rem;
+  }
+  
+  .leyenda-items {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .leyenda-item {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cronograma-cell {
+    min-width: 60px;
+    height: 60px;
+  }
+  
+  .clase-title {
+    font-size: 0.6rem;
+  }
+  
+  .clase-rango {
+    font-size: 0.5rem;
+  }
+  
+  .clase-profesores {
+    display: none;
+  }
+}
