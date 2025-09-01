@@ -68,7 +68,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
                 style={{ width: "50px", height: "50px" }}
               />
             }
-            onClick={() => navigate("/gestionalumno")}
+            onClick={() => navigate("/")}
           >
             Atlantis System
           </MenuItem>
@@ -145,6 +145,13 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
             <MenuItem onClick={() => navigate("/reporte1")}>Reporte 1</MenuItem>
             <MenuItem onClick={() => navigate("/reporte2")}>Reporte 2</MenuItem>
           </SubMenu>
+          <MenuItem
+            icon={<FaCalendarAlt />}
+            onClick={() => navigate("/clasesAlumnos")}
+          >
+            Clases
+          </MenuItem>
+
           <MenuItem icon={<FaCog />} onClick={() => navigate("/configuracion")}>
             Configuración
           </MenuItem>

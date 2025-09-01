@@ -11,6 +11,7 @@ import AbmRangoEtario from "../pages/AbmRangoEtario";
 import InscripcionClase from "../pages/InscripcionClase";
 import ConfigurarCronograma from "../pages/ConfigurarCronograma";
 import InscripcionProfesor from "../pages/InscripcionProfesor";
+import ClasesAlumnos from "../components/ClaseAlumno/ClasesAlumnos";
 
 function Aplicacion() {
   return (
@@ -26,6 +27,7 @@ function Aplicacion() {
         >
           <Routes>
             <Route path="/" element={<PaginaPrincipal />} />
+            <Route path="clasesAlumnos" element={<ClasesAlumnos />} />
             <Route path="gestionalumno" element={<AbmAlumno />} />
             <Route path="gestionprofesor" element={<AbmProfesor />} />
             <Route path="gestiondia" element={<AbmDia />} />
