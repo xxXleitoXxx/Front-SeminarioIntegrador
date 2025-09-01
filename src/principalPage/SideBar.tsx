@@ -141,6 +141,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
               Configurar Cronograma
             </MenuItem>
           </SubMenu>
+        
           <SubMenu label="Reportes" icon={<FaBook />}>
             <MenuItem onClick={() => navigate("/reporte1")}>Reporte 1</MenuItem>
             <MenuItem onClick={() => navigate("/reporte2")}>Reporte 2</MenuItem>
