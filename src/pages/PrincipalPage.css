@@ -1,0 +1,89 @@
+.dashboard-container {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.gestion-alumnos-section {
+  background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+  border-radius: 20px;
+  margin: 2rem 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem 0;
+}
+
+.gestion-alumnos-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+}
+
+.gestion-alumnos-section .header-icon {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+}
+
+.gestion-alumnos-section .header-icon i {
+  font-size: 1.8rem;
+  color: white;
+}
+
+.gestion-alumnos-section .header-content {
+  text-align: center;
+}
+
+.gestion-alumnos-section .section-title {
+  color: #495057;
+  font-weight: 700;
+  margin: 0;
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.gestion-alumnos-section .section-subtitle {
+  color: #6c757d;
+  margin: 0.5rem 0 0 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem 0;
+  }
+  
+  .gestion-alumnos-section {
+    margin: 1rem 0;
+    padding: 1.5rem 0;
+  }
+  
+  .gestion-alumnos-section .section-header {
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .gestion-alumnos-section .header-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .gestion-alumnos-section .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .gestion-alumnos-section .section-subtitle {
+    font-size: 1rem;
+  }
+}
+

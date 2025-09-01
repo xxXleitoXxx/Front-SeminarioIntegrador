@@ -1,5 +1,4 @@
 import { BrowserRouter } from "react-router-dom";
-import Header from "./Header";
 import Aplicacion from "./routes/AppRoutes";
 import { Container } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
@@ -11,7 +10,7 @@ function App() {
     <>
       <BrowserRouter>
         <ToastContainer />
-        <Header />
+
         <Container
           style={{ minHeight: "100vh", minWidth: "100%", padding: "0" }}
         >

@@ -40,7 +40,9 @@ const AlumnoTable = () => {
       {
         id: 0,
         vigenciaDesde: new Date(),
-        vigenciaHasta: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Por defecto 1 año de vigencia
+        vigenciaHasta: new Date(
+          new Date().setFullYear(new Date().getFullYear() + 1)
+        ), // Por defecto 1 año de vigencia
         archivo: null,
       },
     ],
@@ -52,6 +54,7 @@ const AlumnoTable = () => {
   const [alumnos, setAlumnos] = useState<AlumnoDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshData, setRefreshData] = useState(false);
+  const sortedAlumnos = [...alumnos].sort((a, b) => b.nroAlumno - a.nroAlumno);
 
   // Estados para modales de contactos y fichas médicas
   const [showContactosModal, setShowContactosModal] = useState(false);
@@ -98,14 +101,14 @@ const AlumnoTable = () => {
     if (!fichaMedicas || fichaMedicas.length === 0) {
       return false;
     }
-    
+
     const fechaActual = new Date();
-    
+
     // Verificar si hay alguna ficha médica vigente
-    return fichaMedicas.some(ficha => {
+    return fichaMedicas.some((ficha) => {
       const vigenciaDesde = new Date(ficha.vigenciaDesde);
       const vigenciaHasta = new Date(ficha.vigenciaHasta);
-      
+
       return fechaActual >= vigenciaDesde && fechaActual <= vigenciaHasta;
     });
   };
@@ -130,10 +133,7 @@ const AlumnoTable = () => {
           <h1>👨‍🎓 Gestión de Alumnos</h1>
           <p className="page-subtitle">Administra los alumnos del sistema</p>
         </div>
-        <Button
-          className="btn btn-primary btn-add"
-          onClick={handleNuevoAlumno}
-        >
+        <Button className="btn btn-primary btn-add" onClick={handleNuevoAlumno}>
           <span className="btn-icon">+</span>
           Nuevo Alumno
         </Button>
@@ -168,7 +168,7 @@ const AlumnoTable = () => {
               </tr>
             </thead>
             <tbody>
-              {alumnos.map((alumno) => (
+              {sortedAlumnos.map((alumno) => (
                 <tr key={alumno.nroAlumno} className="table-row-modern">
                   <td className="text-center">{alumno.nroAlumno}</td>
                   <td className="text-center">{alumno.dniAlumno}</td>
@@ -254,9 +254,7 @@ const AlumnoTable = () => {
                       >
                         🏥
                       </Button>
-                      <EditButton
-                        onClick={() => handleEditarAlumno(alumno)}
-                      />
+                      <EditButton onClick={() => handleEditarAlumno(alumno)} />
                       <DeleteButton
                         onClick={() => {
                           // Aquí puedes implementar la lógica de eliminación

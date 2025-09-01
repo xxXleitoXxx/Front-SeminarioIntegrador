@@ -12,8 +12,8 @@ function Navegacion() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="d-flex w-100 justify-content-between">
-              <Nav.Link href="#controlAsistencia">
-                Controlar Asistencia
+              <Nav.Link onClick={() => navigate("/asistenciaalumno")}>
+                Asistencia
               </Nav.Link>
               <Nav.Link onClick={() => navigate("/gestionprofesor")}>
                 Gestion Profesor
@@ -30,7 +30,7 @@ function Navegacion() {
               <Nav.Link onClick={() => navigate("/gestionrangoetario")}>
                 Gestion Rango Etario
               </Nav.Link>
-              <Nav.Link onClick={() => navigate("/")}>Conf Fechas</Nav.Link>
+              <Nav.Link onClick={() => navigate("/")}>Inicio</Nav.Link>
               <Nav.Link onClick={() => navigate("/gestionalumno")}>
                 Gestion Alumno
               </Nav.Link>
