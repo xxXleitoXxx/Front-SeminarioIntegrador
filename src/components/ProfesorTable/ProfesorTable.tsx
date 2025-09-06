@@ -7,7 +7,6 @@ import { EditButton } from "../EditButton/EditButton";
 import { DeleteButton } from "../DeleteButton/DeleteButton";
 import type { ProfesorDTO } from "../../types";
 import { ProfesorService } from "../../services/ProfesorService";
-import { ButtonAlta } from "../ButtonAlta/ButtonAlta";
 import EmptyState from "../EmptyState/EmptyState";
 import "./ProfesorTable.css";
 
@@ -20,7 +19,9 @@ const ProfesorTable = () => {
     fechaBajaProfesor: null,
   });
 
-  const [profesor, setProfesor] = useState<ProfesorDTO>(initializableNewProfesor());
+  const [profesor, setProfesor] = useState<ProfesorDTO>(
+    initializableNewProfesor()
+  );
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<ModalType>(ModalType.NONE);
   const [title, setTitle] = useState("");
@@ -101,19 +102,28 @@ const ProfesorTable = () => {
                   <td>{prof.nombreProfesor}</td>
                   <td className="text-center">{prof.telefonoProfesor}</td>
                   <td className="text-center">
-                    <span className={`status-badge ${prof.fechaBajaProfesor ? 'inactive' : 'active'}`}>{prof.fechaBajaProfesor ? 'Inactivo' : 'Activo'}</span>
+                    <span
+                      className={`status-badge ${
+                        prof.fechaBajaProfesor ? "inactive" : "active"
+                      }`}
+                    >
+                      {prof.fechaBajaProfesor ? "Inactivo" : "Activo"}
+                    </span>
                   </td>
                   <td className="text-center">
                     {prof.fechaBajaProfesor ? (
                       <span className="fecha-baja">
-                        {new Date(prof.fechaBajaProfesor).toLocaleString('es-ES', {
-                          year: 'numeric',
-                          month: '2-digit',
-                          day: '2-digit',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          second: '2-digit'
-                        })}
+                        {new Date(prof.fechaBajaProfesor).toLocaleString(
+                          "es-ES",
+                          {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          }
+                        )}
                       </span>
                     ) : (
                       <span className="no-fecha">-</span>
@@ -153,4 +163,4 @@ const ProfesorTable = () => {
   );
 };
 
-export default ProfesorTable; 
+export default ProfesorTable;

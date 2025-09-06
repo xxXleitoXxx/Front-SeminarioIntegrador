@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Card, Badge, Spinner } from "react-bootstrap";
 import type { ConfHorarioTipoClaseDTO, HorarioiDiaxTipoClaseDTO, TipoClaseDTO } from "../../types";
 import { ConfHorarioTipoClaseService } from "../../services/ConfHorarioTipoClaseService";

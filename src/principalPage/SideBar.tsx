@@ -113,7 +113,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
           <SubMenu label="Asistencia" icon={<FaClipboardList />}>
             <MenuItem
               icon={<FaClipboardList />}
-              onClick={() => navigate("/asistenciaalumno")}
+              onClick={() => navigate("/asistencia")}
             >
               Asistencia de Alumnos
             </MenuItem>
@@ -141,7 +141,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
               Configurar Cronograma
             </MenuItem>
           </SubMenu>
-        
+
           <SubMenu label="Reportes" icon={<FaBook />}>
             <MenuItem onClick={() => navigate("/reporte1")}>Reporte 1</MenuItem>
             <MenuItem onClick={() => navigate("/reporte2")}>Reporte 2</MenuItem>
