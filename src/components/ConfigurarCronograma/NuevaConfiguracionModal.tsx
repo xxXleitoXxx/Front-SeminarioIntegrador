@@ -44,6 +44,14 @@ const NuevaConfiguracionModal = ({
       codTipoClase: 0,
       fechaBajaTipoClase: null,
       nombreTipoClase: "",
+      cupoMaxTipoClase: 0,
+      rangoEtarioDTO: {
+        codRangoEtario: 0,
+        nombreRangoEtario: "",
+        fechaBajaRangoEtario: null,
+        edadDesde: 0,
+        edadHasta: 0,
+      },
     },
   });
 
@@ -72,6 +80,14 @@ const NuevaConfiguracionModal = ({
         codTipoClase: 0,
         fechaBajaTipoClase: null,
         nombreTipoClase: "",
+        cupoMaxTipoClase: 0,
+        rangoEtarioDTO: {
+          codRangoEtario: 0,
+          nombreRangoEtario: "",
+          fechaBajaRangoEtario: null,
+          edadDesde: 0,
+          edadHasta: 0,
+        },
       },
     });
   };
@@ -140,37 +156,12 @@ const NuevaConfiguracionModal = ({
                       .split("T")[0]
                   : ""
               }
-              onChange={(e) =>
-                setNuevaConfiguracion((prev) => ({
-                  ...prev,
-                  fechaVigenciaConf: e.target.value
-                    ? new Date(e.target.value)
-                    : null,
-                }))
-              }
+              readOnly
+              style={{ backgroundColor: '#f8f9fa', cursor: 'not-allowed' }}
             />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Fecha de Fin de Vigencia (Opcional)</Form.Label>
-            <Form.Control
-              type="date"
-              value={
-                nuevaConfiguracion.fechaFinVigenciaConf
-                  ? new Date(nuevaConfiguracion.fechaFinVigenciaConf)
-                      .toISOString()
-                      .split("T")[0]
-                  : ""
-              }
-              onChange={(e) =>
-                setNuevaConfiguracion((prev) => ({
-                  ...prev,
-                  fechaFinVigenciaConf: e.target.value
-                    ? new Date(e.target.value)
-                    : null,
-                }))
-              }
-            />
+            <Form.Text className="text-muted">
+              La fecha de vigencia se establece automáticamente como la fecha actual
+            </Form.Text>
           </Form.Group>
 
           <hr />
@@ -253,7 +244,14 @@ const NuevaConfiguracionModal = ({
                         codTipoClase: 0,
                         fechaBajaTipoClase: null,
                         nombreTipoClase: "",
-                        descripcionTipoClase: "",
+                        cupoMaxTipoClase: 0,
+                        rangoEtarioDTO: {
+                          codRangoEtario: 0,
+                          nombreRangoEtario: "",
+                          fechaBajaRangoEtario: null,
+                          edadDesde: 0,
+                          edadHasta: 0,
+                        },
                       },
                     }));
                   }}
