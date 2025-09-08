@@ -58,8 +58,8 @@ export const AlumnoService = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(alumnoData),
     });
-    
     const result = await handleResponse(response);
+    return result;
   }catch(error){
     console.error("Error en la solicitud:", error);
     throw error;

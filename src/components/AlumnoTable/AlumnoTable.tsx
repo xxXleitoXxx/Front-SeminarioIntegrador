@@ -7,14 +7,16 @@ import ContactosModal from "../ContactosModal/ContactosModal";
 import FichasMedicasModal from "../FichasMedicasModal/FichasMedicasModal";
 import { EditButton } from "../EditButton/EditButton";
 import { DeleteButton } from "../DeleteButton/DeleteButton";
-import type {
-  AlumnoDTO,
-  ContactoEmergenciaDTO,
-  FichaMedicaDTO,
+import {
+  ModalType,
+  type AlumnoDTO,
+  type ContactoEmergenciaDTO,
+  type FichaMedicaDTO,
 } from "../../types";
 import { AlumnoService } from "../../services/AlumnoService";
 import EmptyState from "../EmptyState/EmptyState";
 import "./AlumnoTable.css";
+import DeleteAlumnoModal from "../DeletAlumnoModal/DeleteAlumnoModal";
 
 const AlumnoTable = () => {
   const initializableNewAlumno = (): AlumnoDTO => ({
@@ -59,6 +61,7 @@ const AlumnoTable = () => {
   // Estados para modales de contactos y fichas médicas
   const [showContactosModal, setShowContactosModal] = useState(false);
   const [showFichasModal, setShowFichasModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedAlumnoForModals, setSelectedAlumnoForModals] =
     useState<AlumnoDTO | null>(null);
 
@@ -69,6 +72,10 @@ const AlumnoTable = () => {
   const handleEditarAlumno = (alumnoData: AlumnoDTO) => {
     setAlumno(alumnoData);
     setShowEditarModal(true);
+  };
+  const handleDeleteAlumno = (alumnoData: AlumnoDTO) => {
+    setAlumno(alumnoData);
+    setShowDeleteModal(true);
   };
 
   useEffect(() => {
@@ -258,6 +265,7 @@ const AlumnoTable = () => {
                       <DeleteButton
                         onClick={() => {
                           // Aquí puedes implementar la lógica de eliminación
+                          handleDeleteAlumno(alumno);
                           console.log("Eliminar alumno:", alumno.nroAlumno);
                         }}
                       />
@@ -302,6 +310,17 @@ const AlumnoTable = () => {
           onHide={() => setShowFichasModal(false)}
           alumnoId={selectedAlumnoForModals.nroAlumno}
           alumnoNombre={`${selectedAlumnoForModals.nombreAlumno} ${selectedAlumnoForModals.apellidoAlumno}`}
+        />
+      )}
+      {/* Modal de Eliminar Alumno */}
+      {showDeleteModal && alumno && (
+        <DeleteAlumnoModal
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+          title="Eliminar Alumno"
+          modalType={ModalType.DELETE}
+          alumno={alumno}
+          refreshData={setRefreshData}
         />
       )}
     </div>

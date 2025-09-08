@@ -72,31 +72,37 @@ const ProfesorModal = ({
   };
 
   // Alta lógica
-  const handleAltaLogica = async () => {
-    try {
-      await ProfesorService.altaLogicaProfesor(profesor);
-      toast.success("Profesor dado de alta con éxito", { position: "top-center" });
-      onHide();
-      refreshData((prevState) => !prevState);
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        `Ha ocurrido un error: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { position: "top-center" }
-      );
-    }
-  };
+  // const handleAltaLogica = async () => {
+  //   try {
+  //     await ProfesorService.altaLogicaProfesor(profesor);
+  //     toast.success("Profesor dado de alta con éxito", {
+  //       position: "top-center",
+  //     });
+  //     onHide();
+  //     refreshData((prevState) => !prevState);
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error(
+  //       `Ha ocurrido un error: ${
+  //         error instanceof Error ? error.message : String(error)
+  //       }`,
+  //       { position: "top-center" }
+  //     );
+  //   }
+  // };
 
   // Validación
   const validationSchema = Yup.object().shape({
-    nroProfesor: modalType === ModalType.CREATE 
-      ? Yup.number().integer().min(0).optional()
-      : Yup.number().integer().min(0).required("El ProfesorNro es requerido"),
+    nroProfesor:
+      modalType === ModalType.CREATE
+        ? Yup.number().integer().min(0).optional()
+        : Yup.number().integer().min(0).required("El ProfesorNro es requerido"),
     dniProfesor: Yup.number().integer().min(0).required("El DNI es requerido"),
     nombreProfesor: Yup.string().required("El nombre es requerido"),
-    telefonoProfesor: Yup.number().integer().min(0).required("El teléfono es requerido"),
+    telefonoProfesor: Yup.number()
+      .integer()
+      .min(0)
+      .required("El teléfono es requerido"),
   });
 
   const formik = useFormik({
@@ -120,7 +126,10 @@ const ProfesorModal = ({
           <Modal.Body>
             <Form onSubmit={formik.handleSubmit}>
               <div className="form-content">
-                <Form.Group controlId="formDniProfesor" className="form-group-modern">
+                <Form.Group
+                  controlId="formDniProfesor"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">🆔</span>
                     DNI
@@ -131,15 +140,25 @@ const ProfesorModal = ({
                     value={formik.values.dniProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.dniProfesor && formik.touched.dniProfesor)}
+                    isInvalid={
+                      !!(
+                        formik.errors.dniProfesor && formik.touched.dniProfesor
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el DNI"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.dniProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formNombreProfesor" className="form-group-modern">
+                <Form.Group
+                  controlId="formNombreProfesor"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">👤</span>
                     Nombre
@@ -150,15 +169,26 @@ const ProfesorModal = ({
                     value={formik.values.nombreProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.nombreProfesor && formik.touched.nombreProfesor)}
+                    isInvalid={
+                      !!(
+                        formik.errors.nombreProfesor &&
+                        formik.touched.nombreProfesor
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el nombre"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.nombreProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formTelefonoProfesor" className="form-group-modern">
+                <Form.Group
+                  controlId="formTelefonoProfesor"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">📞</span>
                     Teléfono
@@ -169,17 +199,29 @@ const ProfesorModal = ({
                     value={formik.values.telefonoProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.telefonoProfesor && formik.touched.telefonoProfesor)}
+                    isInvalid={
+                      !!(
+                        formik.errors.telefonoProfesor &&
+                        formik.touched.telefonoProfesor
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el teléfono"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.telefonoProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
               <Modal.Footer className="modal-footer-form">
-                <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+                <Button
+                  variant="outline-secondary"
+                  onClick={onHide}
+                  className="btn-cancel"
+                >
                   Cancelar
                 </Button>
                 <Button
@@ -208,27 +250,40 @@ const ProfesorModal = ({
           <Modal.Body>
             <Form onSubmit={formik.handleSubmit}>
               <div className="form-content">
-                <Form.Group controlId="formProfesorNro" className="form-group-modern">
+                <Form.Group
+                  controlId="formProfesorNro"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">#</span>
-                      ProfesorNro
+                    ProfesorNro
                   </Form.Label>
                   <Form.Control
-                      name="nroProfesor"
+                    name="nroProfesor"
                     type="number"
-                      value={formik.values.nroProfesor || ""}
+                    value={formik.values.nroProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                      isInvalid={!!(formik.errors.nroProfesor && formik.touched.nroProfesor)}
-                      disabled={true}
+                    isInvalid={
+                      !!(
+                        formik.errors.nroProfesor && formik.touched.nroProfesor
+                      )
+                    }
+                    disabled={true}
                     className="form-control-modern"
-                      placeholder="Ingrese el ProfesorNro"
+                    placeholder="Ingrese el ProfesorNro"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
-                      {formik.errors.nroProfesor}
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
+                    {formik.errors.nroProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formDniProfesor" className="form-group-modern">
+                <Form.Group
+                  controlId="formDniProfesor"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">🆔</span>
                     DNI
@@ -239,15 +294,25 @@ const ProfesorModal = ({
                     value={formik.values.dniProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.dniProfesor && formik.touched.dniProfesor)}
+                    isInvalid={
+                      !!(
+                        formik.errors.dniProfesor && formik.touched.dniProfesor
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el DNI"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.dniProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formNombreProfesor" className="form-group-modern">
+                <Form.Group
+                  controlId="formNombreProfesor"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">👤</span>
                     Nombre
@@ -258,15 +323,26 @@ const ProfesorModal = ({
                     value={formik.values.nombreProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.nombreProfesor && formik.touched.nombreProfesor)}
+                    isInvalid={
+                      !!(
+                        formik.errors.nombreProfesor &&
+                        formik.touched.nombreProfesor
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el nombre"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.nombreProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formTelefonoProfesor" className="form-group-modern">
+                <Form.Group
+                  controlId="formTelefonoProfesor"
+                  className="form-group-modern"
+                >
                   <Form.Label className="form-label-modern">
                     <span className="label-icon">📞</span>
                     Teléfono
@@ -277,17 +353,29 @@ const ProfesorModal = ({
                     value={formik.values.telefonoProfesor || ""}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    isInvalid={!!(formik.errors.telefonoProfesor && formik.touched.telefonoProfesor)}
+                    isInvalid={
+                      !!(
+                        formik.errors.telefonoProfesor &&
+                        formik.touched.telefonoProfesor
+                      )
+                    }
                     className="form-control-modern"
                     placeholder="Ingrese el teléfono"
                   />
-                  <Form.Control.Feedback type="invalid" className="feedback-modern">
+                  <Form.Control.Feedback
+                    type="invalid"
+                    className="feedback-modern"
+                  >
                     {formik.errors.telefonoProfesor}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
               <Modal.Footer className="modal-footer-form">
-                <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+                <Button
+                  variant="outline-secondary"
+                  onClick={onHide}
+                  className="btn-cancel"
+                >
                   Cancelar
                 </Button>
                 <Button
@@ -316,11 +404,19 @@ const ProfesorModal = ({
           <Modal.Body>
             <div className="delete-confirmation">
               <p>¿Está seguro que desea eliminar al profesor?</p>
-              <p><strong>Nombre:</strong> {profesor.nombreProfesor}</p>
-              <p><strong>DNI:</strong> {profesor.dniProfesor}</p>
+              <p>
+                <strong>Nombre:</strong> {profesor.nombreProfesor}
+              </p>
+              <p>
+                <strong>DNI:</strong> {profesor.dniProfesor}
+              </p>
             </div>
             <Modal.Footer className="modal-footer-form">
-              <Button variant="outline-secondary" onClick={onHide} className="btn-cancel">
+              <Button
+                variant="outline-secondary"
+                onClick={onHide}
+                className="btn-cancel"
+              >
                 Cancelar
               </Button>
               <Button
@@ -339,4 +435,4 @@ const ProfesorModal = ({
   );
 };
 
-export default ProfesorModal; 
+export default ProfesorModal;

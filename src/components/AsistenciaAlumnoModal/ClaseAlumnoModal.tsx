@@ -80,7 +80,7 @@ const ClaseAlumnoModal = ({
           </Modal.Header>
 
           <Modal.Body className="modal-body-form">
-            <h3>Alumnos </h3>
+            <h3> </h3>
             {claseAlumno.map((alumno) => (
               <Form.Check
                 key={alumno.alumnodto.nroAlumno}
