@@ -1,0 +1,58 @@
+.clase-alumno-modal {
+  padding-top: 0.5rem;
+}
+
+.top-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.search-input {
+  max-width: 420px;
+}
+
+.alumno-list {
+  max-height: 50vh;
+  overflow: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem;
+  background: #fff;
+}
+
+.alumno-item {
+  padding: 0.4rem 0.25rem;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.alumno-item:last-child {
+  border-bottom: none;
+}
+
+.empty {
+  padding: 1rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.modal-footer-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* Subtítulo del modal con info de clase */
+.modal-header-form .modal-title .modal-subtitle {
+  display: block;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.modal-header-form .modal-title .modal-subtitle .dot {
+  margin: 0 0.5rem;
+  color: #adb5bd;
+}

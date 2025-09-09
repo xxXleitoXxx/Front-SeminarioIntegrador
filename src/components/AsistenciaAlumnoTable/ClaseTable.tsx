@@ -26,6 +26,7 @@ const ClaseTable = () => {
   const [clases, setClases] = useState<ClaseDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshData, setRefreshData] = useState(false);
+  const [selectedClase, setSelectedClase] = useState<ClaseDTO | null>(null);
 
   const handleClick = (
     newTitle: string,
@@ -136,6 +137,7 @@ const ClaseTable = () => {
                       <Button
                         variant="success"
                         onClick={() => {
+                          setSelectedClase(d);
                           handleClaseAlumno(d.nroClase);
                           handleClick(
                             "Tomar asistencia",
@@ -173,6 +175,7 @@ const ClaseTable = () => {
           claseAlumno={claseAlumno}
           title={title}
           refreshData={setRefreshData}
+          clase={selectedClase ?? undefined}
         />
       )}
     </div>
