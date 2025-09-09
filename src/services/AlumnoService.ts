@@ -1,13 +1,10 @@
 import type { AlumnoDTO } from "../types/index.ts";
-import { handleResponse } from './common/handleResponse';
-
-const BASE_URL = 'http://localhost:8080/api/v1/alumnos';
+import { apiService } from './ApiService';
 
 export const AlumnoService = {
   getAlumnos: async (): Promise<AlumnoDTO[]> => {
     try {
-      const response = await fetch(`${BASE_URL}`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<AlumnoDTO[]>('/alumnos');
       return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -17,8 +14,7 @@ export const AlumnoService = {
 
   getAlumno: async (id: number): Promise<AlumnoDTO> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<AlumnoDTO>(`/alumnos/${id}`);
       return typeof result === 'object' ? result : {} as AlumnoDTO;
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -53,12 +49,7 @@ export const AlumnoService = {
 
     console.log("Contenido de fichaMedicaDTO antes de enviar:", alumnoData.fichaMedicaDTO);
 
-    const response = await fetch(`${BASE_URL}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(alumnoData),
-    });
-    const result = await handleResponse(response);
+    const result = await apiService.post<void>('/alumnos', alumnoData);
     return result;
   }catch(error){
     console.error("Error en la solicitud:", error);
@@ -90,45 +81,13 @@ export const AlumnoService = {
         : [],
     };
 
-    const response = await fetch(`${BASE_URL}/${alumno.nroAlumno}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(alumnoData),
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al actualizar el alumno");
-    }
+    await apiService.put<void>(`/alumnos/${alumno.nroAlumno}`, alumnoData);
   },
 
   deleteAlumno: async (id: number): Promise<string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al eliminar el alumno: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || JSON.stringify(errorData);
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      if (response.status === 204) {
-        return "Alumno eliminado exitosamente";
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.delete<string>(`/alumnos/${id}`);
+      return result || "Alumno eliminado exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -137,35 +96,8 @@ export const AlumnoService = {
 
   bajaLogicaAlumno: async (alumno: AlumnoDTO): Promise<string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${alumno.dniAlumno}/baja`, {
-        method: "PUT"
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al dar de baja alumno: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.put<string>(`/alumnos/${alumno.dniAlumno}/baja`);
+      return result || "Alumno dado de baja exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -202,40 +134,8 @@ export const AlumnoService = {
 
       console.log('[AlumnoService.altaLogicaAlumno] Payload a enviar:', alumnoData);
 
-      const response = await fetch(`${BASE_URL}/altaAlumno`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(alumnoData)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al dar de alta alumno: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.put<string>('/alumnos/altaAlumno', alumnoData);
+      return result || "Alumno dado de alta exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

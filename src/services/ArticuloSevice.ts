@@ -1,13 +1,10 @@
 import type { ArticuloDTO } from "../types/index.ts";
-import { handleResponse } from './common/handleResponse';
-
-const BASE_URL = 'http://localhost:8080';
+import { apiService } from './ApiService';
 
 export const ArticuloService = {
   getArticulos: async (): Promise<ArticuloDTO[]> => {
     try {
-      const response = await fetch(`${BASE_URL}/Articulo`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<ArticuloDTO[]>('/Articulo');
       return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);

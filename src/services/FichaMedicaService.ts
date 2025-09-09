@@ -1,7 +1,5 @@
 import type { FichaMedicaDTO } from "../types/index.ts";
-import { handleResponse } from './common/handleResponse';
-
-const BASE_URL = 'http://localhost:8080/api/v1/fichaMedica';
+import { apiService } from './ApiService';
 
 export const FichaMedicaService = {
   getFichasMedicas: async (): Promise<FichaMedicaDTO[]> => {

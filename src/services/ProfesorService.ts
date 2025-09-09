@@ -1,38 +1,10 @@
 import type { ProfesorDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/profesores';
-
-const handleResponse = async (response: Response) => {
-  if (!response.ok) {
-    let errorMessage = `Error: ${response.statusText}`;
-    try {
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const errorData = await response.json();
-        errorMessage = errorData.error || JSON.stringify(errorData);
-      } else {
-        const text = await response.text();
-        errorMessage = text || errorMessage;
-      }
-    } catch (error) {
-      console.error("Error parsing error response:", error);
-    }
-    throw new Error(errorMessage);
-  }
-  
-  // Manejar tanto JSON como string
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return response.json();
-  } else {
-    return response.text();
-  }
-};
+import { apiService } from './ApiService';
 
 export const ProfesorService = {
   getProfesores: async (): Promise<ProfesorDTO[]> => {
     try {
-      const response = await fetch(`${BASE_URL}`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<ProfesorDTO[]>('/profesores');
       return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -42,8 +14,7 @@ export const ProfesorService = {
 
   getProfesor: async (id: number): Promise<ProfesorDTO> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<ProfesorDTO>(`/profesores/${id}`);
       return typeof result === 'object' ? result : {} as ProfesorDTO;
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -53,39 +24,8 @@ export const ProfesorService = {
 
   createProfesor: async (profesor: ProfesorDTO): Promise<ProfesorDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(profesor)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al crear profesor: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.post<ProfesorDTO | string>('/profesores', profesor);
+      return result;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -94,39 +34,8 @@ export const ProfesorService = {
 
   updateProfesor: async (profesor: ProfesorDTO): Promise<ProfesorDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${profesor.nroProfesor}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(profesor)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al actualizar profesor: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.put<ProfesorDTO | string>(`/profesores/${profesor.nroProfesor}`, profesor);
+      return result;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -135,32 +44,8 @@ export const ProfesorService = {
 
   deleteProfesor: async (id: number): Promise<string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al eliminar el profesor: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || JSON.stringify(errorData);
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      if (response.status === 204) {
-        return "Profesor eliminado exitosamente";
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.delete<string>(`/profesores/${id}`);
+      return result || "Profesor eliminado exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -170,35 +55,8 @@ export const ProfesorService = {
   bajaLogicaProfesor: async (profesor: ProfesorDTO): Promise<string> => {
     try {
       console.log(profesor);
-      const response = await fetch(`${BASE_URL}/${profesor.nroProfesor}/baja`, {
-        method: "PUT"
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al dar de baja profesor: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.put<string>(`/profesores/${profesor.nroProfesor}/baja`);
+      return result || "Profesor dado de baja exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -207,39 +65,8 @@ export const ProfesorService = {
   altaLogicaProfesor: async (profesor: ProfesorDTO): Promise<string> => {
     try {
       console.log(profesor);
-      const response = await fetch(`${BASE_URL}/altaProfesor`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(profesor)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al dar de alta profesor: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.put<string>('/profesores/altaProfesor', profesor);
+      return result || "Profesor dado de alta exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

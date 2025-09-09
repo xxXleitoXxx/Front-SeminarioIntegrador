@@ -1,7 +1,5 @@
 import type { ContactoEmergenciaDTO } from "../types/index.ts";
-import { handleResponse } from './common/handleResponse';
-
-const BASE_URL = 'http://localhost:8080/api/v1/contactosEmergencia';
+import { apiService } from './ApiService';
 
 export const ContactoEmergenciaService = {
   getContactos: async (): Promise<ContactoEmergenciaDTO[]> => {

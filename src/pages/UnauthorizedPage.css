@@ -1,0 +1,30 @@
+.unauthorized-container {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  min-height: 100vh;
+}
+
+.unauthorized-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.unauthorized-icon {
+  font-size: 4rem;
+  color: #ff6b6b;
+}
+
+.unauthorized-card .btn {
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.unauthorized-card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}

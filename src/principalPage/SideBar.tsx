@@ -14,12 +14,20 @@ import {
   FaCity,
   FaUsers,
   FaUserPlus,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const { hasRole, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div style={{ width: collapsed ? "80px" : "250px" }}>
@@ -72,95 +80,133 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
           >
             Atlantis System
           </MenuItem>
-          <SubMenu label="Gestión" icon={<FaUser />}>
-            <MenuItem
-              icon={<FaUser />}
-              onClick={() => navigate("/gestionalumno")}
-            >
-              Alumnos
-            </MenuItem>
-            <MenuItem
-              icon={<FaChalkboardTeacher />}
-              onClick={() => navigate("/gestionprofesor")}
-            >
-              Profesores
-            </MenuItem>
+          {/* Gestión - Para RECEPCIONISTA y ADMIN */}
+          {(hasRole('ROLE_RECEPCIONISTA') || hasRole('ROLE_ADMIN')) && (
+            <SubMenu label="Gestión" icon={<FaUser />}>
+              <MenuItem
+                icon={<FaUser />}
+                onClick={() => navigate("/gestionalumno")}
+              >
+                Alumnos
+              </MenuItem>
+              {/* Solo ADMIN puede ver estas opciones */}
+              {hasRole('ROLE_ADMIN') && (
+                <>
+                  <MenuItem
+                    icon={<FaChalkboardTeacher />}
+                    onClick={() => navigate("/gestionprofesor")}
+                  >
+                    Profesores
+                  </MenuItem>
+                  <MenuItem
+                    icon={<FaCalendarAlt />}
+                    onClick={() => navigate("/gestiondia")}
+                  >
+                    Día
+                  </MenuItem>
+                  <MenuItem
+                    icon={<FaBook />}
+                    onClick={() => navigate("/gestiontipoclase")}
+                  >
+                    Tipo de Clase
+                  </MenuItem>
+                  <MenuItem
+                    icon={<FaCity />}
+                    onClick={() => navigate("/gestionlocalidad")}
+                  >
+                    Localidad
+                  </MenuItem>
+                  <MenuItem
+                    icon={<FaUsers />}
+                    onClick={() => navigate("/gestionrangoetario")}
+                  >
+                    Rango Etario
+                  </MenuItem>
+                </>
+              )}
+            </SubMenu>
+          )}
+          {/* Asistencia - Para RECEPCIONISTA y ADMIN */}
+          {(hasRole('ROLE_RECEPCIONISTA') || hasRole('ROLE_ADMIN')) && (
+            <SubMenu label="Asistencia" icon={<FaClipboardList />}>
+              <MenuItem
+                icon={<FaClipboardList />}
+                onClick={() => navigate("/asistencia")}
+              >
+                Asistencia de Alumnos
+              </MenuItem>
+            </SubMenu>
+          )}
+          
+          {/* Inscripciones - Para RECEPCIONISTA y ADMIN */}
+          {(hasRole('ROLE_RECEPCIONISTA') || hasRole('ROLE_ADMIN')) && (
+            <SubMenu label="Inscripciones" icon={<FaUserPlus />}>
+              <MenuItem
+                icon={<FaUserPlus />}
+                onClick={() => navigate("/inscripcion-clase")}
+              >
+                Alumno a clase
+              </MenuItem>
+              <MenuItem
+                icon={<FaUserPlus />}
+                onClick={() => navigate("/inscripcion-profesor")}
+              >
+                Profesor a clase
+              </MenuItem>
+            </SubMenu>
+          )}
+
+          {/* Cronograma - Solo para ADMIN */}
+          {hasRole('ROLE_ADMIN') && (
+            <SubMenu label="Cronograma" icon={<FaCalendarAlt />}>
+              <MenuItem
+                icon={<FaCalendarAlt />}
+                onClick={() => navigate("/configurar-cronograma")}
+              >
+                Configurar Cronograma
+              </MenuItem>
+            </SubMenu>
+          )}
+
+          {/* Reportes - Solo para ADMIN */}
+          {hasRole('ROLE_ADMIN') && (
+            <SubMenu label="Reportes" icon={<FaBook />}>
+              <MenuItem onClick={() => navigate("/reporte1")}>Reporte 1</MenuItem>
+              <MenuItem onClick={() => navigate("/reporte2")}>Reporte 2</MenuItem>
+            </SubMenu>
+          )}
+          
+          {/* Clases - Solo para ADMIN */}
+          {hasRole('ROLE_ADMIN') && (
             <MenuItem
               icon={<FaCalendarAlt />}
-              onClick={() => navigate("/gestiondia")}
+              onClick={() => navigate("/clasesAlumnos")}
             >
-              Día
+              Clases
             </MenuItem>
-            <MenuItem
-              icon={<FaBook />}
-              onClick={() => navigate("/gestiontipoclase")}
-            >
-              Tipo de Clase
-            </MenuItem>
-            <MenuItem
-              icon={<FaCity />}
-              onClick={() => navigate("/gestionlocalidad")}
-            >
-              Localidad
-            </MenuItem>
-            <MenuItem
-              icon={<FaUsers />}
-              onClick={() => navigate("/gestionrangoetario")}
-            >
-              Rango Etario
-            </MenuItem>
-          </SubMenu>
-          <SubMenu label="Asistencia" icon={<FaClipboardList />}>
-            <MenuItem
-              icon={<FaClipboardList />}
-              onClick={() => navigate("/asistencia")}
-            >
-              Asistencia de Alumnos
-            </MenuItem>
-          </SubMenu>
-          <SubMenu label="Inscripciones" icon={<FaUserPlus />}>
-            <MenuItem
-              icon={<FaUserPlus />}
-              onClick={() => navigate("/inscripcion-clase")}
-            >
-              Alumno a clase
-            </MenuItem>
-            <MenuItem
-              icon={<FaUserPlus />}
-              onClick={() => navigate("/inscripcion-profesor")}
-            >
-              Profesor a clase
-            </MenuItem>
-          </SubMenu>
+          )}
 
-          <SubMenu label="Cronograma" icon={<FaCalendarAlt />}>
-            <MenuItem
-              icon={<FaCalendarAlt />}
-              onClick={() => navigate("/configurar-cronograma")}
-            >
-              Configurar Cronograma
+          {/* Configuración - Solo para ADMIN */}
+          {hasRole('ROLE_ADMIN') && (
+            <MenuItem icon={<FaCog />} onClick={() => navigate("/configuracion")}>
+              Configuración
             </MenuItem>
-          </SubMenu>
-
-          <SubMenu label="Reportes" icon={<FaBook />}>
-            <MenuItem onClick={() => navigate("/reporte1")}>Reporte 1</MenuItem>
-            <MenuItem onClick={() => navigate("/reporte2")}>Reporte 2</MenuItem>
-          </SubMenu>
-          <MenuItem
-            icon={<FaCalendarAlt />}
-            onClick={() => navigate("/clasesAlumnos")}
-          >
-            Clases
-          </MenuItem>
-
-          <MenuItem icon={<FaCog />} onClick={() => navigate("/configuracion")}>
-            Configuración
-          </MenuItem>
+          )}
+          
+          {/* Ayuda - Para todos los usuarios autenticados */}
           <MenuItem
             icon={<FaQuestionCircle />}
             onClick={() => navigate("/ayuda")}
           >
             Ayuda
+          </MenuItem>
+          
+          {/* Logout - Para todos los usuarios autenticados */}
+          <MenuItem
+            icon={<FaSignOutAlt />}
+            onClick={handleLogout}
+          >
+            Cerrar Sesión
           </MenuItem>
         </Menu>
       </Sidebar>

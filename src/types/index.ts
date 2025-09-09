@@ -13,3 +13,5 @@ export type { HorarioiDiaxTipoClaseDTO } from './HorarioiDiaxTipoClaseDTO';
 export type { ConfHorarioTipoClaseDTO } from './ConfHorarioTipoClaseDTO';
 export type { ClaseDTO } from './ClaseDTO';
 export { ModalType } from './ModalType'; 
+export type {User} from './User';
+export type {Token} from './Token';

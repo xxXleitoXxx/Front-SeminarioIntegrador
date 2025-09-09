@@ -1,38 +1,10 @@
 import type { LocalidadDTO } from "../types/index.ts";
-const BASE_URL = 'http://localhost:8080/api/v1/localidades';
-
-const handleResponse = async (response: Response) => {
-  if (!response.ok) {
-    let errorMessage = `Error: ${response.statusText}`;
-    try {
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const errorData = await response.json();
-        errorMessage = errorData.error || JSON.stringify(errorData);
-      } else {
-        const text = await response.text();
-        errorMessage = text || errorMessage;
-      }
-    } catch (error) {
-      console.error("Error parsing error response:", error);
-    }
-    throw new Error(errorMessage);
-  }
-  
-  // Manejar tanto JSON como string
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return response.json();
-  } else {
-    return response.text();
-  }
-};
+import { apiService } from './ApiService';
 
 export const LocalidadService = {
   getLocalidades: async (): Promise<LocalidadDTO[]> => {
     try {
-      const response = await fetch(`${BASE_URL}`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<LocalidadDTO[]>('/localidades');
       return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
@@ -44,39 +16,8 @@ export const LocalidadService = {
 
   createLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(localidad)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al crear localidad: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.post<LocalidadDTO | string>('/localidades', localidad);
+      return result;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -85,39 +26,11 @@ export const LocalidadService = {
 
   updateLocalidad: async (localidad: LocalidadDTO): Promise<LocalidadDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${localidad.codLocalidad}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ codLocalidad: localidad.codLocalidad, nombreLocalidad: localidad.nombreLocalidad })
+      const result = await apiService.put<LocalidadDTO | string>(`/localidades/${localidad.codLocalidad}`, { 
+        codLocalidad: localidad.codLocalidad, 
+        nombreLocalidad: localidad.nombreLocalidad 
       });
-
-      if (!response.ok) {
-        let errorMessage = `Error al actualizar localidad: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Manejar la respuesta exitosa
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
+      return result;
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;
@@ -127,31 +40,8 @@ export const LocalidadService = {
   // En backend realizan baja lógica por PUT /{cod}/baja
   deleteLocalidad: async (id: number): Promise<string> => {
     try {
-      const response = await fetch(`${BASE_URL}/${id}/baja`, {
-        method: "PUT",
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al eliminar la localidad: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || JSON.stringify(errorData);
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      // El controller devuelve 200 con entidad, sin 204
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        return typeof data === 'string' ? data : JSON.stringify(data);
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.put<string>(`/localidades/${id}/baja`);
+      return result || "Localidad eliminada exitosamente";
     } catch (error) {
       console.error("Error en la solicitud:", error);
       throw error;

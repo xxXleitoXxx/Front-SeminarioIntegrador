@@ -1,13 +1,10 @@
 import type { ConfHorarioTipoClaseDTO } from "../types/index.ts";
-import { handleResponse } from './common/handleResponse';
-
-const BASE_URL = 'http://localhost:8080/api/v1/cronograma';
+import { apiService } from './ApiService';
 
 export const ConfHorarioTipoClaseService = {
   getConfiguraciones: async (): Promise<ConfHorarioTipoClaseDTO[]> => {
     try {
-      const response = await fetch(`${BASE_URL}`);
-      const result = await handleResponse(response);
+      const result = await apiService.get<ConfHorarioTipoClaseDTO[]>('/cronograma');
       return Array.isArray(result) ? result : [];
     } catch (error) {
       console.error("Error en la solicitud:", error);
