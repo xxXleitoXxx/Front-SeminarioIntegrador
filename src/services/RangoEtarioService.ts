@@ -1,6 +1,6 @@
 import type { RangoEtarioDTO } from "../types/index.ts";
 import { apiService } from './ApiService';
-
+const BASE_URL= '/rangosetarios'
 export const RangoEtarioService = {
   getRangos: async (): Promise<RangoEtarioDTO[]> => {
     try {
@@ -24,80 +24,22 @@ export const RangoEtarioService = {
 
   createRango: async (rango: RangoEtarioDTO): Promise<RangoEtarioDTO | string> => {
     try {
-      const response = await fetch(`${BASE_URL}`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(rango)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al crear rango etario: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
+      const result = await apiService.post<RangoEtarioDTO>(`${BASE_URL}`,rango);
+      return result;
+      
     } catch (error) {
-      console.error("Error en la solicitud:", error);
+      console.error("Error en la rango etareo:", error);
       throw error;
     }
   },
 
   updateRango: async (codRangoEtario: number, rango: RangoEtarioDTO): Promise<RangoEtarioDTO | string> => {
-    try {
-      const response = await fetch(`${BASE_URL}/${codRangoEtario}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(rango)
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Error al actualizar rango etario: ${response.statusText}`;
-        try {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const errorData = await response.json();
-            errorMessage = errorData.error || JSON.stringify(errorData);
-          } else {
-            const text = await response.text();
-            errorMessage = text || errorMessage;
-          }
-        } catch (error) {
-          console.error("Error parsing error response:", error);
-        }
-        throw new Error(errorMessage);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        return typeof data === 'object' ? data : data;
-      } else {
-        return await response.text();
-      }
+     try {
+      const result = await apiService.put<RangoEtarioDTO>(`${BASE_URL}/${codRangoEtario}`,rango);
+      return result;
+      
     } catch (error) {
-      console.error("Error en la solicitud:", error);
+      console.error("Error en la rango etareo:", error);
       throw error;
     }
   },

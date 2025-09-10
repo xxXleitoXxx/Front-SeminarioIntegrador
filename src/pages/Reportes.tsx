@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { reporteGralHistService } from '../services/ReporteGralHistService';
-import { ReporteGralHistDTO } from '../types/ReporteGralHistDTO';
+import React, { useEffect, useMemo, useState } from "react";
+import { reporteGralHistService } from "../services/ReporteGralHistService";
+import { ReporteGralHistDTO } from "../types/ReporteGralHistDTO";
 import {
   ResponsiveContainer,
   BarChart,
@@ -13,15 +13,20 @@ import {
   PieChart,
   Pie,
   Cell,
-} from 'recharts';
+} from "recharts";
 
-const COLORS = ['#0088FE', '#FF8042'];
+const COLORS = ["#0088FE", "#FF8042"];
 
 const Reportes: React.FC = () => {
   const [data, setData] = useState<ReporteGralHistDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedLocalidad, setSelectedLocalidad] = useState<string | null>(null);
+  const [selectedLocalidad, setSelectedLocalidad] = useState<string | null>(
+    null
+  );
+  const [SelectedTipoClase, setSelectedTipoClase] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +38,11 @@ const Reportes: React.FC = () => {
         if (resp.reporteXLocalidad && resp.reporteXLocalidad.length > 0) {
           setSelectedLocalidad(resp.reporteXLocalidad[0].nombreLocalidad);
         }
+        if (resp.reporteXTipoClase && resp.reporteXTipoClase.length > 0) {
+          setSelectedTipoClase(resp.reporteXTipoClase[0].nombreTipoClase);
+        }
       } catch (e: any) {
-        setError(e?.message ?? 'Error al cargar los reportes');
+        setError(e?.message ?? "Error al cargar los reportes");
       } finally {
         setLoading(false);
       }
@@ -44,7 +52,7 @@ const Reportes: React.FC = () => {
 
   const barData = useMemo(() => {
     if (!data) return [];
-    return data.reporteXLocalidad.map(r => ({
+    return data.reporteXLocalidad.map((r) => ({
       nombreLocalidad: r.nombreLocalidad,
       alumnos: r.alumnosXLocalidadDTO,
     }));
@@ -54,14 +62,17 @@ const Reportes: React.FC = () => {
   // derivamos un ejemplo simple: presentes = 0, ausentes = alumnos
   // Si backend añade métricas por localidad, se reemplaza aquí.
   const pieData = useMemo(() => {
-    if (!data || !selectedLocalidad) return [];
-    const loc = data.reporteXLocalidad.find(l => l.nombreLocalidad === selectedLocalidad);
+    if (!data || !SelectedTipoClase) return [];
+    const loc = data.reporteXTipoClase.find(
+      (l) => l.nombreTipoClase === SelectedTipoClase
+    );
     if (!loc) return [];
-    const presentes = (loc as any).presenteTotalClases ?? 0;
-    const ausentes = (loc as any).ausenteTotalClases ?? loc.alumnosXLocalidadDTO;
+    const presentes =
+      (loc as any).presenteTotalClases ?? loc.presenteTotalClases;
+    const ausentes = (loc as any).ausenteTotalClases ?? loc.ausenteTotalClases;
     return [
-      { name: 'Presentes', value: presentes },
-      { name: 'Ausentes', value: ausentes },
+      { name: "Presentes", value: presentes },
+      { name: "Ausentes", value: ausentes },
     ];
   }, [data, selectedLocalidad]);
 
@@ -78,7 +89,10 @@ const Reportes: React.FC = () => {
             <div className="card-header">Alumnos por Localidad</div>
             <div className="card-body" style={{ height: 380 }}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
+                <BarChart
+                  data={barData}
+                  margin={{ top: 10, right: 20, left: 0, bottom: 10 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="nombreLocalidad" />
                   <YAxis allowDecimals={false} />
@@ -94,15 +108,15 @@ const Reportes: React.FC = () => {
         <div className="col-12 col-lg-5">
           <div className="card h-100">
             <div className="card-header d-flex align-items-center justify-content-between">
-              <span>Presentes vs Ausentes por Localidad</span>
+              <span>Presentes vs Ausentes por TipoClase</span>
               <select
                 className="form-select form-select-sm w-auto"
-                value={selectedLocalidad ?? ''}
-                onChange={(e) => setSelectedLocalidad(e.target.value)}
+                value={SelectedTipoClase ?? ""}
+                onChange={(e) => setSelectedTipoClase(e.target.value)}
               >
-                {data.reporteXLocalidad.map((l) => (
-                  <option key={l.nombreLocalidad} value={l.nombreLocalidad}>
-                    {l.nombreLocalidad}
+                {data.reporteXTipoClase.map((l) => (
+                  <option key={l.nombreTipoClase} value={l.nombreTipoClase}>
+                    {l.nombreTipoClase}
                   </option>
                 ))}
               </select>
@@ -120,7 +134,10 @@ const Reportes: React.FC = () => {
                     label
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -128,7 +145,9 @@ const Reportes: React.FC = () => {
                 </PieChart>
               </ResponsiveContainer>
               {pieData.length === 0 && (
-                <div className="text-muted small mt-2">Sin datos para la localidad seleccionada.</div>
+                <div className="text-muted small mt-2">
+                  Sin datos para la localidad seleccionada.
+                </div>
               )}
             </div>
           </div>
@@ -141,10 +160,18 @@ const Reportes: React.FC = () => {
             <div className="card-header">Totales</div>
             <div className="card-body">
               <div className="d-flex flex-wrap gap-3">
-                <span className="badge bg-primary">Inscriptos: {data.alumnoTotalesInscriptos}</span>
-                <span className="badge bg-secondary">No Inscriptos: {data.alumnoTotalesNoInscriptos}</span>
-                <span className="badge bg-success">Activos: {data.alumnoTotalesActivos}</span>
-                <span className="badge bg-danger">Inactivos: {data.alumnoTotalesInactivos}</span>
+                <span className="badge bg-primary">
+                  Inscriptos: {data.alumnoTotalesInscriptos}
+                </span>
+                <span className="badge bg-secondary">
+                  No Inscriptos: {data.alumnoTotalesNoInscriptos}
+                </span>
+                <span className="badge bg-success">
+                  Activos: {data.alumnoTotalesActivos}
+                </span>
+                <span className="badge bg-danger">
+                  Inactivos: {data.alumnoTotalesInactivos}
+                </span>
               </div>
             </div>
           </div>
@@ -155,5 +182,3 @@ const Reportes: React.FC = () => {
 };
 
 export default Reportes;
-
-
