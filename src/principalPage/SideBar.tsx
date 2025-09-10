@@ -170,10 +170,9 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
 
           {/* Reportes - Solo para ADMIN */}
           {hasRole('ROLE_ADMIN') && (
-            <SubMenu label="Reportes" icon={<FaBook />}>
-              <MenuItem onClick={() => navigate("/reporte1")}>Reporte 1</MenuItem>
-              <MenuItem onClick={() => navigate("/reporte2")}>Reporte 2</MenuItem>
-            </SubMenu>
+            <MenuItem icon={<FaBook />} onClick={() => navigate("/reportes")}>
+              Reportes
+            </MenuItem>
           )}
           
           {/* Clases - Solo para ADMIN */}

@@ -18,6 +18,7 @@ import LoginPage from "../pages/LoginPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../contexts/AuthContext";
+import Reportes from "../pages/Reportes";
 
 function Aplicacion() {
   const { isAuthenticated } = useAuth();
@@ -94,6 +95,14 @@ function Aplicacion() {
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <AbmRangoEtario />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="reportes" 
+              element={
+                <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
+                  <Reportes />
                 </ProtectedRoute>
               } 
             />
