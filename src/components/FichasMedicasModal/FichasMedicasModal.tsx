@@ -300,32 +300,34 @@ const FichasMedicasModal = ({
         ) : (
           <>
             {/* Estadísticas */}
-            <Row className="mb-3">
-              <Col md={3}>
-                <div className="stat-card stat-vigente">
-                  <h6>Vigentes</h6>
-                  <span className="stat-number">{estadisticas.vigentes}</span>
-                </div>
-              </Col>
-              <Col md={3}>
+            <div className="d-flex justify-content-center">
+              <Row className="mb-3 d-flex w-100 justify-content-center">
+                <Col md={3}>
+                  <div className="stat-card stat-vigente">
+                    <h6>Vigentes</h6>
+                    <span className="stat-number">{estadisticas.vigentes}</span>
+                  </div>
+                </Col>
+                {/* <Col md={3}>
                 <div className="stat-card stat-pendiente">
                   <h6>Pendientes</h6>
                   <span className="stat-number">{estadisticas.pendientes}</span>
                 </div>
-              </Col>
-              <Col md={3}>
-                <div className="stat-card stat-vencida">
-                  <h6>Vencidas</h6>
-                  <span className="stat-number">{estadisticas.vencidas}</span>
-                </div>
-              </Col>
-              <Col md={3}>
-                <div className="stat-card stat-total">
-                  <h6>Total</h6>
-                  <span className="stat-number">{fichasMedicas.length}</span>
-                </div>
-              </Col>
-            </Row>
+              </Col> */}
+                <Col md={3}>
+                  <div className="stat-card stat-vencida">
+                    <h6>Vencidas</h6>
+                    <span className="stat-number">{estadisticas.vencidas}</span>
+                  </div>
+                </Col>
+                <Col md={3}>
+                  <div className="stat-card stat-total">
+                    <h6>Total</h6>
+                    <span className="stat-number">{fichasMedicas.length}</span>
+                  </div>
+                </Col>
+              </Row>
+            </div>
 
             {/* Filtros y Nueva Ficha */}
             <Row className="mb-3">
@@ -340,7 +342,6 @@ const FichasMedicasModal = ({
                   >
                     <option value="todos">Todos los estados</option>
                     <option value="vigente">Solo Vigentes</option>
-                    <option value="pendiente">Solo Pendientes</option>
                     <option value="vencida">Solo Vencidas</option>
                   </Form.Select>
                 </Form.Group>
