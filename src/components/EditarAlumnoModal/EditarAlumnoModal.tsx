@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Button,
-  Form,
-  Row,
-  Col,
-  Alert,
-  Spinner,
-} from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
-import type { AlumnoDTO, LocalidadDTO, ContactoEmergenciaDTO } from "../../types/index";
+import type {
+  AlumnoDTO,
+  LocalidadDTO,
+  ContactoEmergenciaDTO,
+} from "../../types/index";
 import { AlumnoService } from "../../services/AlumnoService";
 import { LocalidadService } from "../../services/LocalidadService";
 import "./EditarAlumnoModal.css";
@@ -29,7 +25,9 @@ const EditarAlumnoModal = ({
 }: EditarAlumnoModalProps) => {
   const [alumnoData, setAlumnoData] = useState<AlumnoDTO>(alumno);
   const [localidades, setLocalidades] = useState<LocalidadDTO[]>([]);
-  const [contactosEmergencia, setContactosEmergencia] = useState<ContactoEmergenciaDTO[]>(alumno.contactosEmergencia || []);
+  const [contactosEmergencia, setContactosEmergencia] = useState<
+    ContactoEmergenciaDTO[]
+  >(alumno.contactosEmergencia || []);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -54,13 +52,13 @@ const EditarAlumnoModal = ({
   };
 
   const handleInputChange = (field: keyof AlumnoDTO, value: any) => {
-    setAlumnoData(prev => ({
+    setAlumnoData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
     // Limpiar error del campo
     if (errors[field]) {
-      setErrors(prev => {
+      setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
@@ -68,11 +66,15 @@ const EditarAlumnoModal = ({
     }
   };
 
-  const handleContactoChange = (index: number, field: keyof ContactoEmergenciaDTO, value: any) => {
+  const handleContactoChange = (
+    index: number,
+    field: keyof ContactoEmergenciaDTO,
+    value: any
+  ) => {
     const newContactos = [...contactosEmergencia];
     newContactos[index] = {
       ...newContactos[index],
-      [field]: value
+      [field]: value,
     };
     setContactosEmergencia(newContactos);
   };
@@ -97,12 +99,18 @@ const EditarAlumnoModal = ({
     const newErrors: { [key: string]: string } = {};
 
     if (!alumnoData.dniAlumno) newErrors.dniAlumno = "El DNI es obligatorio";
-    if (!alumnoData.nombreAlumno.trim()) newErrors.nombreAlumno = "El nombre es obligatorio";
-    if (!alumnoData.apellidoAlumno.trim()) newErrors.apellidoAlumno = "El apellido es obligatorio";
-    if (!alumnoData.telefonoAlumno) newErrors.telefonoAlumno = "El teléfono es obligatorio";
-    if (!alumnoData.mailAlumno.trim()) newErrors.mailAlumno = "El email es obligatorio";
-    if (!alumnoData.domicilioAlumno.trim()) newErrors.domicilioAlumno = "El domicilio es obligatorio";
-    if (!alumnoData.localidadAlumno) newErrors.localidadAlumno = "La localidad es obligatoria";
+    if (!alumnoData.nombreAlumno.trim())
+      newErrors.nombreAlumno = "El nombre es obligatorio";
+    if (!alumnoData.apellidoAlumno.trim())
+      newErrors.apellidoAlumno = "El apellido es obligatorio";
+    if (!alumnoData.telefonoAlumno)
+      newErrors.telefonoAlumno = "El teléfono es obligatorio";
+    if (!alumnoData.mailAlumno.trim())
+      newErrors.mailAlumno = "El email es obligatorio";
+    if (!alumnoData.domicilioAlumno.trim())
+      newErrors.domicilioAlumno = "El domicilio es obligatorio";
+    if (!alumnoData.localidadAlumno)
+      newErrors.localidadAlumno = "La localidad es obligatoria";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -110,7 +118,7 @@ const EditarAlumnoModal = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -129,6 +137,7 @@ const EditarAlumnoModal = ({
       onHide();
       refreshData((prevState) => !prevState);
     } catch (error) {
+      refreshData((prevState) => !prevState);
       console.error(error);
       toast.error(
         `Ha ocurrido un error: ${
@@ -152,8 +161,9 @@ const EditarAlumnoModal = ({
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Alert variant="info" className="mb-3">
-            <strong>Nota:</strong> Las fichas médicas se gestionan desde el modal de fichas médicas. 
-            Aquí solo puedes editar la información personal del alumno.
+            <strong>Nota:</strong> Las fichas médicas se gestionan desde el
+            modal de fichas médicas. Aquí solo puedes editar la información
+            personal del alumno.
           </Alert>
 
           <Row>
@@ -163,7 +173,12 @@ const EditarAlumnoModal = ({
                 <Form.Control
                   type="number"
                   value={alumnoData.dniAlumno || ""}
-                  onChange={(e) => handleInputChange("dniAlumno", parseInt(e.target.value) || 0)}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "dniAlumno",
+                      parseInt(e.target.value) || 0
+                    )
+                  }
                   isInvalid={!!errors.dniAlumno}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -176,8 +191,17 @@ const EditarAlumnoModal = ({
                 <Form.Label>Fecha de Nacimiento</Form.Label>
                 <Form.Control
                   type="date"
-                  value={alumnoData.fechaNacAlumno instanceof Date ? alumnoData.fechaNacAlumno.toISOString().split('T')[0] : ""}
-                  onChange={(e) => handleInputChange("fechaNacAlumno", new Date(e.target.value))}
+                  value={
+                    alumnoData.fechaNacAlumno instanceof Date
+                      ? alumnoData.fechaNacAlumno.toISOString().split("T")[0]
+                      : ""
+                  }
+                  onChange={(e) =>
+                    handleInputChange(
+                      "fechaNacAlumno",
+                      new Date(e.target.value)
+                    )
+                  }
                 />
               </Form.Group>
             </Col>
@@ -190,7 +214,9 @@ const EditarAlumnoModal = ({
                 <Form.Control
                   type="text"
                   value={alumnoData.nombreAlumno}
-                  onChange={(e) => handleInputChange("nombreAlumno", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("nombreAlumno", e.target.value)
+                  }
                   isInvalid={!!errors.nombreAlumno}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -204,7 +230,9 @@ const EditarAlumnoModal = ({
                 <Form.Control
                   type="text"
                   value={alumnoData.apellidoAlumno}
-                  onChange={(e) => handleInputChange("apellidoAlumno", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("apellidoAlumno", e.target.value)
+                  }
                   isInvalid={!!errors.apellidoAlumno}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -221,7 +249,12 @@ const EditarAlumnoModal = ({
                 <Form.Control
                   type="number"
                   value={alumnoData.telefonoAlumno || ""}
-                  onChange={(e) => handleInputChange("telefonoAlumno", parseInt(e.target.value) || 0)}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "telefonoAlumno",
+                      parseInt(e.target.value) || 0
+                    )
+                  }
                   isInvalid={!!errors.telefonoAlumno}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -235,7 +268,9 @@ const EditarAlumnoModal = ({
                 <Form.Control
                   type="email"
                   value={alumnoData.mailAlumno}
-                  onChange={(e) => handleInputChange("mailAlumno", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("mailAlumno", e.target.value)
+                  }
                   isInvalid={!!errors.mailAlumno}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -252,7 +287,9 @@ const EditarAlumnoModal = ({
                 <Form.Control
                   type="text"
                   value={alumnoData.domicilioAlumno}
-                  onChange={(e) => handleInputChange("domicilioAlumno", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("domicilioAlumno", e.target.value)
+                  }
                   isInvalid={!!errors.domicilioAlumno}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -266,14 +303,19 @@ const EditarAlumnoModal = ({
                 <Form.Select
                   value={alumnoData.localidadAlumno?.codLocalidad || ""}
                   onChange={(e) => {
-                    const localidad = localidades.find(l => l.codLocalidad === parseInt(e.target.value));
+                    const localidad = localidades.find(
+                      (l) => l.codLocalidad === parseInt(e.target.value)
+                    );
                     handleInputChange("localidadAlumno", localidad || null);
                   }}
                   isInvalid={!!errors.localidadAlumno}
                 >
                   <option value="">Seleccionar localidad</option>
                   {localidades.map((localidad) => (
-                    <option key={localidad.codLocalidad} value={localidad.codLocalidad}>
+                    <option
+                      key={localidad.codLocalidad}
+                      value={localidad.codLocalidad}
+                    >
                       {localidad.nombreLocalidad}
                     </option>
                   ))}
@@ -298,7 +340,7 @@ const EditarAlumnoModal = ({
                 + Agregar Contacto
               </Button>
             </div>
-            
+
             {contactosEmergencia.map((contacto, index) => (
               <Row key={index} className="contacto-row mb-3">
                 <Col md={4}>
@@ -306,7 +348,13 @@ const EditarAlumnoModal = ({
                     type="text"
                     placeholder="Nombre del contacto"
                     value={contacto.nombreContacto}
-                    onChange={(e) => handleContactoChange(index, "nombreContacto", e.target.value)}
+                    onChange={(e) =>
+                      handleContactoChange(
+                        index,
+                        "nombreContacto",
+                        e.target.value
+                      )
+                    }
                   />
                 </Col>
                 <Col md={4}>
@@ -314,7 +362,13 @@ const EditarAlumnoModal = ({
                     type="text"
                     placeholder="Dirección del contacto"
                     value={contacto.direccionContacto}
-                    onChange={(e) => handleContactoChange(index, "direccionContacto", e.target.value)}
+                    onChange={(e) =>
+                      handleContactoChange(
+                        index,
+                        "direccionContacto",
+                        e.target.value
+                      )
+                    }
                   />
                 </Col>
                 <Col md={3}>
@@ -322,7 +376,13 @@ const EditarAlumnoModal = ({
                     type="number"
                     placeholder="Teléfono"
                     value={contacto.telefonoContacto || ""}
-                    onChange={(e) => handleContactoChange(index, "telefonoContacto", parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      handleContactoChange(
+                        index,
+                        "telefonoContacto",
+                        parseInt(e.target.value) || 0
+                      )
+                    }
                   />
                 </Col>
                 <Col md={1}>
