@@ -90,7 +90,7 @@ const LoginPage: React.FC = () => {
                     className="w-100"
                     disabled={loading}
                   >
-                    {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                    {loading ? 'Iniciando sesión..' : 'Iniciar Sesión'}
                   </Button>
                 </Form>
               </Card.Body>
