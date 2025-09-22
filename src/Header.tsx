@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button, Dropdown } from 'react-bootstrap';
-import { FaUser, FaSignOutAlt, FaCog } from 'react-icons/fa';
+
+import { Dropdown } from 'react-bootstrap';
+import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from './contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import "./AtlantisHeader.css";
@@ -48,11 +48,11 @@ export default function AtlantisHeader() {
           <div className="d-flex flex-row align-items-center">
             <div className="p-2 d-flex flex-column">
               <div className="d-flex align-items-center">
-                <span 
-                  className="badge me-2" 
-                  style={{ 
-                    backgroundColor: getRoleColor(roles[0] || ''), 
-                    fontSize: '0.8rem' 
+                <span
+                  className="badge me-2"
+                  style={{
+                    backgroundColor: getRoleColor(roles[0] || ''),
+                    fontSize: '0.8rem'
                   }}
                 >
                   {getRoleDisplayName(roles[0] || '')}
@@ -62,10 +62,10 @@ export default function AtlantisHeader() {
                 {username || 'Usuario'}
               </h6>
             </div>
-            
+
             <Dropdown align="end">
-              <Dropdown.Toggle 
-                variant="link" 
+              <Dropdown.Toggle
+                variant="link"
                 id="user-dropdown"
                 className="d-flex align-items-center p-0 border-0 bg-transparent"
                 style={{ textDecoration: 'none' }}
