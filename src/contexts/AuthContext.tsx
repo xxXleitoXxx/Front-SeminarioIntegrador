@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Token } from '../types/Token';
-import { UserInfo } from '../types/User';
+import { toast } from 'react-toastify';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -33,17 +33,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [roles, setRoles] = useState<string[]>([]);
   const [username, setUsername] = useState<string | null>(null);
 
+  // 🔑 función para decodificar un JWT sin librerías externas
+  const decodeJwt = (token: string): any => {
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (e) {
+      return null;
+    }
+  };
+
   useEffect(() => {
-    // Verificar si hay token guardado en localStorage al cargar la aplicación
     const savedToken = localStorage.getItem('token');
     const savedRoles = localStorage.getItem('roles');
     const savedUsername = localStorage.getItem('username');
-    
+
     if (savedToken && savedRoles && savedUsername) {
-      setToken(savedToken);
-      setRoles(JSON.parse(savedRoles));
-      setUsername(savedUsername);
-      setIsAuthenticated(true);
+      const decoded = decodeJwt(savedToken);
+      const now = Date.now() / 1000;
+
+      if (decoded && decoded.exp && decoded.exp > now) {
+        setToken(savedToken);
+        setRoles(JSON.parse(savedRoles));
+        setUsername(savedUsername);
+        setIsAuthenticated(true);
+
+        // ⏱️ programar logout cuando expire
+        const timeout = (decoded.exp - now) * 1000;
+        setTimeout(() => {
+          toast.warn("la sesión expiró");
+          logout();
+        }, timeout);
+      } else {
+
+        // token expirado → limpiar
+        logout();
+      }
     }
   }, []);
 
@@ -55,6 +80,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.setItem('token', tokenData.token);
     localStorage.setItem('roles', JSON.stringify(tokenData.roles));
     localStorage.setItem('username', username);
+
+    // ⏱️ programar logout
+    const decoded = decodeJwt(tokenData.token);
+    if (decoded && decoded.exp) {
+      const now = Date.now() / 1000;
+      const timeout = (decoded.exp - now) * 1000;
+      setTimeout(() => {
+        logout();
+      }, timeout);
+    }
   };
 
   const logout = () => {
