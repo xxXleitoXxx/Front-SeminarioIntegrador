@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const navigate = useNavigate();
   const { hasRole, logout } = useAuth();
 
@@ -137,7 +137,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
               </MenuItem>
             </SubMenu>
           )}
-          
+
           {/* Inscripciones - Para RECEPCIONISTA y ADMIN */}
           {(hasRole('ROLE_RECEPCIONISTA') || hasRole('ROLE_ADMIN')) && (
             <SubMenu label="Inscripciones" icon={<FaUserPlus />}>
@@ -174,7 +174,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
               Reportes
             </MenuItem>
           )}
-          
+
           {/* Clases - Solo para ADMIN */}
           {hasRole('ROLE_ADMIN') && (
             <MenuItem
@@ -191,7 +191,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
               Configuración
             </MenuItem>
           )}
-          
+
           {/* Ayuda - Para todos los usuarios autenticados */}
           <MenuItem
             icon={<FaQuestionCircle />}
@@ -199,7 +199,7 @@ export const SideBar = ({ isModalOpen }: { isModalOpen: boolean }) => {
           >
             Ayuda
           </MenuItem>
-          
+
           {/* Logout - Para todos los usuarios autenticados */}
           <MenuItem
             icon={<FaSignOutAlt />}

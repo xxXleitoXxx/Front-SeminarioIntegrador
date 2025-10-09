@@ -59,9 +59,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(true);
 
         // ⏱️ programar logout cuando expire
+        
         const timeout = (decoded.exp - now) * 1000;
         setTimeout(() => {
-          toast.warn("la sesión expiró");
           logout();
         }, timeout);
       } else {
