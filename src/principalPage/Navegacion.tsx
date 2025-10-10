@@ -1,56 +1,240 @@
+import { useState, useEffect, useRef, type FC } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-//import NavDropdown from "react-bootstrap/NavDropdown";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
-function Navegacion() {
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import "./Navegacion.css";
+import { useAuth } from "../contexts/AuthContext";
+
+interface IAuthContext {
+  hasRole: (role: string) => boolean;
+  username: string | null;
+  logout: () => void;
+  roles: string[];
+}
+
+const Navegacion: FC = () => {
+  const { hasRole, username, logout, roles } = useAuth() as IAuthContext;
   const navigate = useNavigate();
+
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [panelWidth, setPanelWidth] = useState<number>(0);
+  const collapseRef = useRef<HTMLDivElement | null>(null);
+
+  const handleNavigate = (path: string): void => {
+    navigate(path);
+    setExpanded(false);
+  };
+
+  const handleLogout = (): void => {
+    logout();
+    navigate("/login");
+    setExpanded(false);
+  };
+
+  // medir ancho del panel lateral cuando se abre y en resize
+  useEffect(() => {
+    const updateWidth = () => {
+      const w = collapseRef.current?.getBoundingClientRect().width ?? 0;
+      setPanelWidth(Math.round(w));
+    };
+
+    if (expanded) {
+      // un frame para dejar renderizar la animación y luego medir
+      const raf = requestAnimationFrame(updateWidth);
+      window.addEventListener("resize", updateWidth);
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", updateWidth);
+      };
+    } else {
+      setPanelWidth(0);
+    }
+  }, [expanded]);
+
+  // cerrar con ESC
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setExpanded(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const getRoleDisplayName = (role?: string): string => {
+    switch (role) {
+      case "ROLE_ADMIN":
+        return "Administrador";
+      case "ROLE_RECEPCIONISTA":
+        return "Recepcionista";
+      default:
+        return role || "Usuario";
+    }
+  };
+
+  const getRoleColor = (role?: string): string => {
+    switch (role) {
+      case "ROLE_ADMIN":
+        return "#dc3545";
+      case "ROLE_RECEPCIONISTA":
+        return "#28a745";
+      default:
+        return "#6c757d";
+    }
+  };
+
+  // evitar que abrir un dropdown cierre el navbar en móvil
+  const handleDropdownClick = (e: React.MouseEvent) => {
+    if (window.innerWidth < 992) {
+      e.stopPropagation();
+    }
+  };
+
   return (
-    <div>
-      <Navbar expand="lg" className="bg-body-tertiary justify-content-between">
+    <>
+      {/* overlay: left dinámico para NO cubrir el panel lateral */}
+      {expanded && (
+        <div
+          className="nav-overlay"
+          onClick={() => setExpanded(false)}
+          style={{ left: panelWidth ? `${panelWidth}px` : "0" }}
+        />
+      )}
+
+      <Navbar
+        expand="lg"
+        expanded={expanded}
+        onToggle={setExpanded}
+        className="navbar-custom shadow-sm"
+        sticky="top"
+      >
         <Container>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="d-flex w-100 justify-content-between">
-              <Nav.Link onClick={() => navigate("/asistenciaalumno")}>
-                Asistencia
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/gestionprofesor")}>
-                Gestion Profesor
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/gestiondia")}>
-                Gestion Día
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/gestiontipoclase")}>
-                Gestion Tipo Clase
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/gestionlocalidad")}>
-                Gestion Localidad
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/gestionrangoetario")}>
-                Gestion Rango Etario
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/")}>Inicio</Nav.Link>
-              <Nav.Link onClick={() => navigate("/gestionalumno")}>
-                Gestion Alumno
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/inscripcion-clase")}>
-                Inscripción a Clase
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/inscripcion-profesor")}>
-                Inscripción Profesor
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/cronograma")}>
-                Ver Cronograma
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/configurar-cronograma")}>
-                Configurar Cronograma
-              </Nav.Link>
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            className="navbar-toggler-left"
+          />
+
+          <Navbar.Brand
+            onClick={() => handleNavigate("/")}
+            style={{ cursor: "pointer", fontWeight: "bold" }}
+          >
+            Atlantis
+          </Navbar.Brand>
+
+          {/* pasamos ref al collapse para medir su ancho */}
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            ref={(el) => (collapseRef.current = el as HTMLDivElement | null)}
+          >
+            <Nav className="me-auto">
+              <Nav.Link onClick={() => handleNavigate("/")}>Inicio</Nav.Link>
+
+              {(hasRole("ROLE_RECEPCIONISTA") || hasRole("ROLE_ADMIN")) && (
+                <NavDropdown
+                  title="Gestión"
+                  id="gestion-dropdown"
+                  onClick={handleDropdownClick}
+                >
+                  <NavDropdown.Item onClick={() => handleNavigate("/gestionalumno")}>
+                    Alumnos
+                  </NavDropdown.Item>
+                  {hasRole("ROLE_ADMIN") && (
+                    <>
+                      <NavDropdown.Item onClick={() => handleNavigate("/gestionprofesor")}>
+                        Profesores
+                      </NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => handleNavigate("/gestiondia")}>
+                        Día
+                      </NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => handleNavigate("/gestiontipoclase")}>
+                        Tipo de Clase
+                      </NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => handleNavigate("/gestionlocalidad")}>
+                        Localidad
+                      </NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => handleNavigate("/gestionrangoetario")}>
+                        Rango Etario
+                      </NavDropdown.Item>
+                    </>
+                  )}
+                </NavDropdown>
+              )}
+
+              {(hasRole("ROLE_RECEPCIONISTA") || hasRole("ROLE_ADMIN")) && (
+                <Nav.Link onClick={() => handleNavigate("/asistencia")}>
+                  Asistencia
+                </Nav.Link>
+              )}
+
+              {(hasRole("ROLE_RECEPCIONISTA") || hasRole("ROLE_ADMIN")) && (
+                <NavDropdown
+                  title="Inscripciones"
+                  id="inscripciones-dropdown"
+                  onClick={handleDropdownClick}
+                >
+                  <NavDropdown.Item onClick={() => handleNavigate("/inscripcion-clase")}>
+                    Alumno a clase
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigate("/inscripcion-profesor")}>
+                    Profesor a clase
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+
+              {hasRole("ROLE_ADMIN") && (
+                <>
+                  <Nav.Link onClick={() => handleNavigate("/configurar-cronograma")}>
+                    Cronograma
+                  </Nav.Link>
+                  <Nav.Link onClick={() => handleNavigate("/reportes")}>
+                    Reportes
+                  </Nav.Link>
+                  <Nav.Link onClick={() => handleNavigate("/clasesAlumnos")}>
+                    Clases
+                  </Nav.Link>
+                  <Nav.Link onClick={() => handleNavigate("/configuracion")}>
+                    Configuración
+                  </Nav.Link>
+                </>
+              )}
+
+              <Nav.Link onClick={() => handleNavigate("/ayuda")}>Ayuda</Nav.Link>
+
+              <div className="d-lg-none mt-4 border-top border-secondary pt-3">
+                <div className="d-flex align-items-center mb-3">
+                  <FaUser className="me-2 text-white" size={24} />
+                  <div className="d-flex flex-column">
+                    <div className="text-white fw-bold">
+                      {username || "Usuario"}
+                    </div>
+                    <small
+                      className="badge mt-1"
+                      style={{
+                        backgroundColor: getRoleColor(roles?.[0]),
+                        fontSize: "0.8rem",
+                        alignSelf: "flex-start",
+                      }}
+                    >
+                      {getRoleDisplayName(roles?.[0])}
+                    </small>
+                  </div>
+                </div>
+                <button
+                  className="btn btn-danger w-100 d-flex align-items-center justify-content-center"
+                  onClick={handleLogout}
+                >
+                  <FaSignOutAlt className="me-2" />
+                  Cerrar Sesión
+                </button>
+              </div>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </div>
+    </>
   );
-}
+};
+
 export default Navegacion;

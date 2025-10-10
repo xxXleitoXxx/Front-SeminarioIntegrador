@@ -1,9 +1,13 @@
+/* =================================================================== */
+/* ============= ESTILOS COMPLETOS PARA TEMA OSCURO ============= */
+/* =================================================================== */
+
 .cumpleanos-container {
   padding: 2rem 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   border-radius: 20px;
   margin: 2rem 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .section-header {
@@ -23,7 +27,7 @@
   align-items: center;
   justify-content: center;
   margin-right: 1rem;
-  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
 }
 
 .header-icon i {
@@ -36,26 +40,26 @@
 }
 
 .section-title {
-  color: #2c3e50;
+  color: #f8fafc;
   font-weight: 700;
   margin: 0;
   font-size: 2rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .section-subtitle {
-  color: #7f8c8d;
+  color: #cbd5e1;
   margin: 0.5rem 0 0 0;
   font-size: 1.1rem;
   font-weight: 500;
 }
 
 .cumpleanos-card {
-  border: none;
+  border: 1px solid #334155;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: white;
+  background: #1e293b;
   overflow: hidden;
   position: relative;
 }
@@ -73,14 +77,23 @@
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .cumpleanos-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border-color: #475569;
 }
 
 .cumpleanos-card .card-body {
@@ -101,7 +114,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
 }
 
 .avatar i {
@@ -121,24 +134,26 @@
 }
 
 .nombre-completo {
-  color: #2c3e50;
+  color: #e2e8f0;
   font-weight: 700;
   font-size: 1.2rem;
   margin: 1rem 0;
   line-height: 1.3;
 }
 
-.fecha-info, .edad-info {
+.fecha-info,
+.edad-info {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0.5rem 0;
-  color: #7f8c8d;
+  color: #94a3b8;
   font-size: 0.95rem;
 }
 
-.fecha-info i, .edad-info i {
-  color: #3498db;
+.fecha-info i,
+.edad-info i {
+  color: #52a9ff;
   font-size: 1rem;
 }
 
@@ -156,13 +171,13 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
   width: 100%;
 }
 
 .btn-felicitacion:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
   background: linear-gradient(135deg, #ff5252, #ff8f00);
 }
 
@@ -173,12 +188,12 @@
 .no-cumpleanos {
   text-align: center;
   padding: 3rem;
-  color: #7f8c8d;
+  color: #94a3b8;
 }
 
 .no-cumpleanos i {
   font-size: 4rem;
-  color: #bdc3c7;
+  color: #475569;
   margin-bottom: 1rem;
 }
 
@@ -188,47 +203,61 @@
   font-weight: 500;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .cumpleanos-container {
     padding: 1.5rem 0;
     margin: 1rem 0;
   }
-  
+
   .section-header {
     flex-direction: column;
     text-align: center;
     margin-bottom: 1.5rem;
   }
-  
+
   .header-icon {
     margin-right: 0;
     margin-bottom: 1rem;
   }
-  
+
   .section-title {
     font-size: 1.5rem;
   }
-  
+
   .section-subtitle {
     font-size: 1rem;
   }
-  
+
   .cumpleanos-card .card-body {
     padding: 1rem;
   }
-  
+
   .avatar {
     width: 60px;
     height: 60px;
   }
-  
+
   .avatar i {
     font-size: 2rem;
   }
-  
+
   .nombre-completo {
     font-size: 1.1rem;
   }
 }
 
+/* --- MEJORA OPCIONAL PARA LOS BADGES --- */
+.dias-badge.bg-danger {
+  background-color: #b91c1c !important;
+  color: #fecaca !important;
+}
+
+.dias-badge.bg-warning {
+  background-color: #b45309 !important;
+  color: #fef3c7 !important;
+}
+
+.dias-badge.bg-info {
+  background-color: #0e7490 !important;
+  color: #a5f3fc !important;
+}

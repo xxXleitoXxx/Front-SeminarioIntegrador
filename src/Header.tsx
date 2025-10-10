@@ -1,11 +1,10 @@
-
 import { Dropdown } from 'react-bootstrap';
 import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from './contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import "./AtlantisHeader.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Navegacion from './principalPage/Navegacion';
 export default function AtlantisHeader() {
   const { roles, username, logout } = useAuth();
   const navigate = useNavigate();
@@ -39,14 +38,22 @@ export default function AtlantisHeader() {
 
   return (
     <div className="atlantis-header">
-      <div className="d-flex justify-content-between align-items-center">
+      {/* Añadimos las clases de Bootstrap para controlar la visibilidad.
+        d-none: oculta el elemento en todos los tamaños de pantalla.
+        d-md-flex: lo hace visible y con display flex a partir del punto de interrupción 'md' (768px).
+      */}
+      <div className="d-none d-md-flex justify-content-between align-items-center">
         <div className="p-2" style={{ margin: "20px" }}>
           <h1>Atlantis System</h1>
         </div>
 
         <div className="p-2">
           <div className="d-flex flex-row align-items-center">
-            <div className="p-2 d-flex flex-column">
+            {/* Div que agrupa el nombre de usuario y el rol para que se muestren juntos.
+              Utilizamos las clases de flexbox para organizarlos en una columna.
+            */}
+            <div className="p-2 d-flex flex-column align-items-end">
+              {/* Cambiado el orden: el badge va primero */}
               <div className="d-flex align-items-center">
                 <span
                   className="badge me-2"
@@ -58,7 +65,8 @@ export default function AtlantisHeader() {
                   {getRoleDisplayName(roles[0] || '')}
                 </span>
               </div>
-              <h6 className="p-1 m-0 text-muted">
+              {/* Y el nombre de usuario va después */}
+              <h6 className="p-1 m-0 text-white">
                 {username || 'Usuario'}
               </h6>
             </div>
@@ -85,7 +93,7 @@ export default function AtlantisHeader() {
                   <div className="d-flex align-items-center">
                     <FaUser className="me-2" />
                     <div>
-                      <div className="fw-bold">{username || 'Usuario'}</div>
+                      <div className="fw-bold text-white">{username || 'Usuario'}</div>
                       <small className="text-muted">
                         {getRoleDisplayName(roles[0] || '')}
                       </small>
@@ -102,7 +110,7 @@ export default function AtlantisHeader() {
           </div>
         </div>
       </div>
-      <div>{/*<Navegacion /> */}</div>
+      <div>{<Navegacion />}</div>
     </div>
   );
 }

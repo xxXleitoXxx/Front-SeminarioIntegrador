@@ -7,7 +7,6 @@ export default function Main() {
   return (
     <div className="d-flex flex-column justify-content-between">
       <div className="d-flex flex-row">
-        <h1>Página Principal</h1>
       </div>
       <div className="p-1">
         <CronogramaPage />

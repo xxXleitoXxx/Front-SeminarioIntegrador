@@ -36,7 +36,7 @@ function Aplicacion() {
   // Si está autenticado, mostrar la aplicación completa
   return (
     <div className="d-flex">
-      <SideBar isModalOpen={false} />
+      {/*<SideBar isModalOpen={false} />*/}
       <div className="flex-grow-1 d-flex flex-column">
         <div className="p-0 m-0">
           <Header />
