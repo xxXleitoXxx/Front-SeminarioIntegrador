@@ -42,7 +42,6 @@ const Navegacion: FC = () => {
     };
 
     if (expanded) {
-      // un frame para dejar renderizar la animación y luego medir
       const raf = requestAnimationFrame(updateWidth);
       window.addEventListener("resize", updateWidth);
       return () => {
@@ -54,7 +53,7 @@ const Navegacion: FC = () => {
     }
   }, [expanded]);
 
-  // cerrar con ESC
+  // cerrar con tecla ESC
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setExpanded(false);
@@ -87,21 +86,17 @@ const Navegacion: FC = () => {
 
   // evitar que abrir un dropdown cierre el navbar en móvil
   const handleDropdownClick = (e: React.MouseEvent) => {
-    if (window.innerWidth < 992) {
-      e.stopPropagation();
-    }
+    if (window.innerWidth < 992) e.stopPropagation();
   };
 
   return (
     <>
-      {/* overlay: left dinámico para NO cubrir el panel lateral */}
-      {expanded && (
-        <div
-          className="nav-overlay"
-          onClick={() => setExpanded(false)}
-          style={{ left: panelWidth ? `${panelWidth}px` : "0" }}
-        />
-      )}
+      {/* Overlay (clic afuera cierra el menú) */}
+      <div
+        className={`nav-overlay ${expanded ? "show" : ""}`}
+        onClick={() => setExpanded(false)}
+        style={{ left: panelWidth ? `${panelWidth}px` : "0" }}
+      />
 
       <Navbar
         expand="lg"
@@ -123,7 +118,6 @@ const Navegacion: FC = () => {
             Atlantis
           </Navbar.Brand>
 
-          {/* pasamos ref al collapse para medir su ancho */}
           <Navbar.Collapse
             id="basic-navbar-nav"
             ref={(el) => (collapseRef.current = el as HTMLDivElement | null)}
