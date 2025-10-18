@@ -1,9 +1,11 @@
 /* Estilos para el Cronograma */
 
 .cronograma-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem 1rem;
+  min-height: auto;
+  background: linear-gradient(135deg, #4d4c4c 0%, #1f1f1f 100%);
+  padding: 2rem 1rem !important;
+  box-shadow: #333;
+  border-radius: 1.5rem;
 }
 
 .cronograma-loading {
@@ -199,42 +201,42 @@
   .cronograma-container {
     padding: 1rem 0.5rem;
   }
-  
+
   .cronograma-title {
     font-size: 2rem;
   }
-  
+
   .cronograma-table-container {
     padding: 1rem;
   }
-  
+
   .cronograma-cell {
     min-width: 80px;
     height: 80px;
     padding: 0.25rem;
   }
-  
+
   .clase-card-body {
     padding: 0.5rem;
   }
-  
+
   .clase-title {
     font-size: 0.7rem;
   }
-  
+
   .clase-rango {
     font-size: 0.6rem;
   }
-  
+
   .clase-profesores {
     font-size: 0.55rem;
   }
-  
+
   .leyenda-items {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .leyenda-item {
     font-size: 0.8rem;
   }
@@ -245,15 +247,15 @@
     min-width: 60px;
     height: 60px;
   }
-  
+
   .clase-title {
     font-size: 0.6rem;
   }
-  
+
   .clase-rango {
     font-size: 0.5rem;
   }
-  
+
   .clase-profesores {
     display: none;
   }

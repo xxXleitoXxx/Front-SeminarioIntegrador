@@ -1,4 +1,4 @@
-import PrincipalPage from "./PrincipalPage";
+
 import CronogramaPage from "./CronogramaPage";
 import CumpleanosProximos from "../components/CumpleanosProximos";
 import FichasMedicasProximas from "../components/FichasMedicasProximas";
@@ -12,9 +12,7 @@ export default function Main() {
         <CronogramaPage />
       </div>
 
-      <div>
-        <PrincipalPage />
-      </div>
+     
       <div>
         <CumpleanosProximos />
       </div>

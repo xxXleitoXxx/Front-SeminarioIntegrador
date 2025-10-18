@@ -3,6 +3,7 @@
   background: linear-gradient(90deg, #4d4c4c 0%, #1f1f1f 100%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.22s ease-in-out;
+  z-index: 999;
 }
 
 .navbar-custom .navbar-brand {
