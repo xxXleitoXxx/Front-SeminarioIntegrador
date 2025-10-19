@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { reporteGralHistService } from "../services/ReporteGralHistService";
-import { ReporteGralHistDTO } from "../types/ReporteGralHistDTO";
+import type { ReporteGralHistDTO } from "../types/ReporteGralHistDTO";
 import {
   ResponsiveContainer,
   BarChart,
@@ -133,7 +133,7 @@ const Reportes: React.FC = () => {
                     outerRadius={110}
                     label
                   >
-                    {pieData.map((entry, index) => (
+                    {pieData.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}

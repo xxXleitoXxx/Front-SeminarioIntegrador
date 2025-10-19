@@ -8,6 +8,7 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import "./Navegacion.css";
 import { useAuth } from "../contexts/AuthContext";
 
+// 🔹 Interfaz local para el contexto de autenticación
 interface IAuthContext {
   hasRole: (role: string) => boolean;
   username: string | null;
@@ -23,18 +24,20 @@ const Navegacion: FC = () => {
   const [panelWidth, setPanelWidth] = useState<number>(0);
   const collapseRef = useRef<HTMLDivElement | null>(null);
 
+  // 🔹 Navegar y cerrar menú
   const handleNavigate = (path: string): void => {
     navigate(path);
     setExpanded(false);
   };
 
+  // 🔹 Logout y cerrar menú
   const handleLogout = (): void => {
     logout();
     navigate("/login");
     setExpanded(false);
   };
 
-  // medir ancho del panel lateral cuando se abre y en resize
+  // 🔹 Medir ancho del panel lateral cuando se abre y en resize
   useEffect(() => {
     const updateWidth = () => {
       const w = collapseRef.current?.getBoundingClientRect().width ?? 0;
@@ -53,7 +56,7 @@ const Navegacion: FC = () => {
     }
   }, [expanded]);
 
-  // cerrar con tecla ESC
+  // 🔹 Cerrar con tecla ESC
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setExpanded(false);
@@ -62,6 +65,7 @@ const Navegacion: FC = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // 🔹 Mostrar nombre legible según rol
   const getRoleDisplayName = (role?: string): string => {
     switch (role) {
       case "ROLE_ADMIN":
@@ -73,6 +77,7 @@ const Navegacion: FC = () => {
     }
   };
 
+  // 🔹 Color por rol
   const getRoleColor = (role?: string): string => {
     switch (role) {
       case "ROLE_ADMIN":
@@ -84,7 +89,7 @@ const Navegacion: FC = () => {
     }
   };
 
-  // evitar que abrir un dropdown cierre el navbar en móvil
+  // 🔹 Evitar que abrir un dropdown cierre el navbar en móvil
   const handleDropdownClick = (e: React.MouseEvent) => {
     if (window.innerWidth < 992) e.stopPropagation();
   };
@@ -120,7 +125,7 @@ const Navegacion: FC = () => {
 
           <Navbar.Collapse
             id="basic-navbar-nav"
-            ref={(el) => (collapseRef.current = el as HTMLDivElement | null)}
+            ref={collapseRef} // ✅ ref corregido
           >
             <Nav className="me-auto">
               <Nav.Link onClick={() => handleNavigate("/")}>Inicio</Nav.Link>
@@ -196,6 +201,7 @@ const Navegacion: FC = () => {
 
               <Nav.Link onClick={() => handleNavigate("/ayuda")}>Ayuda</Nav.Link>
 
+              {/* 🔹 Panel usuario en móvil */}
               <div className="d-lg-none mt-4 border-top border-secondary pt-3">
                 <div className="d-flex align-items-center mb-3">
                   <FaUser className="me-2 text-white" size={24} />
