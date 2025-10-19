@@ -129,8 +129,7 @@ const AlumnoModal = ({
     } catch (error) {
       console.error(error);
       toast.error(
-        `Ha ocurrido un error: ${
-          error instanceof Error ? error.message : String(error)
+        `Ha ocurrido un error: ${error instanceof Error ? error.message : String(error)
         }`,
         { position: "top-center" }
       );
@@ -147,8 +146,7 @@ const AlumnoModal = ({
     } catch (error) {
       console.error(error);
       toast.error(
-        `Ha ocurrido un error: ${
-          error instanceof Error ? error.message : String(error)
+        `Ha ocurrido un error: ${error instanceof Error ? error.message : String(error)
         }`,
         { position: "top-center" }
       );
@@ -156,24 +154,24 @@ const AlumnoModal = ({
   };
 
   // Alta lógica
-  const handleAltaLogica = async () => {
-    try {
-      await AlumnoService.altaLogicaAlumno(alumno);
-      toast.success("Alumno dado de alta con éxito", {
-        position: "top-center",
-      });
-      onHide();
-      refreshData((prevState) => !prevState);
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        `Ha ocurrido un error: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { position: "top-center" }
-      );
-    }
-  };
+  // const handleAltaLogica = async () => {
+  //   try {
+  //     await AlumnoService.altaLogicaAlumno(alumno);
+  //     toast.success("Alumno dado de alta con éxito", {
+  //       position: "top-center",
+  //     });
+  //     onHide();
+  //     refreshData((prevState) => !prevState);
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error(
+  //       `Ha ocurrido un error: ${
+  //         error instanceof Error ? error.message : String(error)
+  //       }`,
+  //       { position: "top-center" }
+  //     );
+  //   }
+  // };
 
   // Manejar archivo seleccionado
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -428,8 +426,8 @@ const AlumnoModal = ({
                         value={
                           formik.values.fechaNacAlumno
                             ? new Date(formik.values.fechaNacAlumno)
-                                .toISOString()
-                                .split("T")[0]
+                              .toISOString()
+                              .split("T")[0]
                             : ""
                         }
                         onChange={formik.handleChange}

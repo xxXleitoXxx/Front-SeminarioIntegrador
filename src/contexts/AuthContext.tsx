@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Token } from '../types/Token';
-import { toast } from 'react-toastify';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import type { Token } from '../types/Token';
+
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -59,7 +60,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(true);
 
         // ⏱️ programar logout cuando expire
-        
+
         const timeout = (decoded.exp - now) * 1000;
         setTimeout(() => {
           logout();

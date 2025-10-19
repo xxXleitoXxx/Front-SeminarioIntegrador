@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { SideBar } from "../principalPage/SideBar";
 import Header from "../AtlantisHeader";
 import AbmAlumno from "../pages/AbmAlumno";
 import PaginaPrincipal from "../pages/Main";
@@ -9,7 +8,6 @@ import AbmTipoClase from "../pages/AbmTipoClase";
 import AbmLocalidad from "../pages/AbmLocalidad";
 import AbmRangoEtario from "../pages/AbmRangoEtario";
 import InscripcionClase from "../pages/InscripcionClase";
-import CronogramaPage from "../pages/CronogramaPage";
 import ConfigurarCronograma from "../pages/ConfigurarCronograma";
 import InscripcionProfesor from "../pages/InscripcionProfesor";
 import ClasesAlumnos from "../components/ClaseAlumno/ClasesAlumnos";

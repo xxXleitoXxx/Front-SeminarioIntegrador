@@ -1,4 +1,4 @@
-import { Spinner } from "react-bootstrap";
+
 import "./Loader.css";
 
 interface LoaderProps {
@@ -16,8 +16,8 @@ const Loader = ({
     size === "small"
       ? "loader-small"
       : size === "large"
-      ? "loader-spinner-large"
-      : "loader-spinner";
+        ? "loader-spinner-large"
+        : "loader-spinner";
 
   const containerClass =
     variant === "container" ? "loader-container" : "loader";
