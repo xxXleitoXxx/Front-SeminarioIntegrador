@@ -1,6 +1,128 @@
-.usuario{
-width: 100px;
-display: grid;
-place-content: center;
+/* ---------- Contenedor principal del header ---------- */
+.atlantis-header {
+    background: linear-gradient(90deg, #4d4c4c 0%, #1f1f1f 100%);
+    color: #f5f5f5;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1020;
+}
 
+/* ---------- Título del sistema ---------- */
+.atlantis-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    /* Cambia el color del título a blanco para que destaque */
+    color: #ffffff;
+    margin: 0;
+    transition: text-shadow 0.3s ease;
+}
+
+.atlantis-header h1:hover {
+    /* Agrega una sombra de texto más visible para un efecto de brillo */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.6);
+    cursor: default;
+}
+
+/* ---------- Badge de rol ---------- */
+.atlantis-header .badge {
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    /* Agrega esta línea para asegurar que el texto sea blanco */
+    color: #ffffff;
+}
+
+.atlantis-header .badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.45);
+}
+
+/* ---------- Nombre de usuario ---------- */
+.atlantis-header h6 {
+    margin: 0;
+    font-weight: 500;
+    /* Cambia el color a uno más claro para mejorar la legibilidad */
+    color: #e0e0e0;
+    font-size: 0.85rem;
+}
+
+/* ---------- Imagen del avatar ---------- */
+.atlantis-header img {
+    border-radius: 50%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.atlantis-header img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- Dropdown del usuario ---------- */
+.atlantis-header .dropdown-menu {
+    background: rgba(45, 45, 45, 0.97);
+    backdrop-filter: blur(6px);
+    border-radius: 8px;
+    border: none;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.atlantis-header .dropdown-menu.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.atlantis-header .dropdown-item {
+    color: #e0e0e0;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.atlantis-header .dropdown-item:hover {
+    background-color: #adadad;
+    color: #111 !important;
+    transform: translateX(4px);
+}
+
+/* Header del dropdown */
+.atlantis-header .dropdown-header {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #f5f5f5;
+    padding: 0.5rem 1rem;
+}
+
+/* Divider */
+.atlantis-header .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Iconos dentro del dropdown */
+.atlantis-header .dropdown-item svg {
+    min-width: 18px;
+    min-height: 18px;
+}
+
+/* Ajuste responsivo */
+@media (max-width: 991.98px) {
+    .atlantis-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .atlantis-header .badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .atlantis-header img {
+        width: 40px;
+        height: 40px;
+    }
 }

@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { SideBar } from "../principalPage/SideBar";
-import Header from "../Header";
+import Header from "../AtlantisHeader";
 import AbmAlumno from "../pages/AbmAlumno";
 import PaginaPrincipal from "../pages/Main";
 import AbmProfesor from "../pages/AbmProfesor";
@@ -9,7 +8,6 @@ import AbmTipoClase from "../pages/AbmTipoClase";
 import AbmLocalidad from "../pages/AbmLocalidad";
 import AbmRangoEtario from "../pages/AbmRangoEtario";
 import InscripcionClase from "../pages/InscripcionClase";
-import CronogramaPage from "../pages/CronogramaPage";
 import ConfigurarCronograma from "../pages/ConfigurarCronograma";
 import InscripcionProfesor from "../pages/InscripcionProfesor";
 import ClasesAlumnos from "../components/ClaseAlumno/ClasesAlumnos";
@@ -36,122 +34,122 @@ function Aplicacion() {
   // Si está autenticado, mostrar la aplicación completa
   return (
     <div className="d-flex">
-      <SideBar isModalOpen={false} />
+      {/*<SideBar isModalOpen={false} />*/}
       <div className="flex-grow-1 d-flex flex-column">
         <div className="p-0 m-0">
           <Header />
         </div>
         <div
           className="flex-grow-1 overflow-auto p-3"
-          style={{ height: "calc(100vh - 80px)" }}
+          style={{ height: "calc(100vh - 80px)", background: "linear-gradient(135deg, #5a5a5aff 0%, #333232ff 100%)" }}
         >
-          <Routes>
+          <Routes >
             {/* Rutas públicas para usuarios autenticados */}
             <Route path="/" element={<PaginaPrincipal />} />
-            
+
             {/* Rutas protegidas por roles */}
-            <Route 
-              path="gestionalumno" 
+            <Route
+              path="gestionalumno"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_RECEPCIONISTA', 'ROLE_ADMIN']}>
                   <AbmAlumno />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="gestionprofesor" 
+            <Route
+              path="gestionprofesor"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <AbmProfesor />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="gestiondia" 
+            <Route
+              path="gestiondia"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <AbmDia />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="gestiontipoclase" 
+            <Route
+              path="gestiontipoclase"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <AbmTipoClase />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="gestionlocalidad" 
+            <Route
+              path="gestionlocalidad"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <AbmLocalidad />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="gestionrangoetario" 
+            <Route
+              path="gestionrangoetario"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <AbmRangoEtario />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="reportes" 
+            <Route
+              path="reportes"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <Reportes />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="clasesAlumnos" 
+            <Route
+              path="clasesAlumnos"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <ClasesAlumnos />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="configurar-cronograma" 
+            <Route
+              path="configurar-cronograma"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_ADMIN']}>
                   <ConfigurarCronograma />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
+
             {/* Rutas para RECEPCIONISTA y ADMIN */}
-            <Route 
-              path="inscripcion-clase" 
+            <Route
+              path="inscripcion-clase"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_RECEPCIONISTA', 'ROLE_ADMIN']}>
                   <InscripcionClase />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="inscripcion-profesor" 
+            <Route
+              path="inscripcion-profesor"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_RECEPCIONISTA', 'ROLE_ADMIN']}>
                   <InscripcionProfesor />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="asistencia" 
+            <Route
+              path="asistencia"
               element={
                 <ProtectedRoute requiredRoles={['ROLE_RECEPCIONISTA', 'ROLE_ADMIN']}>
                   <Asistencia />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
+
             {/* Página de error 401 */}
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-            
+
             {/* Redirección por defecto */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

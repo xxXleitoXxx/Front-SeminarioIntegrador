@@ -1,5 +1,5 @@
 import { apiService } from './ApiService';
-import { ReporteGralHistDTO } from '../types/ReporteGralHistDTO';
+import type { ReporteGralHistDTO } from '../types/ReporteGralHistDTO';
 
 class ReporteGralHistService {
   async getReporteGralHist(): Promise<ReporteGralHistDTO> {

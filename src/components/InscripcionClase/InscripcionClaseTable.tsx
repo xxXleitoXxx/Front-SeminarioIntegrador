@@ -8,7 +8,6 @@ import type { InscripcionDTO, AlumnoDTO, TipoClaseDTO } from "../../types";
 import { InscripcionService } from "../../services/InscripcionService";
 import { AlumnoService } from "../../services/AlumnoService";
 import { TipoClaseService } from "../../services/TipoClaseService";
-import { ButtonAlta } from "../ButtonAlta/ButtonAlta";
 import EmptyState from "../EmptyState/EmptyState";
 import "./InscripcionClase.css";
 
@@ -149,12 +148,12 @@ const InscripcionClaseTable = () => {
                   }
                   return edad;
                 };
-                
+
                 return (
                   <tr key={insc.nroInscripcion} className="table-row-modern">
                     <td className="text-center">{insc.nroInscripcion}</td>
                     <td className="text-center">{insc.alumnoDto?.dniAlumno ?? '-'}</td>
-                    <td className="text-center">{alumno ? `${alumno.nombreAlumno} (${calcularEdad(alumno?.fechaNacAlumno) ?? '-' } años)` : 'N/A'}</td>
+                    <td className="text-center">{alumno ? `${alumno.nombreAlumno} (${calcularEdad(alumno?.fechaNacAlumno) ?? '-'} años)` : 'N/A'}</td>
                     <td className="text-center">{tipoClase ? `${tipoClase.nombreTipoClase} (${tipoClase.rangoEtarioDTO?.edadDesde}-${tipoClase.rangoEtarioDTO?.edadHasta})` : 'N/A'}</td>
                     <td className="text-center">
                       {new Date(insc.fechaInscripcion).toLocaleDateString('es-ES')}

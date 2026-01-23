@@ -203,11 +203,10 @@ const AlumnoTable = () => {
                   </td>
                   <td className="text-center">
                     <span
-                      className={`contactos-badge ${
-                        getContactosCount(alumno.contactosEmergencia) > 0
-                          ? "has-contacts"
-                          : "no-contacts"
-                      }`}
+                      className={`contactos-badge ${getContactosCount(alumno.contactosEmergencia) > 0
+                        ? "has-contacts"
+                        : "no-contacts"
+                        }`}
                     >
                       {getContactosCount(alumno.contactosEmergencia)} contacto
                       {getContactosCount(alumno.contactosEmergencia) !== 1
@@ -217,11 +216,10 @@ const AlumnoTable = () => {
                   </td>
                   <td className="text-center">
                     <span
-                      className={`ficha-badge ${
-                        isAlumnoActivo(alumno.fechaBajaAlumno)
-                          ? "has-ficha"
-                          : "no-ficha"
-                      }`}
+                      className={`ficha-badge ${isAlumnoActivo(alumno.fechaBajaAlumno)
+                        ? "has-ficha"
+                        : "no-ficha"
+                        }`}
                     >
                       {isAlumnoActivo(alumno.fechaBajaAlumno)
                         ? "Activo"
@@ -230,11 +228,10 @@ const AlumnoTable = () => {
                   </td>
                   <td className="text-center">
                     <span
-                      className={`ficha-badge ${
-                        hasFichaMedica(alumno.fichaMedicaDTO)
-                          ? "has-ficha"
-                          : "no-ficha"
-                      }`}
+                      className={`ficha-badge ${hasFichaMedica(alumno.fichaMedicaDTO)
+                        ? "has-ficha"
+                        : "no-ficha"
+                        }`}
                     >
                       {hasFichaMedica(alumno.fichaMedicaDTO)
                         ? "📄 Presente"

@@ -100,11 +100,7 @@ const InscripcionProfesorTable = ({
           title="No hay inscripciones de profesores"
           message="Comienza creando una nueva inscripción de profesor"
           icon="👨‍🏫"
-          actionButton={
-            <Button variant="primary" onClick={handleCreate}>
-              Crear Primera Inscripción
-            </Button>
-          }
+
         />
         <InscripcionProfesorModal
           show={showModal}

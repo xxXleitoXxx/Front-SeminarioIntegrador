@@ -104,8 +104,7 @@ const InscripcionProfesorModal = ({
     } catch (error) {
       console.error(error);
       toast.error(
-        `Ha ocurrido un error: ${
-          error instanceof Error ? error.message : String(error)
+        `Ha ocurrido un error: ${error instanceof Error ? error.message : String(error)
         }`,
         { position: "top-center" }
       );
@@ -128,8 +127,7 @@ const InscripcionProfesorModal = ({
     } catch (error) {
       console.error(error);
       toast.error(
-        `Ha ocurrido un error: ${
-          error instanceof Error ? error.message : String(error)
+        `Ha ocurrido un error: ${error instanceof Error ? error.message : String(error)
         }`,
         { position: "top-center" }
       );
@@ -159,7 +157,7 @@ const InscripcionProfesorModal = ({
     onSubmit: handleCreate,
   });
 
-  const selectedProfesor: ProfesorDTO | undefined = profesores.find(p => p.dniProfesor === formik.values.dniProfesor);
+  //const selectedProfesor: ProfesorDTO | undefined = profesores.find(p => p.dniProfesor === formik.values.dniProfesor);
   const selectedTipoClase: TipoClaseDTO | undefined = tipoClases.find(tc => tc.codTipoClase === formik.values.codTipoClase);
 
   return (

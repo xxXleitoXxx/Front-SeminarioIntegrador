@@ -1,136 +1,152 @@
-.navigation-container {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* ---------- Estilos base del navbar ---------- */
+.navbar-custom {
+  background: linear-gradient(90deg, #4d4c4c 0%, #1f1f1f 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.22s ease-in-out;
+  z-index: 999;
 }
 
-.custom-navbar {
-  background: transparent !important;
-  padding: 1rem 0;
-}
-
-.navbar-brand {
-  margin-right: 2rem;
-}
-
-.brand-text {
-  font-size: 1.8rem;
+.navbar-custom .navbar-brand {
+  color: #f5f5f5 !important;
   font-weight: 700;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  letter-spacing: 1px;
+  font-size: 1.18rem;
+  letter-spacing: 0.5px;
+  transition: transform 0.22s ease, text-shadow 0.36s ease;
 }
 
-.navbar-toggler {
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
+.navbar-custom .navbar-brand:hover {
+  transform: scale(1.06);
+  text-shadow: 0 0 10px rgba(200, 200, 200, 0.7);
 }
 
-.navbar-toggler:focus {
-  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+.navbar-custom .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+.navbar-custom .navbar-toggler-left {
+  order: 0;
+  margin-right: 0.5rem;
 }
 
-.nav-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
+.navbar-custom .navbar-brand {
+  order: 1;
 }
 
-.nav-link-item {
-  color: rgba(255, 255, 255, 0.9) !important;
-  font-weight: 500;
-  padding: 0.75rem 1rem !important;
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  white-space: nowrap;
-  min-width: fit-content;
+/* ---------- Links en escritorio ---------- */
+@media (min-width: 992px) {
+
+  .navbar-custom .nav-link,
+  .navbar-custom .dropdown-toggle {
+    position: relative;
+    color: #e0e0e0 !important;
+    font-weight: 500;
+    margin-right: 1rem;
+    transition: color 0.22s ease, text-shadow 0.28s ease, transform 0.22s ease;
+  }
+
+  .navbar-custom .nav-link:hover,
+  .navbar-custom .dropdown-toggle:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9),
+      0 0 14px rgba(255, 255, 255, 0.35);
+    transform: translateY(-3px);
+  }
+
+  .navbar-custom .dropdown-menu {
+    border-radius: 10px;
+    margin-top: 10px;
+    border: none;
+    background: rgba(45, 45, 45, 0.98);
+    backdrop-filter: blur(4px);
+    animation: fadeInDown 0.28s ease forwards;
+    transform-origin: top center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  }
 }
 
-.nav-link-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.nav-link-item:hover::before {
-  left: 100%;
-}
-
-.nav-link-item:hover {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.nav-link-item:focus {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.nav-link-item i {
-  font-size: 1.1rem;
-  transition: transform 0.3s ease;
-}
-
-.nav-link-item:hover i {
-  transform: scale(1.1);
-}
-
-/* Responsive adjustments */
+/* ---------- Panel lateral (menú móvil) ---------- */
 @media (max-width: 991.98px) {
-  .nav-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+  .navbar-custom .navbar-collapse {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: min(85%, 320px);
+    background: linear-gradient(180deg,
+        rgba(40, 40, 40, 0.98),
+        rgba(35, 35, 35, 0.98));
+    backdrop-filter: blur(8px);
+    box-shadow: 6px 0 30px rgba(0, 0, 0, 0.5);
+    border-radius: 0 12px 12px 0;
+    padding: 1.75rem 1.25rem;
+    z-index: 1051;
+    /* sobre el overlay */
+    transform: translateX(-110%);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      transform 0.3s cubic-bezier(0.2, 0.9, 0.25, 1),
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+    overflow-y: auto;
   }
-  
-  .nav-link-item {
+
+  .navbar-custom .navbar-collapse.show {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .navbar-custom .nav-link,
+  .navbar-custom .dropdown-toggle {
+    display: block;
     width: 100%;
-    text-align: center;
-    margin: 0.25rem 0;
-    white-space: normal;
-  }
-  
-  .brand-text {
-    font-size: 1.5rem;
+    text-align: left;
+    color: #e0e0e0 !important;
+    padding: 0.75rem 0.25rem;
+    border-radius: 8px;
   }
 }
 
-@media (max-width: 575.98px) {
-  .custom-navbar {
-    padding: 0.5rem 0;
+/* ---------- Overlay sincronizado (sombra al abrir menú) ---------- */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(1px);
+  z-index: 1040;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out 0.12s;
+  /* delay para sincronizar */
+}
+
+.nav-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0.5s;
+  /* al cerrar, sin delay */
+}
+
+/* ---------- Ocultar overlay en pantallas grandes ---------- */
+@media (min-width: 992px) {
+  .nav-overlay {
+    display: none;
   }
-  
-  .brand-text {
-    font-size: 1.3rem;
+}
+
+/* ---------- Animaciones ---------- */
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
   }
-  
-  .nav-link-item {
-    padding: 0.5rem 0.75rem !important;
-    font-size: 0.9rem;
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

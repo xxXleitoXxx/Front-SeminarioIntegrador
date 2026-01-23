@@ -1,14 +1,13 @@
 import { handleResponse } from './common/handleResponse';
 
-const BASE_URL = 'http://localhost:8080/api/v1';
-
+//const BASE_URL = 'https://jnrwlnnw-8080.brs.devtunnels.ms/api/v1';
+const BASE_URL = 'http://76.13.161.198:8080/api/v1';
 interface RequestOptions {
   method?: string;
   headers?: Record<string, string>;
   body?: any;
   requiresAuth?: boolean;
 }
-
 class ApiService {
   private getAuthHeaders(): Record<string, string> {
     const token = localStorage.getItem('token');
@@ -16,7 +15,7 @@ class ApiService {
   }
 
   private async makeRequest<T>(
-    endpoint: string, 
+    endpoint: string,
     options: RequestOptions = {}
   ): Promise<T> {
     const {
@@ -60,18 +59,18 @@ class ApiService {
   }
 
   async post<T>(endpoint: string, data?: any, requiresAuth: boolean = true): Promise<T> {
-    return this.makeRequest<T>(endpoint, { 
-      method: 'POST', 
-      body: data, 
-      requiresAuth 
+    return this.makeRequest<T>(endpoint, {
+      method: 'POST',
+      body: data,
+      requiresAuth
     });
   }
 
   async put<T>(endpoint: string, data?: any, requiresAuth: boolean = true): Promise<T> {
-    return this.makeRequest<T>(endpoint, { 
-      method: 'PUT', 
-      body: data, 
-      requiresAuth 
+    return this.makeRequest<T>(endpoint, {
+      method: 'PUT',
+      body: data,
+      requiresAuth
     });
   }
 
@@ -80,10 +79,10 @@ class ApiService {
   }
 
   async patch<T>(endpoint: string, data?: any, requiresAuth: boolean = true): Promise<T> {
-    return this.makeRequest<T>(endpoint, { 
-      method: 'PATCH', 
-      body: data, 
-      requiresAuth 
+    return this.makeRequest<T>(endpoint, {
+      method: 'PATCH',
+      body: data,
+      requiresAuth
     });
   }
 }
