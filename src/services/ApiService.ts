@@ -1,7 +1,7 @@
 import { handleResponse } from './common/handleResponse';
 
 //const BASE_URL = 'https://jnrwlnnw-8080.brs.devtunnels.ms/api/v1';
-const BASE_URL = 'http://api-atlantis.nimsys.cloud:8080/api/v1';
+const BASE_URL = 'https://api-atlantis.nimsys.cloud/api/v1';
 interface RequestOptions {
   method?: string;
   headers?: Record<string, string>;
